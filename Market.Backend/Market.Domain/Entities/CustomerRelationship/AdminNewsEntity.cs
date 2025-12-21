@@ -28,10 +28,10 @@ namespace Market.Domain.Entities.CustomerRelationship
         /// <summary>
         /// Body text
         /// </summary>
-        public string Body { get; set; }
+        public string? Body { get; set; }
         /// <summary>
         /// The image
         /// </summary>
-        public byte[] Image { get; set; }
+        public byte?[] Image { get; set; }
     }
 }

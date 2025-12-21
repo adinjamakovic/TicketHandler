@@ -20,5 +20,6 @@ namespace Market.Domain.Entities.Events
         /// Genre description
         /// </summary>
         public string Description { get; set; }
+        public ICollection<PerformerEntity> Performers { get; set; } = new List<PerformerEntity>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.Events;
 using Market.Domain.Entities.Identity;
 using Market.Domain.Entities.Sales;
 using System;
@@ -12,7 +13,7 @@ namespace Market.Domain.Entities.CustomerRelationship
     /// <summary>
     /// Represents a review of a certain event
     /// </summary>
-    public class ReviewEntity : BaseEntity
+    public class ReviewEntity
     {
         /// <summary>
         /// Identifier of the person who submited the review
@@ -25,11 +26,11 @@ namespace Market.Domain.Entities.CustomerRelationship
         /// <summary>
         /// The identifier of the order linked with the review
         /// </summary>
-        public int OrderId { get; set; }
+        public int EventId { get; set; }
         /// <summary>
         /// The order linked with the review
         /// </summary>
-        public OrderEntity Order { get; set; }
+        public EventEntity Event { get; set; }
         /// <summary>
         /// Event grade
         /// </summary>
@@ -54,5 +55,8 @@ namespace Market.Domain.Entities.CustomerRelationship
         /// Performer review
         /// </summary>
         public string PerformerReview { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+        public DateTime? ModifiedAtUtc { get; set; }
     }
 }

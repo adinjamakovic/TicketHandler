@@ -1,4 +1,6 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.Events;
+using Market.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,5 +30,10 @@ namespace Market.Domain.Entities.Geographical
         /// City Postal Code
         /// </summary>
         public string PostalCode { get; set; }
+
+        public ICollection<PointOfSaleEntity> PointsOfSale { get; private set; } = new List<PointOfSaleEntity>();
+        public ICollection<PersonEntity> Persons { get; private set; } = new List<PersonEntity>();
+        public ICollection<LocationEntity> Locations { get; private set; } = new List<LocationEntity>();
+        public ICollection<OrganizerEntity> Organizers { get; private set;} = new List<OrganizerEntity>();
     }
 }

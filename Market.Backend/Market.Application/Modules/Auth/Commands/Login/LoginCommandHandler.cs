@@ -3,14 +3,14 @@
 public sealed class LoginCommandHandler(
     IAppDbContext ctx,
     IJwtTokenService jwt,
-    IPasswordHasher<MarketUserEntity> hasher)
+    IPasswordHasher<PersonEntity> hasher)
     : IRequestHandler<LoginCommand, LoginCommandDto>
 {
     public async Task<LoginCommandDto> Handle(LoginCommand request, CancellationToken ct)
     {
         var email = request.Email.Trim().ToLowerInvariant();
 
-        var user = await ctx.Users
+        var user = await ctx.Persons
             .FirstOrDefaultAsync(x => x.Email.ToLower() == email && x.IsEnabled && !x.IsDeleted, ct)
             ?? throw new MarketNotFoundException("Korisnik nije pronađen ili je onemogućen.");
 

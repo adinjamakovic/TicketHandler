@@ -12,6 +12,8 @@ namespace Market.Domain.Entities.Identity
     /// </summary>
     public class WalletEntity : BaseEntity
     {
+        public int PersonId { get; set; }
+        public PersonEntity Person { get; set; }
         /// <summary>
         /// Represents the current amount of funds
         /// </summary>

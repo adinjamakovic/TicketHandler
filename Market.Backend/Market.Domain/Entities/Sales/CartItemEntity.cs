@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,16 @@ namespace Market.Domain.Entities.Sales
     /// <summary>
     /// Identifies a singular cart item
     /// </summary>
-    public class CartItemEntity : BaseEntity
+    public class CartItemEntity
     {
+        /// <summary>
+        /// Identifier of the person whom the cart belongs to
+        /// </summary>
+        public int PersonId { get; set; }
+        /// <summary>
+        /// The person whom the cart belongs to
+        /// </summary>
+        public PersonEntity Person { get; set; }
         /// <summary>
         /// Identifier for the ticket that is a cart item
         /// </summary>
@@ -24,5 +33,7 @@ namespace Market.Domain.Entities.Sales
         /// Quantity
         /// </summary>
         public decimal Quantity { get; set; }
+        public DateTime CreatedAtUtc { get; set; }
+        public DateTime LastUpdatedAtUtc { get; set; }
     }
 }

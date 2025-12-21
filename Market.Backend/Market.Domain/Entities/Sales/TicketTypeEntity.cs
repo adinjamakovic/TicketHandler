@@ -20,5 +20,6 @@ namespace Market.Domain.Entities.Sales
         /// Ticket type description
         /// </summary>
         public string Description { get; set; }
+        public ICollection<TicketsEntity> Tickets { get; set; } = new List<TicketsEntity>();
     }
 }

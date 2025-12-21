@@ -17,6 +17,7 @@ namespace Market.Domain.Entities.Geographical
         /// Location identifier
         /// </summary>
         public int LocationId { get; set; }
+        public LocationEntity Location { get; set; }
         /// <summary>
         /// Location Image
         /// </summary>

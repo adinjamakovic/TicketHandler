@@ -1,10 +1,14 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.CustomerRelationship;
+using Market.Domain.Entities.Events;
 using Market.Domain.Entities.Geographical;
+using Market.Domain.Entities.Sales;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace Market.Domain.Entities.Identity
 {
@@ -13,6 +17,7 @@ namespace Market.Domain.Entities.Identity
     /// </summary>
     public class PersonEntity : BaseEntity
     {
+        public WalletEntity Wallet { get; set; }
         /// <summary>
         /// Person First Name
         /// </summary>
@@ -46,8 +51,31 @@ namespace Market.Domain.Entities.Identity
         /// </summary>
         public string Phone { get; set; }
         /// <summary>
-        /// Identifier of the role that the person is a part of
+        /// User username
         /// </summary>
-        public int RoleId { get; set; }
+        public string UserName { get; set; }
+        /// <summary>
+        /// User email
+        /// </summary>
+        public string Email { get; set; }
+        /// <summary>
+        /// Password salt
+        /// </summary>
+        public string Salt { get; set; }
+        /// <summary>
+        /// Password hash
+        /// </summary>
+        public string PasswordHash { get; set; }
+        public bool IsAdmin { get; set; }
+        public bool IsOrganiser { get; set; }
+        public bool IsUser { get; set; }
+        public int TokenVersion { get; set; }
+        public bool IsEnabled { get; set; }
+        public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
+        public OrganizerEntity? Organizer { get; set; }
+        public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
+        public ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
+        public ICollection<TransactionEntity> Transactions { get; set; } = new List<TransactionEntity>();
+        public ICollection<ReviewEntity> Reviews { get; set; } = new List<ReviewEntity>();
     }
 }

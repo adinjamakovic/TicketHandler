@@ -46,5 +46,8 @@ namespace Market.Domain.Entities.Events
         /// Person that will be a user of the organizators account
         /// </summary>
         public PersonEntity User { get; set; }
+
+        public ICollection<EventEntity> Events { get; set; } = new List<EventEntity>();
+        public ICollection<EventNewsEntity> EventNews { get; set; } = new List<EventNewsEntity>();
     }
 }

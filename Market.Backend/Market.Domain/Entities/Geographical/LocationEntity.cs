@@ -35,6 +35,7 @@ namespace Market.Domain.Entities.Geographical
         /// <summary>
         /// A list of location images
         /// </summary>
-        public List<LocationImagesEntity> Images { get; set; }
+        public ICollection<LocationImagesEntity> Images { get; set; } = new List<LocationImagesEntity>();
+        public ICollection<VenueEntity> Venues { get; set; } = new List<VenueEntity>();
     }
 }

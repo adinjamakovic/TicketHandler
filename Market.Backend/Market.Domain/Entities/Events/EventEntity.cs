@@ -1,5 +1,7 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.CustomerRelationship;
 using Market.Domain.Entities.Geographical;
+using Market.Domain.Entities.Sales;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,5 +55,9 @@ namespace Market.Domain.Entities.Events
         /// Event type
         /// </summary>
         public EventTypeEntity EventType { get; set; }
+        public ICollection<EventNewsEntity> EventNews { get; set; } = new List<EventNewsEntity>();
+        public ICollection<PerformerEventEntity> PerformerEvents { get; set; } = new List<PerformerEventEntity>();
+        public ICollection<TicketsEntity> Tickets { get; set; } = new List<TicketsEntity>();
+        public ICollection<ReviewEntity> Reviews { get; set; } = new List<ReviewEntity>();
     }
 }

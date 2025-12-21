@@ -24,7 +24,6 @@ namespace Market.Domain.Entities.Sales
         /// <summary>
         /// When the order was created
         /// </summary>
-        public DateTime OrderedAtUtc { get; set; }
-        
+        public ICollection<OrderItemEntity> OrderItems { get; set; } = new List<OrderItemEntity>();
     }
 }

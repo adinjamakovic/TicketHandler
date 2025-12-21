@@ -33,5 +33,6 @@ namespace Market.Domain.Entities.Events
         /// Genre that the performer is a part of
         /// </summary>
         public GenreEntity Genre { get; set; }
+        public ICollection<PerformerEventEntity> PerformerEvents { get; set; } = new List<PerformerEventEntity>();
     }
 }

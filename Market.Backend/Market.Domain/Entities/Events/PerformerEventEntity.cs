@@ -16,6 +16,7 @@ namespace Market.Domain.Entities.Events
         /// Identifier for the event
         /// </summary>
         public int EventId { get; set; }
+        public EventEntity Event { get; set; }
         /// <summary>
         /// Identifies the performer 
         /// </summary>

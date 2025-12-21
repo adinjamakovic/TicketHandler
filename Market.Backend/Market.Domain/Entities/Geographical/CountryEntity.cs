@@ -24,5 +24,6 @@ namespace Market.Domain.Entities.Geographical
         /// Distinct phone code
         /// </summary>
         public string PhoneCode { get; set; }
+        public ICollection<CityEntity> Cities { get; private set; } = new List<CityEntity>();
     }
 }

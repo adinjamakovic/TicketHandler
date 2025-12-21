@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Common;
+using Market.Domain.Entities.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,5 +31,6 @@ namespace Market.Domain.Entities.Geographical
         /// Venue Location
         /// </summary>
         public LocationEntity Location { get; set; }
+        public ICollection<EventEntity> Events { get; set; } = new List<EventEntity>();
     }
 }
