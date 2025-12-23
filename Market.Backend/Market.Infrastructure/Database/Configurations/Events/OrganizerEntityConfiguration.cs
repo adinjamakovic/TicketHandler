@@ -22,9 +22,9 @@ namespace Market.Infrastructure.Database.Configurations.Events
                 .IsRequired();
 
             b.HasOne(x => x.User)
-                .WithOne(x => x.Organizer)
+                .WithOne(x=>x.Organizer)
                 .HasForeignKey<OrganizerEntity>(x => x.UserId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
 
             b.HasOne(x=>x.City)
                 .WithMany(x=>x.Organizers)

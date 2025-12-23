@@ -29,7 +29,7 @@ namespace Market.Infrastructure.Database.Configurations.Sales
             b.HasOne(x => x.Ticket)
                 .WithMany()
                 .HasForeignKey(x => x.TicketId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

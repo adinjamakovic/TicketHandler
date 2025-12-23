@@ -19,7 +19,7 @@ namespace Market.Domain.Entities.Geographical
         /// <summary>
         /// Country flag image
         /// </summary>
-        public byte[] Flag { get; set; }
+        public byte[]? Flag { get; set; }
         /// <summary>
         /// Distinct phone code
         /// </summary>

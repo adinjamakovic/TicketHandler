@@ -21,7 +21,7 @@ namespace Market.Infrastructure.Database.Configurations.Events
             b.HasOne(x => x.Organizer)
                 .WithMany(x => x.EventNews)
                 .HasForeignKey(x => x.OrganizerId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
 
             b.HasOne(x => x.Event)
                 .WithMany(x => x.EventNews)

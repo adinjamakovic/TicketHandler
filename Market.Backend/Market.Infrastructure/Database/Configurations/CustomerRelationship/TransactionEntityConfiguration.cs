@@ -29,7 +29,7 @@ namespace Market.Infrastructure.Database.Configurations.CustomerRelationship
             b.HasOne(x => x.Person)
                 .WithMany(x => x.Transactions)
                 .HasForeignKey(x => x.PersonId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Market.Domain.Entities.Events
         /// Event type name
         /// </summary>
         public string Name { get; set; }
+        public bool IsEnabled { get; set; }
         public ICollection<EventEntity> Events { get; set; } = new List<EventEntity>();
     }
 }

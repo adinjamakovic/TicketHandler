@@ -23,7 +23,7 @@ namespace Market.Infrastructure.Database.Configurations.CustomerRelationship
             b.HasOne(x => x.Event)
                 .WithMany(x => x.Reviews)
                 .HasForeignKey(x => x.EventId)
-                .IsRequired();
+                .OnDelete(DeleteBehavior.Restrict);
 
         }
     }

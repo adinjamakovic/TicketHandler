@@ -21,11 +21,11 @@ namespace Market.Domain.Entities.Identity
         /// <summary>
         /// Person First Name
         /// </summary>
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
         /// <summary>
         /// Person Last Name
         /// </summary>
-        public string LastName { get; set; } 
+        public string? LastName { get; set; } 
         /// <summary>
         /// Person birth date
         /// </summary>
@@ -41,19 +41,19 @@ namespace Market.Domain.Entities.Identity
         /// <summary>
         /// Address at which the person resides
         /// </summary>
-        public string Address { get; set; }
+        public string? Address { get; set; }
         /// <summary>
         /// The gender of the person
         /// </summary>
-        public string Gender { get; set; }
+        public string? Gender { get; set; }
         /// <summary>
         /// Contact phone number
         /// </summary>
-        public string Phone { get; set; }
+        public string? Phone { get; set; }
         /// <summary>
         /// User username
         /// </summary>
-        public string UserName { get; set; }
+        public string? UserName { get; set; }
         /// <summary>
         /// User email
         /// </summary>
@@ -61,7 +61,7 @@ namespace Market.Domain.Entities.Identity
         /// <summary>
         /// Password salt
         /// </summary>
-        public string Salt { get; set; }
+        public string? Salt { get; set; }
         /// <summary>
         /// Password hash
         /// </summary>
@@ -71,8 +71,8 @@ namespace Market.Domain.Entities.Identity
         public bool IsUser { get; set; }
         public int TokenVersion { get; set; }
         public bool IsEnabled { get; set; }
-        public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
         public OrganizerEntity? Organizer { get; set; }
+        public ICollection<RefreshTokenEntity> RefreshTokens { get; private set; } = new List<RefreshTokenEntity>();
         public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
         public ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
         public ICollection<TransactionEntity> Transactions { get; set; } = new List<TransactionEntity>();

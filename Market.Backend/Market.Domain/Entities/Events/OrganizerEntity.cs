@@ -43,7 +43,7 @@ namespace Market.Domain.Entities.Events
         /// </summary>
         public int UserId { get; set; }
         /// <summary>
-        /// Person that will be a user of the organizators account
+        /// Person that will be a user of the organizers account
         /// </summary>
         public PersonEntity User { get; set; }
 

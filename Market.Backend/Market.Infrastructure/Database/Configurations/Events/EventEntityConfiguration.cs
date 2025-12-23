@@ -26,7 +26,8 @@ namespace Market.Infrastructure.Database.Configurations.Events
 
             b.HasOne(x => x.Venue)
                 .WithMany(x => x.Events)
-                .HasForeignKey(x => x.VenueId);
+                .HasForeignKey(x => x.VenueId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             b.HasOne(x=>x.EventType)
                 .WithMany(x => x.Events)

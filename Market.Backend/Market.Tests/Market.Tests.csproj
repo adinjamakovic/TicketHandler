@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Market.Shared\Market.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProductCategoryTests\UnitTests\" />
+  </ItemGroup>
+
 </Project>
