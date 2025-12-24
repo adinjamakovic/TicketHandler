@@ -210,7 +210,7 @@ public static class DynamicDataSeeder
         };
         var dummyForTests = new PersonEntity
         {
-
+            CityId=6,
             Address = "Dummy Address",
             Email = "test",
             PasswordHash = hasher.HashPassword(null!, "test123"),
