@@ -386,8 +386,7 @@ namespace Market.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Organizers", (string)null);
                 });
