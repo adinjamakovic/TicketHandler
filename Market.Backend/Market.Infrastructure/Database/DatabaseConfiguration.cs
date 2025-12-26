@@ -50,9 +50,6 @@ public partial class DatabaseContext
 
         ApplyGlobalFielters(modelBuilder);
 
-        // bugfix 26.12.2025 organizers could not have the same value for userID
-        modelBuilder.Entity<OrganizerEntity>().HasIndex(x=>x.UserId).IsUnique(false);
-
         //StaticDataSeeder.Seed(modelBuilder); // static data
     }
 

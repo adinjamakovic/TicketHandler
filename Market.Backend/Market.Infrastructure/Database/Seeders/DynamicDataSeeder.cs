@@ -207,6 +207,7 @@ public static class DynamicDataSeeder
             IsEnabled = true,
         };
 
+
         var dummyForSwagger = new PersonEntity
         {
             CityId = 6,
@@ -248,58 +249,9 @@ public static class DynamicDataSeeder
             CreatedAtUtc = DateTime.UtcNow,
             Logo = new byte[0]
         };
-        var wonderland = new OrganizerEntity
-        {
-            Name = "Wonderland",
-            Description = "Dummy desc",
-            Address = "Dummy address",
-            CityId = 3,
-            UserId = 2,
-            CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
-        };
-        var eventive = new OrganizerEntity
-        {
-            Name = "Eventive",
-            Description = "Dummy desc",
-            Address = "Dummy address",
-            CityId = 4,
-            UserId = 2,
-            CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
-        };
-        var freeman = new OrganizerEntity
-        {
-            Name = "Freeman",
-            Description = "Dummy desc",
-            Address = "Dummy address",
-            CityId = 5,
-            UserId = 2,
-            CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
-        };
-        var informa = new OrganizerEntity
-        {
-            Name = "Informa",
-            Description = "Dummy desc",
-            Address = "Dummy address",
-            CityId = 4,
-            UserId = 2,
-            CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
-        };
-        var liveNation = new OrganizerEntity
-        {
-            Name = "Live Nation",
-            Description = "Dummy desc",
-            Address = "Dummy address",
-            CityId = 3,
-            UserId = 2,
-            CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
-        };
+        
       
-        context.Organizers.AddRange(mkg, wonderland, eventive, freeman, informa, liveNation);
+        context.Organizers.AddRange(mkg);
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo organizers added.");
     }
@@ -532,7 +484,7 @@ public static class DynamicDataSeeder
                     Name = "Dummy Festival",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(10),
-                    OrganizerId = 2,
+                    OrganizerId = 1,
                     VenueId = 2,
                     Image = new byte[0],
                     EventTypeId = 2,
@@ -542,7 +494,7 @@ public static class DynamicDataSeeder
                     Name = "Dummy Movie",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(20),
-                    OrganizerId = 2,
+                    OrganizerId = 1,
                     VenueId = 2,
                     Image = new byte[0],
                     EventTypeId = 3,
@@ -552,7 +504,7 @@ public static class DynamicDataSeeder
                     Name = "Dummy Screen Play",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(15),
-                    OrganizerId = 3,
+                    OrganizerId = 1,
                     VenueId = 3,
                     Image = new byte[0],
                     EventTypeId = 4,
@@ -562,7 +514,7 @@ public static class DynamicDataSeeder
                     Name = "Dummy Theater Act",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(30),
-                    OrganizerId = 4,
+                    OrganizerId = 1,
                     VenueId = 4,
                     Image = new byte[0],
                     EventTypeId = 5,
@@ -572,7 +524,7 @@ public static class DynamicDataSeeder
                     Name = "Dummy Opera/Ballet",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(1),
-                    OrganizerId = 4,
+                    OrganizerId = 1,
                     VenueId = 4,
                     Image = new byte[0],
                     EventTypeId = 6,
