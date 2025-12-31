@@ -9,6 +9,7 @@ namespace Market.Application.Abstractions;
 public interface IAppDbContext
 {
     DbSet<AdminNewsEntity> AdminNews { get; }
+    DbSet<EventEntity> Events { get; }
     DbSet<LoyaltyProgrammeEntity> LoyaltyProgrammes { get; }
     DbSet<ReviewEntity> Reviews { get; }
     DbSet<RefreshTokenEntity> RefreshTokens { get; }

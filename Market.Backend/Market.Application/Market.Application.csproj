@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modules\Events\Organizers\Commands\" />
+    <Folder Include="Modules\Events\Organizers\Commands\Update\" />
   </ItemGroup>
 
 </Project>
