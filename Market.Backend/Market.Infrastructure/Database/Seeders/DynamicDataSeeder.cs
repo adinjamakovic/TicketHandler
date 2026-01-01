@@ -15,6 +15,7 @@ public static class DynamicDataSeeder
         await SeedCountries(context);
         await SeedCities(context);
         await SeedUsersAsync(context);
+        await SeedPerformerEvents(context);
         await SeedEventTypes(context);
         await SeedGenresAsync(context);
         await SeedPerformersAsync(context);
@@ -78,7 +79,26 @@ public static class DynamicDataSeeder
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: Cities added.");
     }
-
+    private static async Task SeedPerformerEvents(DatabaseContext context)
+    {
+        if (await context.PerformerEvents.AnyAsync())
+            return;
+        var QueenDummyConcert = new PerformerEventEntity
+        {
+            EventId = 1,
+            PerformerId = 1,
+            TimeStamp = new TimeOnly(21, 0, 0)
+        };
+        var BobDylanDummyConcert = new PerformerEventEntity
+        {
+            EventId = 1,
+            PerformerId = 4,
+            TimeStamp = new TimeOnly(19, 0, 0)
+        };
+        context.PerformerEvents.AddRange(QueenDummyConcert, BobDylanDummyConcert);
+        await context.SaveChangesAsync();
+        Console.WriteLine("✅ Dynamic seed: Cities added.");
+    }
 
 
     private static async Task SeedCountries(DatabaseContext context)
