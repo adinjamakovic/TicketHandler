@@ -1,5 +1,6 @@
 using Market.Application.Modules.Events.Organizers.Commands.Create;
 using Market.Application.Modules.Events.Organizers.Commands.Delete;
+using Market.Application.Modules.Events.Organizers.Commands.Update;
 using Market.Application.Modules.Events.Organizers.Queries.GetById;
 using Market.Application.Modules.Events.Organizers.Queries.List;
 using System.Runtime.CompilerServices;
@@ -10,6 +11,14 @@ namespace Market.API.Controllers;
 [Route("[controller]")]
 public class OrganizersController(ISender sender) : ControllerBase
 {
+    [HttpPost]
+    public async Task<ActionResult<int>> Create(CreateOrganizerCommand cmd, CancellationToken ct)
+    {
+        int id = await sender.Send(cmd, ct);
+
+        return CreatedAtAction(nameof(GetById), new { id }, new { id });
+    }
+
     [HttpGet]
     [AllowAnonymous]
     public async Task<PageResult<ListOrganizersQueryDto>> List([FromQuery] ListOrganizersQuery query, CancellationToken ct)
@@ -24,13 +33,12 @@ public class OrganizersController(ISender sender) : ControllerBase
         var Organizer = await sender.Send(new GetOrganizerByIdQuery { Id = id }, ct);
         return Organizer;
     }
- 
-    [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateOrganizerCommand cmd, CancellationToken ct)
-    {
-        int id = await sender.Send(cmd, ct);
 
-        return CreatedAtAction(nameof(GetById), new { id }, new { id });
+    [HttpPut("{id:int}")]
+    public async Task Update(int id, UpdateOrganizerCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await sender.Send(command, ct);
     }
 
     [HttpDelete("{id:int}")]
