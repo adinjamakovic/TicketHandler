@@ -25,6 +25,8 @@ namespace Market.Infrastructure.Database.Configurations.CustomerRelationship
                 .HasForeignKey(x => x.EventId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            b.HasQueryFilter(x => !x.IsDeleted);
+
         }
     }
 }

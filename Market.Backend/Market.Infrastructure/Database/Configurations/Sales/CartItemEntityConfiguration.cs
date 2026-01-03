@@ -27,6 +27,8 @@ namespace Market.Infrastructure.Database.Configurations.Sales
                 .WithMany(x => x.CartItems)
                 .HasForeignKey(x => x.PersonId)
                 .IsRequired();
+
+            b.HasQueryFilter(x => !x.IsDeleted);
         }
     }
 }
