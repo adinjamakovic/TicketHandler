@@ -34,6 +34,7 @@ namespace Market.Domain.Entities.Sales
         /// </summary>
         public decimal Quantity { get; set; }
         public DateTime CreatedAtUtc { get; set; }
-        public DateTime LastUpdatedAtUtc { get; set; }
+        public DateTime ModifiedAtUtc { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }
