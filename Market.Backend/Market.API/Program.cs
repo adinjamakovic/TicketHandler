@@ -3,6 +3,7 @@ using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
 using Serilog;
+using System.Security.Cryptography;
 
 public partial class Program
 {
@@ -49,6 +50,18 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAngularDev",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:4200")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
+
             var app = builder.Build();
 
             // ---------------------------------------------------------
@@ -65,6 +78,8 @@ public partial class Program
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
             app.UseHttpsRedirection();
+            app.UseCors("AllowAngularDev");
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

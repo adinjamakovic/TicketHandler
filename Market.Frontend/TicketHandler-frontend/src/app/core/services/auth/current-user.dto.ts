@@ -2,7 +2,7 @@ export interface CurrentUserDto {
   userId: number;
   email: string;
   isAdmin: boolean;
-  isManager: boolean;
-  isEmployee: boolean;
+  IsOrganiser: boolean;
+  IsUser: boolean;
   tokenVersion: number;
 }

@@ -33,7 +33,7 @@ export class LoginComponent extends BaseComponent {
     const payload: LoginCommand = {
       email: this.form.value.email ?? '',
       password: this.form.value.password ?? '',
-      fingerprint: null,
+      fingerprint: 'string',
     };
 
     this.auth.login(payload).subscribe({
