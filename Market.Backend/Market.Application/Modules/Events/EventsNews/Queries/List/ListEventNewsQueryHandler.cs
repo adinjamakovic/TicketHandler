@@ -12,7 +12,6 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.List
         public async Task<PageResult<ListEventNewsQueryDto>> Handle(ListEventNewsQuery req, CancellationToken ct)
         {
             var q = ctx.EventNews.AsNoTracking();
-)
 
             if (appCurrent.IsOrganiser)
                 req.OrganizerId = (await ctx.Organizers

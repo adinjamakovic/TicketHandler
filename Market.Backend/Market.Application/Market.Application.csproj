@@ -20,9 +20,4 @@
     <ProjectReference Include="..\Market.Shared\Market.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\Events\EventsNews\Commands\Delete\" />
-    <Folder Include="Modules\Events\EventsNews\Commands\Update\" />
-  </ItemGroup>
-
 </Project>

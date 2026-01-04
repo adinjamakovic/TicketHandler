@@ -1,6 +1,11 @@
+using Market.Application.Modules.Events.Events.Commands.Delete;
+using Market.Application.Modules.Events.Events.Commands.Update;
 using Market.Application.Modules.Events.EventsNews.Commands.Create;
+using Market.Application.Modules.Events.EventsNews.Commands.Delete;
+using Market.Application.Modules.Events.EventsNews.Commands.Update;
 using Market.Application.Modules.Events.EventsNews.Queries.GetById;
 using Market.Application.Modules.Events.EventsNews.Queries.List;
+using Microsoft.Identity.Client;
 using System.Runtime.CompilerServices;
 
 namespace Market.API.Controllers;
@@ -9,6 +14,11 @@ namespace Market.API.Controllers;
 [Route("[controller]")]
 public class EventNewsController(ISender sender) : ControllerBase
 {
+    [HttpDelete("{id:int}")]
+    public async Task Delete(int id, CancellationToken ct)
+    {
+        await sender.Send(new DeleteEventNewsCommand { Id = id}, ct);
+    }
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateEventNewsCommand command, CancellationToken ct)
     {
@@ -31,5 +41,12 @@ public class EventNewsController(ISender sender) : ControllerBase
         var EventNews = await sender.Send(new GetEventNewsByIdQuery { Id = id }, ct);
 
         return EventNews;
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task Update(int id, UpdateEventNewsCommand command, CancellationToken ct)
+    {
+        command.Id=id;
+        await sender.Send(command, ct);
     }
 }
