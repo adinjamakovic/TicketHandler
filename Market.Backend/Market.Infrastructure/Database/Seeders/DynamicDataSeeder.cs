@@ -15,15 +15,15 @@ public static class DynamicDataSeeder
         await SeedCountries(context);
         await SeedCities(context);
         await SeedUsersAsync(context);
-        await SeedPerformerEvents(context);
         await SeedEventTypes(context);
         await SeedGenresAsync(context);
-        await SeedPerformersAsync(context);
+        await SeedLoyalityProgrammesAsync(context);
+        await SeedOrganizersAsync(context);
         await SeedLocationsAsync(context);
         await SeedVenuesAsync(context);
-        await SeedOrganizersAsync(context);
-        await SeedLoyalityProgrammesAsync(context);
+        await SeedPerformersAsync(context);
         await SeedEventsAsync(context);
+        await SeedPerformerEvents(context);
 
     }
 
@@ -276,7 +276,7 @@ public static class DynamicDataSeeder
         Console.WriteLine("✅ Dynamic seed: demo organizers added.");
     }
     /// <summary>
-    /// Kreira demo korisnike ako ih još nema u bazi.
+    /// Kreira demo Zanrove ako ih još nema u bazi.
     /// </summary>
     private static async Task SeedGenresAsync(DatabaseContext context)
     {
