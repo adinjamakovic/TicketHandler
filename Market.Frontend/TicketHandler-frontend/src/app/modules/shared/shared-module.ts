@@ -8,7 +8,7 @@ import { FitConfirmDialogComponent } from './components/fit-confirm-dialog/fit-c
 import {DialogHelperService} from './services/dialog-helper.service';
 import { FitLoadingBarComponent } from './components/fit-loading-bar/fit-loading-bar.component';
 import { FitTableSkeletonComponent } from './components/fit-table-skeleton/fit-table-skeleton.component';
-import { FitDatepickerComponent } from './components/fit-datepicker/fit-datepicker.component';
+import { LandingPageSearchComponent } from './components/landing-page-search/landing-page-search.component';
 
 
 @NgModule({
@@ -17,7 +17,7 @@ import { FitDatepickerComponent } from './components/fit-datepicker/fit-datepick
     FitConfirmDialogComponent,
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
-    FitDatepickerComponent
+    LandingPageSearchComponent
   ],
   imports: [
     CommonModule,
@@ -37,6 +37,7 @@ import { FitDatepickerComponent } from './components/fit-datepicker/fit-datepick
     FormsModule,
     FitLoadingBarComponent,
     FitTableSkeletonComponent,
+    LandingPageSearchComponent,
     materialModules
   ]
 })

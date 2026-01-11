@@ -87,6 +87,11 @@ $text-white: #ffffff;
   margin-top: 30px;
   border: black 1px solid;
   border-radius: 20px;
-  padding: 4px;
+  padding: 10px;
 
+  ._search{
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
 }

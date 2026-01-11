@@ -52,7 +52,7 @@ public class EventsController(ISender sender) : ControllerBase
         await sender.Send(new DeleteEventCommand { Id = id }, ct); 
     }
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     public async Task Update(int id, UpdateEventCommand command, CancellationToken ct)
     {
         command.Id = id;
