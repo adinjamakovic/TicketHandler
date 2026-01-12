@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market.Application.Modules.Events.Events.Commands.Create
+namespace Market.Application.Modules.Sales.Orders.Commands.Create
 {
     public class CreateEventCommand : IRequest<int>
     {
