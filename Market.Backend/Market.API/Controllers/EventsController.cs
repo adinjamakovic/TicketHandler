@@ -3,6 +3,7 @@ using Market.Application.Modules.Events.Events.Commands.Delete;
 using Market.Application.Modules.Events.Events.Commands.Update;
 using Market.Application.Modules.Events.Events.Queries.GetById;
 using Market.Application.Modules.Events.Events.Queries.List;
+using Market.Application.Modules.Sales.Orders.Commands.Create;
 using System.Runtime.CompilerServices;
 
 namespace Market.API.Controllers;
