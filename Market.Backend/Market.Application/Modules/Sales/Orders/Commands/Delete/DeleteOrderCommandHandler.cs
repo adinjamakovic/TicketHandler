@@ -15,6 +15,7 @@ namespace Market.Application.Sales.Sales.Orders.Commands.Delete
         {
             var Order = await ctx.Orders
                 .FirstOrDefaultAsync(x => x.Id == req.Id, ct);
+            var wallet  = await ctx.Wallets.FirstOrDefaultAsync(x=> x.PersonId == Order.PersonId);
 
             if (Order is null)
                 throw new MarketNotFoundException($"Order with Id {req.Id} does not exist");
@@ -28,7 +29,11 @@ namespace Market.Application.Sales.Sales.Orders.Commands.Delete
             if(OrderItems != null)
             {
                 foreach (var orderItems in OrderItems)
+                {
+                    wallet!.Balance += orderItems.Subtotal;
                     ctx.OrderItems.Remove(orderItems);
+                }
+                ctx.Wallets.Update(wallet!);
             }
 
             await ctx.SaveChangesAsync(ct);

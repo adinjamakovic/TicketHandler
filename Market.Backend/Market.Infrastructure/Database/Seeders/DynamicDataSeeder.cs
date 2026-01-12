@@ -24,8 +24,10 @@ public static class DynamicDataSeeder
         await SeedPerformersAsync(context);
         await SeedEventsAsync(context);
         await SeedPerformerEvents(context);
+        await SeedWallet(context);
 
     }
+
 
     private static async Task SeedCities(DatabaseContext context)
     {
@@ -554,5 +556,26 @@ public static class DynamicDataSeeder
             await context.SaveChangesAsync();
             Console.WriteLine("✅ Dynamic seed: Venues added.");
         }
+    }
+    private static async Task SeedWallet(DatabaseContext context)
+    {
+        if (await context.Wallets.AnyAsync())
+            return;
+
+        var users =await context.Persons.ToListAsync();
+
+        foreach (var user in users)
+        {
+            var wallet = new WalletEntity
+            {
+                PersonId = user.Id,
+                Balance = 10,
+                PreviouslySpent = 0,
+            };
+            await context.Wallets.AddAsync( wallet );
+        }
+        await context.SaveChangesAsync();
+
+        Console.WriteLine("✅ Dynamic seed: wallet for users added.");
     }
 }
