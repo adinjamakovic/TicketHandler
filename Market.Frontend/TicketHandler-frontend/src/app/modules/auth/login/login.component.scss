@@ -1,11 +1,11 @@
 // src/app/pages/auth/login/login.component.scss
 
 // === VARIJABLE (iste kao landing page) ===
-$primary-blue: #4a90e2;
-$light-blue: #e8f4fd;
-$lighter-blue: #f5faff;
-$dark-blue: #2e5c8a;
-$accent-blue: #64b5f6;
+$primary-pruple: #984ae2;
+$light-purple: #f7e8fd;
+$lighter-purple: #fcf5ff;
+$dark-purple: #6b2e8a;
+$accent-purple: #ab64f6;
 $text-dark: #1a1a1a;
 $text-light: #666666;
 $white: #ffffff;
@@ -76,7 +76,7 @@ $success-green: #4caf50;
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(135deg, $lighter-blue 0%, $light-blue 50%, $lighter-blue 100%);
+  background: linear-gradient(135deg, $lighter-purple 0%, $light-purple 50%, $lighter-purple 100%);
   z-index: 0;
 }
 
@@ -134,7 +134,7 @@ $success-green: #4caf50;
   font-size: 64px;
   width: 64px;
   height: 64px;
-  color: $primary-blue;
+  color: $primary-pruple;
   margin-bottom: 16px;
   animation: pulse 2s ease-in-out infinite;
 }
@@ -145,7 +145,7 @@ $success-green: #4caf50;
   margin: 0 0 8px 0;
   padding-top: 5px;
   padding-bottom: 5px;
-  background: linear-gradient(135deg, $primary-blue 0%, $dark-blue 100%);
+  background: linear-gradient(135deg, $primary-pruple 0%, $dark-purple 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -216,7 +216,7 @@ form {
     }
 
     .mat-mdc-text-field-wrapper {
-      background-color: $lighter-blue;
+      background-color: $lighter-purple;
       border-radius: 12px;
       transition: all 0.3s ease;
     }
@@ -239,14 +239,14 @@ form {
       .mdc-notched-outline__leading,
       .mdc-notched-outline__notch,
       .mdc-notched-outline__trailing {
-        border-color: $primary-blue !important;
+        border-color: $primary-pruple !important;
         border-width: 2px !important;
       }
     }
 
     .mat-mdc-form-field-icon-prefix,
     .mat-mdc-form-field-icon-suffix {
-      color: $primary-blue;
+      color: $primary-pruple;
     }
 
     input {
@@ -299,11 +299,11 @@ form {
 
 ::ng-deep .mat-mdc-checkbox {
   .mdc-checkbox__background {
-    border-color: $primary-blue !important;
+    border-color: $primary-pruple !important;
   }
 
   &.mat-mdc-checkbox-checked .mdc-checkbox__background {
-    background-color: $primary-blue !important;
+    background-color: $primary-pruple !important;
   }
 
   .mdc-label {
@@ -313,14 +313,14 @@ form {
 }
 
 .forgot-link {
-  color: $primary-blue;
+  color: $primary-pruple;
   text-decoration: none;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.3s ease;
 
   &:hover {
-    color: $dark-blue;
+    color: $dark-purple;
     text-decoration: underline;
   }
 }
@@ -397,13 +397,13 @@ form {
 }
 
 .register-link {
-  color: $primary-blue;
+  color: $primary-pruple;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
 
   &:hover {
-    color: $dark-blue;
+    color: $dark-purple;
     text-decoration: underline;
   }
 }
@@ -428,7 +428,7 @@ form {
   border-radius: 8px;
 
   &:hover {
-    color: $primary-blue;
+    color: $primary-pruple;
     background: rgba(74, 144, 226, 0.1);
 
     mat-icon {
