@@ -10,6 +10,6 @@ namespace Market.Application.Modules.Events.Events.Queries.List
     public sealed class GetEventsByOrganizerIdQuery : BasePagedQuery<GetEventsByOrganizerIdQueryDto>
     {
         //Search over Organizer Id
-        public int Id { get; init; } = -1;
+        public int Id { get; init; } = 1;
     }
 }

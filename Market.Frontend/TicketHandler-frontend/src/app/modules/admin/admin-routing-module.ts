@@ -8,12 +8,18 @@ import { ProductsEditComponent } from './catalogs/products/products-edit/product
 import { ProductCategoriesComponent } from './catalogs/product-categories/product-categories.component';
 import {AdminOrdersComponent} from './orders/admin-orders.component';
 import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
+import { AdminOrganizersComponent } from './organizers/admin-organizers/admin-organizers.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
+      //Organizers
+      {
+        path: 'organizers',
+        component: AdminOrganizersComponent,
+      },
       // PRODUCTS
       {
         path: 'products',
