@@ -28,9 +28,9 @@
       "EMPLOYEE": "Employee"
     },
     "MENU": {
-      "CATALOG": "CATALOG",
-      "CATEGORIES": "Product Categories",
-      "PRODUCTS": "Products",
+      "EVENTS": "Events",
+      "EVENTNEWS": "Event news",
+      "ORGANIZERS": "Organizers",
       "ORDERS_SECTION": "ORDERS",
       "ORDERS": "Orders Overview",
       "SYSTEM": "SYSTEM",

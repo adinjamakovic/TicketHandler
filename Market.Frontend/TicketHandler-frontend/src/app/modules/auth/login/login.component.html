@@ -11,15 +11,15 @@
     <!-- Logo & Brand -->
     <div class="auth-brand">
       <mat-icon class="brand-icon">storefront</mat-icon>
-      <h1 class="brand-name">FIT Market</h1>
-      <p class="brand-tagline">Dobrodošli nazad</p>
+      <h1 class="brand-name">TicketHandler</h1>
+      <p class="brand-tagline">Welcome back</p>
     </div>
 
     <!-- Login Card -->
     <mat-card class="auth-card mat-elevation-z8">
       <mat-card-header>
         <mat-card-title>{{ 'AUTH.LOGIN.TITLE' | translate }}</mat-card-title>
-        <mat-card-subtitle>Unesite vaše podatke za pristup</mat-card-subtitle>
+        <mat-card-subtitle>Enter your credentials below</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -42,10 +42,10 @@
             />
             <mat-icon matPrefix>person</mat-icon>
             <mat-error *ngIf="form.get('email')?.hasError('required')">
-              Email je obavezan
+              Email is a mandatory field
             </mat-error>
             <mat-error *ngIf="form.get('email')?.hasError('email')">
-              Unesite validan email
+              Enter a valid email
             </mat-error>
           </mat-form-field>
 
@@ -70,7 +70,7 @@
               <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
             </button>
             <mat-error *ngIf="form.get('password')?.hasError('required')">
-              Lozinka je obavezna
+              Password is a mandatory field
             </mat-error>
           </mat-form-field>
 
@@ -79,7 +79,7 @@
             <mat-checkbox formControlName="rememberMe" color="primary">
               {{ 'AUTH.LOGIN.REMEMBER_ME' | translate }}
             </mat-checkbox>
-            <a href="#" class="forgot-link">Zaboravili ste lozinku?</a>
+            <a href="#" class="forgot-link">Forgot your password?</a>
           </div>
 
           <!-- Submit Button -->
@@ -101,20 +101,20 @@
                   diameter="20"
                   strokeWidth="3"
                 ></mat-progress-spinner>
-                <span>Prijava u toku...</span>
+                <span>Logging in...</span>
               </ng-template>
             </button>
           </div>
 
           <!-- Divider -->
           <div class="divider">
-            <span>ili</span>
+            <span>or</span>
           </div>
 
           <!-- Register Link -->
           <div class="register-prompt">
-            <span>Nemate nalog?</span>
-            <a routerLink="/auth/register" class="register-link">Registrujte se</a>
+            <span>Not registered?</span>
+            <a routerLink="/auth/register" class="register-link">Register now!</a>
           </div>
         </form>
       </mat-card-content>
@@ -124,7 +124,7 @@
     <div class="auth-footer">
       <a routerLink="/" class="back-link">
         <mat-icon>arrow_back</mat-icon>
-        Nazad na početnu
+        Back to homepage
       </a>
     </div>
   </div>
