@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-landing-page-search',
@@ -8,20 +8,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrl: './landing-page-search.component.scss',
 })
 export class LandingPageSearchComponent {
-  @Output() search = new EventEmitter<any>();
+  name = new FormControl('');
 
-  searchForm: FormGroup;
-
-  constructor(private fb: FormBuilder) {
-    this.searchForm = this.fb.group({
-      location: [''],
-      startDate: [''],
-      endDate: [''],
-      eventName: ['']
-    });
-  }
-
-  submit(){
-    this.search.emit(this.searchForm.value);
-  }
 }
