@@ -276,6 +276,7 @@ public static class DynamicDataSeeder
         {
             CityId = 6,
             Address = "Dummy Address",
+            FirstName ="Dummy organiser name",
             Email = "dummy_organiser@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsOrganiser = true,

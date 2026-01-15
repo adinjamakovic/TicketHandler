@@ -23,6 +23,13 @@ const routes: Routes = [
       import('./modules/client/client-module').then(m => m.ClientModule)
   },
   {
+    path: 'organizer',
+    canActivate: [myAuthGuard],
+    data: myAuthData({ requireAuth: true }),// bilo ko logiran
+    loadChildren: () =>
+      import('./modules/organizers/organizer-module').then(m => m.OrganizerModule)
+  },
+  {
     path: '',
     loadChildren: () =>
       import('./modules/public/public-module').then(m => m.PublicModule)

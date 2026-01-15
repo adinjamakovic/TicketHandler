@@ -13,7 +13,6 @@ export class CurrentUserService {
   isAdmin = computed(() => this.auth.isAdmin());
   isManager = computed(() => this.auth.isManager());
   isEmployee = computed(() => this.auth.isEmployee());
-
   get snapshot() {
     return this.auth.currentUser();
   }
@@ -24,6 +23,7 @@ export class CurrentUserService {
     if (!user) return '/login';
 
     if (user.isAdmin) return '/admin';
+    if (user.IsOrganiser) return '/organizer'
     return '/client';
   }
 }
