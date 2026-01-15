@@ -12,10 +12,12 @@ import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {CustomTranslateLoader} from './core/services/custom-translate-loader';
 import {materialModules} from './modules/shared/material-modules';
 import {SharedModule} from './modules/shared/shared-module';
+import { TicketsComponent } from './modules/organizers/tickets/tickets.component';
+import { TicketTypesComponent } from './modules/organizers/ticket-types/ticket-types.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,

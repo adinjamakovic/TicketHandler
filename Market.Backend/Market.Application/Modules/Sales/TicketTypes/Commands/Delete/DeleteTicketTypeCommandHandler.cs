@@ -17,7 +17,7 @@ namespace Market.Application.Modules.Sales.TicketTypes.Commands.Delete
             if (TicketTypes is null)
                 throw new MarketNotFoundException("Ticket types not found");
             
-            if (!appCurrentUser.IsUser)
+            if (appCurrentUser.IsUser)
                 throw new MarketBusinessRuleException("111","You are not allowed to do this");
 
             ctx.TicketTypes.Remove(TicketTypes);

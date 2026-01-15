@@ -25,9 +25,62 @@ public static class DynamicDataSeeder
         await SeedEventsAsync(context);
         await SeedPerformerEvents(context);
         await SeedWallet(context);
+        await SeedTicketType(context);
+        await SeedTicket(context);
+        
+
 
     }
 
+    private static async Task SeedTicket(DatabaseContext context)
+    {
+        if (await context.Tickets.AnyAsync())
+            return;
+
+        var VIP = new TicketsEntity
+        {
+            EventId = 1,
+            TicketTypeId = 1,
+            QuanityInStock = 10,
+            UnitPrice = 20,
+            Benefits = "Meet And Greet with performer"
+        };
+        var Standard = new TicketsEntity
+        {
+            EventId = 1,
+            TicketTypeId = 2,
+            QuanityInStock = 10,
+            UnitPrice = 20,
+            Benefits = ""
+        };
+
+        context.Tickets.AddRange(VIP, Standard);
+
+        await context.SaveChangesAsync();
+        Console.WriteLine("✅ Dynamic seed: Tickets added.");
+    }
+
+    private static async Task SeedTicketType(DatabaseContext context)
+    {
+        if (await context.TicketTypes.AnyAsync())
+            return;
+
+        var VIP = new TicketTypeEntity
+        {
+            Name = "VIP",
+            Description = "More expensive ticket type"
+        };
+        var Standard = new TicketTypeEntity
+        {
+            Name = "Standard",
+            Description = "Standard ticket"
+        };
+
+        context.TicketTypes.AddRange(VIP,Standard);
+
+        await context.SaveChangesAsync();
+        Console.WriteLine("✅ Dynamic seed: Ticket types added.");
+    }
 
     private static async Task SeedCities(DatabaseContext context)
     {
@@ -223,6 +276,7 @@ public static class DynamicDataSeeder
         {
             CityId = 6,
             Address = "Dummy Address",
+            FirstName ="Dummy organiser name",
             Email = "dummy_organiser@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsOrganiser = true,

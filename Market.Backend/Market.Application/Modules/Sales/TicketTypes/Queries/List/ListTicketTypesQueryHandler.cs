@@ -24,6 +24,7 @@ namespace Market.Application.Modules.Sales.TicketTypes.Commands.Queries.List
             var projectedQuery = q.OrderBy(x => x.Name)
                 .Select(x => new ListTicketTypesQueryDto
                 {
+                    Id=x.Id,
                     Name=x.Name,
                     Description=x.Description
                 });
