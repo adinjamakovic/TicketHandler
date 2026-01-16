@@ -13,8 +13,8 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.List
         {
             var q = ctx.Tickets.AsNoTracking();
 
-            if (req.EventId is not null)
-                q = q.Where(x => x.EventId == req.EventId);
+            if (req.Id is not null)
+                q = q.Where(x => x.Id == req.Id);
 
             var projectedQ = q.OrderBy(x => x.CreatedAtUtc)
                 .Select(x => new ListTicketsQueryDto

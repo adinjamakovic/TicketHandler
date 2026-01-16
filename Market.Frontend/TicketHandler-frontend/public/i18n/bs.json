@@ -38,6 +38,66 @@
       "LOGOUT": "Odjava"
     }
   },
+  "ORGANIZER_PANEL": {
+    "TITLE": "Organizatorski Panel",
+    "ROLES": {
+      "ADMIN": "Administrator",
+      "MANAGER": "Menadžer",
+      "EMPLOYEE": "Zaposlenik"
+    },
+    "MENU": {
+      "SALES": "PRODAJA",
+      "TICKET": "Karte",
+      "TICKET_TYPES": "Tip Karata",
+      "ORDERS_SECTION": "NARUDŽBE",
+      "ORDERS": "Pregled Narudžbi",
+      "SYSTEM": "SISTEM",
+      "SETTINGS": "Postavke",
+      "LOGOUT": "Odjava"
+    }
+  },
+  "TICKET_TYPES": {
+    "TITLE": "Tip karata",
+    "SEARCH_PLACEHOLDER": "",
+    "SEARCH_INPUT_PLACEHOLDER": "Unesite naziv tipa karte...",
+    "NEW_TICKET_TYPE": "Novi Tip Karte",
+    "ADD_NEW": "Dodaj Tip Karte",
+    "LOADING": "Učitavanje tipova karata...",
+    "TABLE.NAME": "Naziv",
+    "TABLE.DESCRIPTION": "Opis",
+    "TABLE.ACTIONS": "Akcije",
+    "NO_DATA": "Nema tipova karata za prikaz",
+    "NO_DATA_FILTER": "Nema rezultata za pretragu",
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Uredi tip karte",
+      "DELETE_TOOLTIP": "Obriši tip karte"
+    },
+    "FORM": {
+      "NAME": "Naziv Tipa Karata",
+      "NAME_PLACEHOLDER": "Unesite naziv tipa karte",
+      "DESCRIPTION": "Opis",
+      "DESCRIPTION_PLACEHOLDER": "Unesite opis tipa karte",
+      "LOADING": "Učitavanje...",
+      "CANCEL": "Otkaži",
+      "SAVE": "Sačuvaj",
+      "UPDATE": "Ažuriraj"
+    },
+    "DIALOGS": {
+      "DELETE_TITLE": "Brisanje Tipa Karte",
+      "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati tip karte \"{{name}}\"?",
+      "CONFIRM_ENABLE": "Da li ste sigurni da želite aktivirati tip karte \"{{name}}\"?",
+      "CONFIRM_DISABLE": "Da li ste sigurni da želite deaktivirati tip karte \"{{name}}\"?",
+      "SUCCESS_CREATE": "Tip karte uspješno kreiran.",
+      "SUCCESS_UPDATE": "Tip karte uspješno ažuriran.",
+      "SUCCESS_DELETE": "Tip karte uspješno obrisan.",
+      "SUCCESS_ENABLE": "Tip karte \"{{name}}\" je uspješno aktiviran.",
+      "SUCCESS_DISABLE": "Tip karte \"{{name}}\" je uspješno deaktiviran.",
+      "ERROR_CREATE": "Greška pri kreiranju tipa karte.",
+      "ERROR_UPDATE": "Greška pri ažuriranju tipa karte.",
+      "ERROR_DELETE": "Greška pri brisanju tipa karte.",
+      "ERROR_TOGGLE": "Greška pri promjeni statusa tipa karte \"{{name}}\"."
+    }
+  },
   "PRODUCT_CATEGORIES": {
     "TITLE": "Kategorije Proizvoda",
     "SUBTITLE": "Upravljanje kategorijama proizvoda",

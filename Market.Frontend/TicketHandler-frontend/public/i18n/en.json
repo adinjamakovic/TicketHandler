@@ -38,6 +38,66 @@
       "LOGOUT": "Logout"
     }
   },
+  "ORGANIZER_PANEL": {
+    "TITLE": "Organizer Panel",
+    "ROLES": {
+      "ADMIN": "Administrator",
+      "MANAGER": "Manager",
+      "EMPLOYEE": "Employee"
+    },
+    "MENU": {
+      "SALES": "SALES",
+      "TICKET": "Tickets",
+      "TICKET_TYPES": "Ticket Types",
+      "ORDERS_SECTION": "ORDERS",
+      "ORDERS": "Orders Overview",
+      "SYSTEM": "SYSTEM",
+      "SETTINGS": "Settings",
+      "LOGOUT": "Logout"
+    }
+  },
+  "TICKET_TYPES": {
+    "TITLE": "Ticket Types",
+    "SEARCH_PLACEHOLDER": "",
+    "SEARCH_INPUT_PLACEHOLDER": "Enter ticket type name...",
+    "NEW_TICKET_TYPE": "New Ticket Type",
+    "ADD_NEW": "Add Ticket Type",
+    "LOADING": "Loading ticket types...",
+    "TABLE.NAME": "Name",
+    "TABLE.DESCRIPTION": "Description",
+    "TABLE.ACTIONS": "Actions",
+    "NO_DATA": "No ticket types to display",
+    "NO_DATA_FILTER": "No results found for search",
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Edit ticket type",
+      "DELETE_TOOLTIP": "Delete ticket type"
+    },
+    "FORM": {
+      "NAME": "Ticket Type Name",
+      "NAME_PLACEHOLDER": "Enter ticket type name",
+      "DESCRIPTION": "Description",
+      "DESCRIPTION_PLACEHOLDER": "Enter ticket type description",
+      "LOADING": "Loading...",
+      "CANCEL": "Cancel",
+      "SAVE": "Save",
+      "UPDATE": "Update"
+    },
+    "DIALOGS": {
+      "DELETE_TITLE": "Delete Ticket Type",
+      "DELETE_MESSAGE": "Are you sure you want to delete ticket type \"{{name}}\"?",
+      "CONFIRM_ENABLE": "Are you sure you want to enable ticket type \"{{name}}\"?",
+      "CONFIRM_DISABLE": "Are you sure you want to disable ticket type \"{{name}}\"?",
+      "SUCCESS_CREATE": "Ticket type created successfully.",
+      "SUCCESS_UPDATE": "Ticket type updated successfully.",
+      "SUCCESS_DELETE": "Ticket type deleted successfully.",
+      "SUCCESS_ENABLE": "Ticket type \"{{name}}\" has been enabled successfully.",
+      "SUCCESS_DISABLE": "Ticket type \"{{name}}\" has been disabled successfully.",
+      "ERROR_CREATE": "Error creating ticket type.",
+      "ERROR_UPDATE": "Error updating ticket type.",
+      "ERROR_DELETE": "Error deleting ticket type.",
+      "ERROR_TOGGLE": "Error changing status of ticket type \"{{name}}\"."
+    }
+  },
   "PRODUCT_CATEGORIES": {
     "TITLE": "Product Categories",
     "SUBTITLE": "Manage product categories",

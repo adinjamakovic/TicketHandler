@@ -8,6 +8,7 @@ namespace Market.Application.Modules.Sales.TicketTypes.Commands.Queries.List
 {
     public class ListTicketTypesQueryDto
     {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
     }
