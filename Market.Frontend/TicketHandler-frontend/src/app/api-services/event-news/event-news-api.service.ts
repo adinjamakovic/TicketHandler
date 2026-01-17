@@ -1,7 +1,10 @@
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateEventNewsCommand, ListEventNewsRequest, ListEventNewsResponse, UpdateEventNewsCommand } from "./event-news-api.model";
+import {
+  CreateEventNewsCommand,
+  GetEventNewsByIdQueryDto, ListEventNewsRequest, ListEventNewsResponse, UpdateEventNewsCommand
+} from "./event-news-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
 import { GetEventByIdQueryDto } from "../events/events-api.model";
@@ -23,8 +26,8 @@ export class EventNewsApiService {
     }
 
     //GET /EventNews/{id}
-    GetById(id: number): Observable<GetEventByIdQueryDto> {
-        return this.http.get<GetEventByIdQueryDto>(`${this.baseUrl}/${id}}`);
+    GetById(id: number): Observable<GetEventNewsByIdQueryDto> {
+        return this.http.get<GetEventNewsByIdQueryDto>(`${this.baseUrl}/${id}}`);
     }
 
     //POST /EventNews
