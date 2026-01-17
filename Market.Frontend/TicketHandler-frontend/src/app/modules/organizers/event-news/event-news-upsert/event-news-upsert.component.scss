@@ -73,6 +73,12 @@ mat-dialog-content {
       width: 100%;
     }
 
+    .body-width{
+      margin-top: 50px;
+      width: 100%;
+      height: 300px;
+    }
+
     mat-form-field {
       &.mat-form-field-appearance-outline {
         .mat-mdc-form-field-flex {

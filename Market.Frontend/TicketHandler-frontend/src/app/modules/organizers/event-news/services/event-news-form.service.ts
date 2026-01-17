@@ -8,12 +8,24 @@ export class EventNewsService {
 
   createNewsForm(news?: GetEventNewsByIdQueryDto): FormGroup {
     return this.fb.group({
+      event: [
+        news?.event ?? null,
+        [
+          Validators.required,
+        ]
+      ],
       header: [
         news?.header ?? '',
         [
           Validators.required,
           Validators.minLength(6),
           Validators.maxLength(50),
+        ]
+      ],
+      body: [
+        news?.body ?? '',
+        [
+          Validators.maxLength(1000),
         ]
       ]
     })
