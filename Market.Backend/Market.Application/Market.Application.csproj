@@ -20,8 +20,4 @@
     <ProjectReference Include="..\Market.Shared\Market.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Modules\Identity\Person\Commands\" />
-  </ItemGroup>
-
 </Project>

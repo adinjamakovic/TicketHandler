@@ -18,7 +18,7 @@ import { TicketTypesComponent } from './ticket-types/ticket-types.component';
     OrganizerSettingsComponent,
     TicketTypesUpsertComponent,
     TicketTypesComponent,
-    TicketsComponent,
+    TicketsComponent
 
   ],
   imports: [

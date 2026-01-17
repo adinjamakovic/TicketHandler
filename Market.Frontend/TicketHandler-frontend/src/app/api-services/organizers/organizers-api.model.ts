@@ -9,17 +9,17 @@ export class ListOrganizersRequest extends BasePagedQuery{
     search?: string | null;
 }
 
-export interface ListOrganizersItem {
+export interface ListOrganizersQueryDto {
     id: number;
     name: string;
-    Description?: string | null;
-    CityName: string;
-    UserName: string;
-    EmailAddress: string;
-    IsDeleted: boolean;
+    description?: string | null;
+    cityName: string;
+    userName: string;
+    emailAddress: string;
+    isDeleted: boolean;
 }
 
-export type ListOrganizersResponse = PageResult<ListOrganizersItem>;
+export type ListOrganizersResponse = PageResult<ListOrganizersQueryDto>;
 
 // ================================================
 // ================== GET BY ID  ==================
@@ -34,10 +34,11 @@ export interface GetOrganizerByIdQueryEventDto{
 
 export interface GetOrganizerByIdQueryDto {
     id: number;
-    Name: string;
+    name: string;
     description?: string | null;
     email: string;
     city: string;
+    cityId: number;
     events: GetOrganizerByIdQueryEventDto[];
 }
 
@@ -48,7 +49,7 @@ export interface GetOrganizerByIdQueryDto {
 export interface CreateOrganizerCommand {
     name: string;
     description: string;
-    Address: string;
+    address: string;
     cityid: number;
     //implement later:
     //logo: ??????;
