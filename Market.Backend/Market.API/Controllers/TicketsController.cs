@@ -7,6 +7,7 @@ using Market.Application.Modules.Sales.Tickets.Commands.Create;
 using Market.Application.Modules.Sales.Tickets.Commands.Delete;
 using Market.Application.Modules.Sales.Tickets.Commands.Update;
 using Market.Application.Modules.Sales.Tickets.Queries.GetByEventId;
+using Market.Application.Modules.Sales.Tickets.Queries.GetByEventName;
 using Market.Application.Modules.Sales.Tickets.Queries.GetById;
 using Market.Application.Modules.Sales.Tickets.Queries.List;
 using System.Runtime.CompilerServices;
@@ -44,14 +45,19 @@ public class TicketsController(ISender sender) : ControllerBase
         var result = await sender.Send(q, ct);
         return result;
     }
-
+    [HttpGet("EventName")]
+    public async Task<PageResult<GetTicketsByEventNameQueryDto>> ListTicketsByEventName([FromQuery] GetTicketsByEventNameQuery q, CancellationToken ct)
+    {
+        var result = await sender.Send(q, ct);
+        return result;
+    }
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
         await sender.Send(new DeleteTicketsCommand { Id = id }, ct); 
     }
 
-    [HttpPut("id:int")]
+    [HttpPut("{id:int}")]
     public async Task Update(int id, UpdateTicketsCommand command, CancellationToken ct)
     {
         command.Id = id;

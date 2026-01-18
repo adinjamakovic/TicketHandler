@@ -4,6 +4,7 @@ import { OrganizersLayoutComponent } from './organizers-layout/organizers-layout
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketTypesComponent } from './ticket-types/ticket-types.component';
 import { OrganizerSettingsComponent } from './organizer-settings/organizer-settings.component';
+import { TicketsUpsertComponent } from './tickets/tickets-upsert/tickets-upsert.component';
 
 const routes: Routes = [
   {

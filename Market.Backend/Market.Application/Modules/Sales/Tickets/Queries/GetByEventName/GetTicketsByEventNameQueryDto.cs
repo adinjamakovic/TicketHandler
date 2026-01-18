@@ -1,27 +1,29 @@
-﻿using System;
+﻿using Market.Application.Modules.Events.Events.Queries.List;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market.Application.Modules.Sales.Tickets.Queries.List
+namespace Market.Application.Modules.Sales.Tickets.Queries.GetByEventName
 {
-    public class ListTicketsQueryDto
+    public sealed class GetTicketsByEventNameQueryDto
     {
         public required int Id { get; init; }
-        public ListTicketsQueryEvent Event { get; set; }
-        public ListTicketsQueryTicketType TicketType { get; set; }
+        public GetTicketsByEventNameQueryDtoEvent Event { get; set; }
+        public GetTicketsByEventNameQueryDtoTicketType TicketType { get; set; }
         public decimal QuantityInStock { get; set; }
         public decimal UnitPrice { get; set; }
         public string Benefits { get; set; }
     }
 
-    public class ListTicketsQueryEvent
+    public class GetTicketsByEventNameQueryDtoTicketType
     {
         public int Id { get; set; }
         public string Name { get; set; }
     }
-    public class ListTicketsQueryTicketType
+
+    public class GetTicketsByEventNameQueryDtoEvent
     {
         public int Id { get; set; }
         public string Name { get; set; }

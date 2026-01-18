@@ -280,6 +280,56 @@ export class DialogHelperService {
       );
     }
   };
+  tickets = {
+    confirmDelete: (categoryName: string) => {
+      return this.confirmDelete(
+        categoryName,
+        'TICKETS.DIALOGS.DELETE_MESSAGE'
+      );
+    },
+
+    showCreateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_CREATE'
+      );
+    },
+
+    showUpdateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_UPDATE'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_DELETE'
+      );
+    },
+
+    showCreateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_CREATE'
+      );
+    },
+
+    showUpdateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_UPDATE'
+      );
+    },
+
+    showDeleteError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_DELETE'
+      );
+    }
+  };
   /**
    * Product specific dialogs
    */

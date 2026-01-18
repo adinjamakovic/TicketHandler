@@ -1018,7 +1018,7 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("QuanityInStock")
+                    b.Property<decimal>("QuantityInStock")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
