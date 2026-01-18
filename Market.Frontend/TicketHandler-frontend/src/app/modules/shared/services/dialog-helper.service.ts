@@ -230,6 +230,57 @@ export class DialogHelperService {
     }
   };
 
+  eventNews = {
+    confirmDelete: (newsHeader: string) => {
+      return this.confirmDelete(
+        newsHeader,
+        'Are you sure you want to delete?'
+      );
+    },
+
+    showCreateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have sucessfully added event news!'
+      );
+    },
+
+    showUpdateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have succesfully updated event news!'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have successfully deleted event news!'
+      );
+    },
+
+    showCreateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem while creating event news'
+      );
+    },
+
+    showUpdateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem while updating event news'
+      );
+    },
+
+    showDeleteError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem trying to delete event news'
+      );
+    }
+  };
+
   ticketTypes = {
     confirmDelete: (categoryName: string) => {
       return this.confirmDelete(

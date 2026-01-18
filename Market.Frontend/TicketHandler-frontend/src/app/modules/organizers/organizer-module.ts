@@ -10,6 +10,9 @@ import { TicketTypesUpsertComponent } from './ticket-types/ticket-types-upsert/t
 import { TicketTypesFormService } from './ticket-types/services/ticket-types-form.service';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketTypesComponent } from './ticket-types/ticket-types.component';
+import { EventsComponent } from './events/events.component';
+import { EventNewsComponent } from './event-news/event-news.component';
+import { EventNewsUpsertComponent } from './event-news/event-news-upsert/event-news-upsert.component';
 
 
 @NgModule({
@@ -19,6 +22,9 @@ import { TicketTypesComponent } from './ticket-types/ticket-types.component';
     TicketTypesUpsertComponent,
     TicketTypesComponent,
     TicketsComponent,
+    EventsComponent,
+    EventNewsComponent,
+    EventNewsUpsertComponent,
 
   ],
   imports: [
