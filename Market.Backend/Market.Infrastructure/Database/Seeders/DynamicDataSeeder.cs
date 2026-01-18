@@ -41,7 +41,7 @@ public static class DynamicDataSeeder
         {
             EventId = 1,
             TicketTypeId = 1,
-            QuanityInStock = 10,
+            QuantityInStock = 10,
             UnitPrice = 20,
             Benefits = "Meet And Greet with performer"
         };
@@ -49,7 +49,7 @@ public static class DynamicDataSeeder
         {
             EventId = 1,
             TicketTypeId = 2,
-            QuanityInStock = 10,
+            QuantityInStock = 10,
             UnitPrice = 20,
             Benefits = ""
         };

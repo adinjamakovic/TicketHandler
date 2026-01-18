@@ -31,7 +31,7 @@ namespace Market.Application.Modules.Sales.Orders.Queries.ListWithTickets
                             Id = y.Ticket.Id,
                             EventId = y.Ticket.EventId,
                             TicketTypeId = y.Ticket.TicketTypeId,
-                            QuanityInStock = y.Ticket.QuanityInStock,
+                            QuanityInStock = y.Ticket.QuantityInStock,
                             UnitPrice = y.Ticket.UnitPrice,
                             Benefits = y.Ticket.Benefits
                         },

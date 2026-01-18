@@ -10,7 +10,7 @@ namespace Market.Application.Modules.Sales.Tickets.Commands.Create
     {
         public int EventId { get; set; }
         public int TicketTypeId { get; set; }
-        public decimal QuanityInStock { get; set; }
+        public decimal QuantityInStock { get; set; }
         public decimal UnitPrice { get; set; }
         public string Benefits { get; set; }
     }

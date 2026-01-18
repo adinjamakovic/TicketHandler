@@ -13,16 +13,28 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.List
         {
             var q = ctx.Tickets.AsNoTracking();
 
-            if (req.Id is not null)
-                q = q.Where(x => x.Id == req.Id);
+            var searchTerm = req.EventName?.Trim().ToLower() ?? string.Empty;
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                q = q.Where(x => x.Event.Name.ToLower().Contains(searchTerm));
+            }
 
             var projectedQ = q.OrderBy(x => x.CreatedAtUtc)
                 .Select(x => new ListTicketsQueryDto
                 {
                     Id = x.Id,
-                    EventId = x.EventId,
-                    TicketTypeId = x.TicketTypeId,
-                    QuanityInStock = x.QuanityInStock,
+                    Event = new ListTicketsQueryEvent
+                    {
+                        Id = x.EventId,
+                        Name = x.Event.Name,
+                    },
+                    TicketType = new ListTicketsQueryTicketType
+                    {
+                        Id = x.TicketType.Id,
+                        Name = x.TicketType.Name,
+                    },
+                    QuantityInStock = x.QuantityInStock,
                     UnitPrice = x.UnitPrice,
                     Benefits = x.Benefits
                 });

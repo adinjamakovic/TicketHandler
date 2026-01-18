@@ -1,7 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { ListOrganizersRequest, UpdateOrganizerCommand } from '../organizers/organizers-api.model';
 import { Observable } from 'rxjs';
 import { CreateTicketTypesCommand, GetTicketTypesByIdQueryDto, ListTicketTypesRequest, ListTicketTypesResponse, UpdateTicketTypesCommand } from './ticket-types-api.model';
 import { buildHttpParams } from '../../core/models/build-http-params';

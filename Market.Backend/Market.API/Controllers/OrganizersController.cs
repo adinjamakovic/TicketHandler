@@ -2,6 +2,7 @@ using Market.Application.Modules.Events.Organizers.Commands.Create;
 using Market.Application.Modules.Events.Organizers.Commands.Delete;
 using Market.Application.Modules.Events.Organizers.Commands.Update;
 using Market.Application.Modules.Events.Organizers.Queries.GetById;
+using Market.Application.Modules.Events.Organizers.Queries.GetByUserId;
 using Market.Application.Modules.Events.Organizers.Queries.List;
 using System.Runtime.CompilerServices;
 
@@ -33,7 +34,12 @@ public class OrganizersController(ISender sender) : ControllerBase
         var Organizer = await sender.Send(new GetOrganizerByIdQuery { Id = id }, ct);
         return Organizer;
     }
-
+    [HttpGet("UserId/{userId:int}")]
+    public async Task<GetOrganizerByUserIdQueryDto> GetByUserId(int userId, CancellationToken ct)
+    {
+        var Organizer = await sender.Send(new GetOrganizerByUserIdQuery { UserId = userId }, ct);
+        return Organizer;
+    }
     [HttpPut("{id:int}")]
     public async Task Update(int id, UpdateOrganizerCommand command, CancellationToken ct)
     {
