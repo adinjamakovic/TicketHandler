@@ -7,6 +7,8 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {DialogHelperService} from '../../shared/services/dialog-helper.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EventNewsUpsertComponent} from './event-news-upsert/event-news-upsert.component';
+import {ListEventsQueryDto} from '../../../api-services/events/events-api.model';
+import {DialogButton} from '../../shared/models/dialog-config.model';
 
 @Component({
   selector: 'app-event-news',
@@ -63,7 +65,7 @@ export class EventNewsComponent
       const dialogRef = this.dialog.open(EventNewsUpsertComponent, {
         width: '500px',
         maxWidth: '90vw',
-        panelClass: 'product-category-dialog',
+        panelClass: 'event-news-dialog',
         autoFocus: true,
         disableClose: false,
         data: {
@@ -79,8 +81,88 @@ export class EventNewsComponent
       });
   }
 
-  onEdit(eventId: number): void {}
+  onEdit(news: ListEventNewsQueryDto): void {
+      const dialogRef = this.dialog.open(EventNewsUpsertComponent, {
+        width: '500px',
+        maxWidth: '90vw',
+        panelClass: 'event-news-dialog',
+        autoFocus: true,
+        disableClose: false,
+        data: {
+          mode: 'edit',
+          eventNewsId: news.id,
+        },
+      });
 
-  onDelete(eventId: number): void {}
+      dialogRef.afterClosed().subscribe((success: boolean) => {
+        if (success) {
+          this.dialogHelper.eventNews.showUpdateSuccess().subscribe();
+          this.loadPagedData();
+        }
+      });
+  }
 
+  onDelete(eventNews: ListEventNewsQueryDto): void {
+      this.dialogHelper.eventNews.confirmDelete(eventNews.header).subscribe(result => {
+        if (result && result.button === DialogButton.DELETE) {
+          this.performDelete(eventNews);
+        }
+      });
+  }
+
+  private performDelete(eventNews: ListEventNewsQueryDto) : void {
+        this.startLoading();
+
+        this.api.delete(eventNews.id).subscribe({
+          next: () => {
+            this.dialogHelper.eventNews.showDeleteSuccess().subscribe();
+            this.loadPagedData();
+          },
+          error: (err) => {
+            this.stopLoading();
+
+            const errorMessage = this.extractErrorMessage(err);
+
+            this.dialogHelper.showError(
+              'ERROR!',
+              'Failed to delete event news.',
+            ).subscribe();
+            console.error('Delete event news error', err);
+
+            },
+        });
+    }
+
+  private extractErrorMessage(err: any): string | null {
+    if (err?.error) {
+      if (typeof err.error === 'string') {
+        return err.error;
+      }
+
+      if (err.error.message) {
+        return err.error.message;
+      }
+
+      if (err.error.title) {
+        return err.error.title;
+      }
+
+      if (err.error.errors && typeof err.error.errors === 'object') {
+        const errors = Object.values(err.error.errors).flat();
+        if (errors.length > 0) {
+          return errors.join(', ');
+        }
+      }
+    }
+
+    if (err?.message) {
+      return err.message;
+    }
+
+    if (err?.statusText && err.statusText !== 'Unknown Error') {
+      return err.statusText;
+    }
+
+    return null;
+  }
 }

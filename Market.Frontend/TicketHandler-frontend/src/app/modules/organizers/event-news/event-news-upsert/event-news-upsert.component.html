@@ -2,7 +2,7 @@
 
 <mat-dialog-content>
   <form [formGroup]="form" *ngIf="!isLoading && form">
-    <mat-form-field appearance="outline" class="full-width">
+    <mat-form-field *ngIf="data.mode==='create'" appearance="outline" class="full-width">
       <mat-label>Event</mat-label>
       <mat-select formControlName="event">
         @for (event of events; track event.id) {

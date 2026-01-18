@@ -24,12 +24,11 @@ export interface EventNewsDialogData {
 })
 export class EventNewsUpsertComponent implements OnInit{
     private dialogRef=inject(MatDialogRef<EventNewsUpsertComponent>);
-    private data = inject<EventNewsDialogData>(MAT_DIALOG_DATA);
+    data = inject<EventNewsDialogData>(MAT_DIALOG_DATA);
     private api = inject(EventNewsApiService);
     private eventsApi = inject(EventsApiService);
     private formService = inject(EventNewsService);
     private toaster = inject(ToasterService);
-    private currentUser = inject(CurrentUserService);
 
     events: ListEventsQueryDto[] =[];
     form!: FormGroup;

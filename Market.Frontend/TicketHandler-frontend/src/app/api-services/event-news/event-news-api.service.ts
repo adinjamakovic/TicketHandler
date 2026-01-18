@@ -27,7 +27,7 @@ export class EventNewsApiService {
 
     //GET /EventNews/{id}
     GetById(id: number): Observable<GetEventNewsByIdQueryDto> {
-        return this.http.get<GetEventNewsByIdQueryDto>(`${this.baseUrl}/${id}}`);
+        return this.http.get<GetEventNewsByIdQueryDto>(`${this.baseUrl}/${id}`);
     }
 
     //POST /EventNews
