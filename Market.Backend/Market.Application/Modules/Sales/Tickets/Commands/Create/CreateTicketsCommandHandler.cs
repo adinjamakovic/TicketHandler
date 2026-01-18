@@ -18,7 +18,7 @@ namespace Market.Application.Modules.Sales.Tickets.Commands.Create
             {
                 EventId = req.EventId,
                 TicketTypeId = req.TicketTypeId,
-                QuanityInStock = req.QuanityInStock,
+                QuantityInStock = req.QuantityInStock,
                 UnitPrice = req.UnitPrice,
                 Benefits = req.Benefits,
                 CreatedAtUtc = DateTime.UtcNow

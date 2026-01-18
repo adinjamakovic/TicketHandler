@@ -18,9 +18,17 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.GetById
             var dto = await q.Select(x => new GetTicketsByIdQueryDto
             {
                Id = x.Id,
-               EventId = x.EventId,
-               TicketTypeId = x.TicketTypeId,
-               QuanityInStock = x.QuanityInStock,
+               Event = new GetTicketsByIdQueryDtoEvent
+               {
+                   Id = x.Event.Id,
+                   Name= x.Event.Name,
+               },
+               TicketType = new GetTicketsByIdQueryDtoTicketType
+               {
+                   Id= x.TicketType.Id,
+                   Name = x.TicketType.Name,
+               },
+               QuantityInStock = x.QuantityInStock,
                UnitPrice = x.UnitPrice,
                Benefits = x.Benefits,
             }).FirstOrDefaultAsync(ct);

@@ -4,6 +4,7 @@ import { OrganizersLayoutComponent } from './organizers-layout/organizers-layout
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketTypesComponent } from './ticket-types/ticket-types.component';
 import { OrganizerSettingsComponent } from './organizer-settings/organizer-settings.component';
+import { TicketsUpsertComponent } from './tickets/tickets-upsert/tickets-upsert.component';
 import {EventsComponent} from './events/events.component';
 import {EventNewsComponent} from './event-news/event-news.component';
 

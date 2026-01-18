@@ -11,7 +11,7 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.GetByEventId
         public required int Id { get; init; }
         public int EventId { get; set; }
         public int TicketTypeId { get; set; }
-        public decimal QuanityInStock { get; set; }
+        public decimal QuantityInStock { get; set; }
         public decimal UnitPrice { get; set; }
         public string Benefits { get; set; }
     }

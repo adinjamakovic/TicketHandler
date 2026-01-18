@@ -1,8 +1,9 @@
-<h2 mat-dialog-title>{{ title }}</h2>
+<h2 mat-dialog-title  *ngIf="isEditMode"> {{ 'TICKET_TYPES.EDIT_TOOLTIP' | translate }} </h2>
+<h2 mat-dialog-title  *ngIf="!isEditMode"> {{ 'TICKET_TYPES.NEW_TICKET_TYPE' | translate }} </h2>
 
 <mat-dialog-content>
   <form [formGroup]="form" *ngIf="!isLoading && form">
-    <!-- Category Name -->
+    <!-- Ticket types Name -->
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>{{ 'TICKET_TYPES.FORM.NAME' | translate }}</mat-label>
       <input

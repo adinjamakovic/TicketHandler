@@ -41,6 +41,20 @@ export interface GetOrganizerByIdQueryDto {
     events: GetOrganizerByIdQueryEventDto[];
 }
 
+export interface GetOrganizerByUserIdQueryDto {
+    id: number;
+    Name: string;
+    description?: string | null;
+    email: string;
+    city: string;
+    events: GetOrganizerByUserIdQueryEventDto[];
+}
+export interface GetOrganizerByUserIdQueryEventDto{
+    id: number;
+    Name: string;
+    Description?: string | null;
+    ScheduledDate: string;
+}
 // ================================================
 // ================= COMMANDS =====================
 // ================================================

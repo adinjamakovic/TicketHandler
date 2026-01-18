@@ -4,25 +4,41 @@ import { PageResult } from '../../core/models/paging/page-result';
 
 // ==============Queries==============
 export class ListTicketsRequest extends BasePagedQuery {
-  id?: number| null;
+  eventName?: string| null;
 }
 export interface ListTicketsQueryDto{
   id:number;
-  eventId:number;
-  ticketTypeId:number;
+  event:ListTicketsQueryEvent;
+  ticketType:ListTicketsQueryTicketType;
   quantityInStock: number;
   unitPrice:number;
   benefits:string;
+}
+export interface ListTicketsQueryEvent{
+  id:number;
+  name:string;
+}
+export interface ListTicketsQueryTicketType{
+  id:number;
+  name:string;
 }
 export type ListTicketsResponse = PageResult<ListTicketsQueryDto>;
 
 export interface GetTicketsByIdQueryDto{
   id:number;
-  eventId:number;
-  ticketTypeId:number;
+  event:GetTicketsByIdQueryDtoEvent;
+  ticketType:GetTicketsByIdQueryDtoTicketType;
   quantityInStock: number;
   unitPrice:number;
   benefits:string;
+}
+export interface GetTicketsByIdQueryDtoEvent{
+  id:number;
+  name:string;
+}
+export interface GetTicketsByIdQueryDtoTicketType{
+  id:number;
+  name:string;
 }
 export interface GetTicketsByEventIdQueryDto{
   id:number;
@@ -31,6 +47,22 @@ export interface GetTicketsByEventIdQueryDto{
   quantityInStock: number;
   unitPrice:number;
   benefits:string;
+}
+export interface GetTicketsByEventNameQueryDto{
+  id:number;
+  event:GetTicketsByEventNameQueryDtoEvent;
+  ticketType:GetTicketsByEventNameQueryDtoTicketType;
+  quantityInStock: number;
+  unitPrice:number;
+  benefits:string;
+}
+export interface GetTicketsByEventNameQueryDtoEvent{
+  id:number;
+  name:string;
+}
+export interface GetTicketsByEventNameQueryDtoTicketType{
+  id:number;
+  name:string;
 }
 // ==============Commands==============
 export interface CreateTicketsCommand{

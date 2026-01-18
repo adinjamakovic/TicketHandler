@@ -98,6 +98,57 @@
       "ERROR_TOGGLE": "Greška pri promjeni statusa tipa karte \"{{name}}\"."
     }
   },
+  "TICKETS": {
+    "TITLE": "Karte",
+    "SEARCH_PLACEHOLDER": "",
+    "SEARCH_INPUT_PLACEHOLDER": "Unesite naziv karte...",
+    "NEW_TICKET": "Nova Karta",
+    "ADD_NEW": "Dodaj Kartu",
+    "LOADING": "Učitavanje karata...",
+    "TABLE.EVENT_NAME": "Naziv dogadjaja",
+    "TABLE.TICKET_TYPE": "Tip karte",
+    "TABLE.QUANTITY": "Količina",
+    "TABLE.TICKET_PRICE": "Cijena Karte",
+    "TABLE.TICKET_BENEFITS": "Prednosti Karte",
+    "TABLE.ACTIONS": "Akcije",
+    "NO_DATA": "Nema karata za prikaz",
+    "NO_DATA_FILTER": "Nema rezultata za pretragu",
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Uredi kartu",
+      "DELETE_TOOLTIP": "Obriši kartu"
+    },
+    "FORM": {
+      "QUANTITYINSTOCK": "Količina u skladištu",
+      "QUANTITYINSTOCK_PLACEHOLDER": "Unesite količinu u skladištu",
+      "PRICE": "Cijena",
+      "PRICE_PLACEHOLDER": "Unesite cijenu karte",
+      "EVENT": "Događaj",
+      "EVENT_PLACEHOLDER": "Unesite naziv događaja",
+      "TICKETTYPE": "Tip Karte",
+      "TICKETTYPE_PLACEHOLDER": "Unesite tip karte",
+      "BENEFITS": "Prednosti",
+      "BENEFITS_PLACEHOLDER": "Unesite prednosti karte",
+      "LOADING": "Učitavanje...",
+      "CANCEL": "Otkaži",
+      "SAVE": "Sačuvaj",
+      "UPDATE": "Ažuriraj"
+    },
+    "DIALOGS": {
+      "DELETE_TITLE": "Brisanje Karte",
+      "DELETE_MESSAGE": "Da li ste sigurni da želite obrisati kartu \"{{name}}\"?",
+      "CONFIRM_ENABLE": "Da li ste sigurni da želite aktivirati kartu \"{{name}}\"?",
+      "CONFIRM_DISABLE": "Da li ste sigurni da želite deaktivirati kartu \"{{name}}\"?",
+      "SUCCESS_CREATE": "Karta uspješno kreirana.",
+      "SUCCESS_UPDATE": "Karta uspješno ažurirana.",
+      "SUCCESS_DELETE": "Karta uspješno obrisana.",
+      "SUCCESS_ENABLE": "Karta \"{{name}}\" je uspješno aktivirana.",
+      "SUCCESS_DISABLE": "Karta \"{{name}}\" je uspješno deaktivirana.",
+      "ERROR_CREATE": "Greška pri kreiranju karte.",
+      "ERROR_UPDATE": "Greška pri ažuriranju karte.",
+      "ERROR_DELETE": "Greška pri brisanju karte.",
+      "ERROR_TOGGLE": "Greška pri promjeni statusa karte \"{{name}}\"."
+    }
+  },
   "PRODUCT_CATEGORIES": {
     "TITLE": "Kategorije Proizvoda",
     "SUBTITLE": "Upravljanje kategorijama proizvoda",
