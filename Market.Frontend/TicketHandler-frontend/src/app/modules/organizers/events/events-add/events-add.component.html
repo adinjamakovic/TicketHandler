@@ -1,0 +1,107 @@
+<div class="container">
+  <div class="header-card mat-elevation-z2">
+    <h1>Add Event</h1>
+  </div>
+
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-overlay">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>Saving Event</p>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Event name</mat-label>
+        <input
+          matInput
+          formControlName="name"
+          [placeholder]="'Event name'"
+        />
+        <mat-icon matSuffix>event</mat-icon>
+        <mat-error *ngIf="hasError('name')">
+          {{ getErrorMessage('name') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Event description</mat-label>
+        <input
+          matInput
+          formControlName="description"
+          [placeholder]="'Event description'"
+        />
+        <mat-icon matSuffix>bookmark</mat-icon>
+        <mat-error *ngIf="hasError('description')">
+          {{ getErrorMessage('description') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Choose a date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="scheduledDate">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="hasError('scheduledDate')">
+          {{ getErrorMessage('scheduledDate') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Venue</mat-label>
+        <mat-select formControlName="venue">
+          @for (venue of venues; track venue.id) {
+            <mat-option [value]="venue.id">{{venue.name}}</mat-option>
+          }
+        </mat-select>
+        <mat-error *ngIf="form.get('venue')?.invalid">
+          {{getErrorMessage('venue') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Event type</mat-label>
+        <mat-select formControlName="eventType">
+          @for (eventType of eventTypes; track eventType.id) {
+            <mat-option [value]="eventType.id">{{eventType.name}}</mat-option>
+          }
+        </mat-select>
+        <mat-error *ngIf="form.get('eventType')?.invalid">
+          {{getErrorMessage('eventType') }}
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Performer</mat-label>
+        <mat-select formControlName="performer">
+          @for (performer of performers; track performer.id) {
+            <mat-option [value]="performer.id">{{performer.name}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field  appearance="outline" class="full-width">
+        <mat-label>Performer time</mat-label>
+        <input matInput
+               [matTimepicker]="timepicker"
+               formControlName="time">
+        <mat-timepicker #timepicker/>
+        <mat-timepicker-toggle [for]="timepicker" matSuffix/>
+      </mat-form-field>
+      <button matButton="outlined" (click)="AddPerformer()">Add Performer</button>
+      @for (performer of selectedPerformers; track `${performer.performerId}.${performer.timeStamp}`) {
+        <div class="form-card">
+          <p>{{findPerformer(performer.performerId)}}</p>
+          <p>{{performer.timeStamp}}</p>
+        </div>
+      }
+
+
+    </form>
+  </div>
+</div>

@@ -13,7 +13,11 @@ import { TicketTypesComponent } from './ticket-types/ticket-types.component';
 import { EventsComponent } from './events/events.component';
 import { EventNewsComponent } from './event-news/event-news.component';
 import { EventNewsUpsertComponent } from './event-news/event-news-upsert/event-news-upsert.component';
-
+import { EventsAddComponent } from './events/events-add/events-add.component';
+import { EventsEditComponent } from './events/events-edit/events-edit.component';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatTimepickerModule} from '@angular/material/timepicker';
 
 @NgModule({
   declarations: [
@@ -25,13 +29,18 @@ import { EventNewsUpsertComponent } from './event-news/event-news-upsert/event-n
     EventsComponent,
     EventNewsComponent,
     EventNewsUpsertComponent,
+    EventsAddComponent,
+    EventsEditComponent,
 
   ],
   imports: [
     OrganizerRoutingModule,
     SharedModule,
     MatTabBody,
-    MatDialogModule
-]
+    MatDialogModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTimepickerModule
+],
 })
 export class OrganizerModule { }

@@ -1,16 +1,30 @@
-import { inject } from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateEventCommand, GetEventByIdQueryDto, GetEventByOrganizerIdResponse, GetEventsByOrganizerIdRequest, ListEventsQueryDto, ListEventsResponse, ListEventsWithPerformersRequest, ListEventsWithPerformersResponse, UpdateEventCommand } from "./events-api.model";
+import {
+  CreateEventCommand,
+  GetEventByIdQueryDto,
+  GetEventByOrganizerIdResponse,
+  GetEventsByOrganizerIdRequest,
+  ListEventsQueryDto,
+  ListEventsRequest,
+  ListEventsResponse,
+  ListEventsWithPerformersRequest,
+  ListEventsWithPerformersResponse,
+  UpdateEventCommand
+} from "./events-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
 
+@Injectable({
+  providedIn: 'root',
+})
 export class EventsApiService{
     private readonly baseUrl = `${environment.apiUrl}/Events`;
     private http = inject(HttpClient);
 
     //GET /Events
-    list(request?: ListEventsQueryDto) : Observable<ListEventsResponse>{
+    list(request?: ListEventsRequest) : Observable<ListEventsResponse>{
         const params = request ? buildHttpParams(request as any) : undefined;
 
         return this.http.get<ListEventsResponse>(this.baseUrl, {

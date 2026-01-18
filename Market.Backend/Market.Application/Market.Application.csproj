@@ -21,6 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Modules\Events\EventType\Commands\" />
+    <Folder Include="Modules\Geographical\Venues\Commands\" />
     <Folder Include="Modules\Identity\Person\Commands\" />
   </ItemGroup>
 
