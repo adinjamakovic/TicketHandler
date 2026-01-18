@@ -13,6 +13,9 @@ import { TicketTypesComponent } from './ticket-types/ticket-types.component';
 import { TicketsUpsertComponent } from './tickets/tickets-upsert/tickets-upsert.component';
 import { EventsApiService } from '../../api-services/events/events-api.service';
 
+import { EventsComponent } from './events/events.component';
+import { EventNewsComponent } from './event-news/event-news.component';
+import { EventNewsUpsertComponent } from './event-news/event-news-upsert/event-news-upsert.component';
 
 
 @NgModule({
@@ -23,6 +26,10 @@ import { EventsApiService } from '../../api-services/events/events-api.service';
     TicketTypesComponent,
     TicketsComponent,
     TicketsUpsertComponent,
+    EventsComponent,
+    EventNewsComponent,
+    EventNewsUpsertComponent,
+
   ],
   imports: [
     OrganizerRoutingModule,

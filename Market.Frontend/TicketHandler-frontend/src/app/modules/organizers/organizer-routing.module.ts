@@ -5,6 +5,8 @@ import { TicketsComponent } from './tickets/tickets.component';
 import { TicketTypesComponent } from './ticket-types/ticket-types.component';
 import { OrganizerSettingsComponent } from './organizer-settings/organizer-settings.component';
 import { TicketsUpsertComponent } from './tickets/tickets-upsert/tickets-upsert.component';
+import {EventsComponent} from './events/events.component';
+import {EventNewsComponent} from './event-news/event-news.component';
 
 const routes: Routes = [
   {
@@ -20,6 +22,15 @@ const routes: Routes = [
           {
             path: 'ticket-types',
             component: TicketTypesComponent,
+          },
+          //Events
+          {
+            path: 'events',
+            component: EventsComponent,
+          },
+          {
+            path: 'event-news',
+            component: EventNewsComponent,
           },
           {
             path: 'settings',

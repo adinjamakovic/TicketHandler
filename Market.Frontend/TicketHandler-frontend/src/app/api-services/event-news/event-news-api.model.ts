@@ -26,7 +26,7 @@ export type ListEventNewsResponse = PageResult<ListEventNewsQueryDto>;
 // ================== GET BY ID  ==================
 // ================================================
 
-export interface GetEventNewsByIdDto {
+export interface GetEventNewsByIdQueryDto {
     id: number;
     event: string;
     organizer: string;
