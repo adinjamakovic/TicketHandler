@@ -9,17 +9,17 @@ export class ListOrganizersRequest extends BasePagedQuery{
     search?: string | null;
 }
 
-export interface ListOrganizersItem {
+export interface ListOrganizersQueryDto {
     id: number;
     name: string;
-    Description?: string | null;
-    CityName: string;
-    UserName: string;
-    EmailAddress: string;
-    IsDeleted: boolean;
+    description?: string | null;
+    cityName: string;
+    userName: string;
+    emailAddress: string;
+    isDeleted: boolean;
 }
 
-export type ListOrganizersResponse = PageResult<ListOrganizersItem>;
+export type ListOrganizersResponse = PageResult<ListOrganizersQueryDto>;
 
 // ================================================
 // ================== GET BY ID  ==================
@@ -32,12 +32,26 @@ export interface GetOrganizerByIdQueryEventDto{
     ScheduledDate: string;
 }
 
+export interface GetOrganizerByIdQueryDtoUser {
+    firstName: string;
+    lastName: string;
+    birthDate: string;
+    cityId: number;
+    address: string;
+    gender: string;
+    phone: string;
+    email: string;
+}
+
 export interface GetOrganizerByIdQueryDto {
     id: number;
-    Name: string;
+    name: string;
     description?: string | null;
     email: string;
     city: string;
+    address: string;
+    cityId: number;
+    user: GetOrganizerByIdQueryDtoUser;
     events: GetOrganizerByIdQueryEventDto[];
 }
 
@@ -59,15 +73,27 @@ export interface GetOrganizerByUserIdQueryEventDto{
 // ================= COMMANDS =====================
 // ================================================
 
+export interface CreateAndUpdateOrganizerCommandUser{
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  cityId: number;
+  address: string;
+  gender: string;
+  phone: string;
+  email: string;
+  password: string;
+}
+
 export interface CreateOrganizerCommand {
     name: string;
     description: string;
-    Address: string;
+    address: string;
     cityid: number;
     //implement later:
     //logo: ??????;
     //
-    userid: number;
+    user: CreateAndUpdateOrganizerCommandUser;
 }
 
 export interface DeleteOrganizerCommand{
@@ -75,9 +101,12 @@ export interface DeleteOrganizerCommand{
 }
 
 export interface UpdateOrganizerCommand{
-    id: number;
     name: string;
-    description?: string| null;
-    Address: string;
-    cityid: number
+    description: string;
+    address: string;
+    cityid: number;
+    //implement later:
+    //logo: ??????;
+    //
+    user: CreateAndUpdateOrganizerCommandUser;
 }

@@ -280,6 +280,57 @@ export class DialogHelperService {
       );
     }
   };
+  
+  organizers = {
+    confirmDelete: (organizer: string) => {
+      return this.confirmDelete(
+        organizer,
+        `Are you sure you want to delete this organizer (${organizer})? This action cannot be undone.`
+      );
+    },
+
+    showCreateSuccess: () => {
+      return this.showSuccess(
+        'Organizer create successfully',
+        'PRODUCT_CATEGORIES.DIALOGS.SUCCESS_CREATE'
+      );
+    },
+
+    showUpdateSuccess: () => {
+      return this.showSuccess(
+        'Organizer updated successfully',
+        'PRODUCT_CATEGORIES.DIALOGS.SUCCESS_UPDATE'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'Organizer deleted successfully',
+        'PRODUCT_CATEGORIES.DIALOGS.SUCCESS_DELETE'
+      );
+    },
+
+    showCreateError: () => {
+      return this.showError(
+        'Error creating organizer',
+        'PRODUCT_CATEGORIES.DIALOGS.ERROR_CREATE'
+      );
+    },
+
+    showUpdateError: () => {
+      return this.showError(
+        'Error updating organizer',
+        'PRODUCT_CATEGORIES.DIALOGS.ERROR_UPDATE'
+      );
+    },
+
+    showDeleteError: () => {
+      return this.showError(
+        'Error deleting organizer',
+        'PRODUCT_CATEGORIES.DIALOGS.ERROR_DELETE'
+      );
+    }
+  };
 
   ticketTypes = {
     confirmDelete: (categoryName: string) => {

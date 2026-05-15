@@ -18,8 +18,20 @@ namespace Market.Application.Modules.Events.Organizers.Queries.GetById
                     Id = x.Id,
                     Name = x.Name,
                     Description = x.Description,
-                    Email = x.User.Email,
                     City = x.City.Name,
+                    CityId = x.City.Id,
+                    Address = x.Address,
+                    User = new GetOrganizerByIdQueryDtoUser
+                    {
+                        FirstName = x.User.FirstName,
+                        LastName = x.User.LastName,
+                        BirthDate = x.User.BirthDate,
+                        CityId = x.User.CityId,
+                        Address = x.User.Address,
+                        Gender = x.User.Gender,
+                        Phone = x.User.Phone,
+                        Email = x.User.Email
+                    },
                     Events = x.Events.Select(y => new GetOrganizerByIdQueryEventDto
                     {
                         Id = y.Id,
