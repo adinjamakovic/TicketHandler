@@ -21,7 +21,7 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.GetByEventId
                     Id = x.Id,
                     EventId = x.EventId,
                     TicketTypeId = x.TicketTypeId,
-                    QuanityInStock = x.QuanityInStock,
+                    QuantityInStock = x.QuantityInStock,
                     UnitPrice = x.UnitPrice,
                     Benefits = x.Benefits,
                 });

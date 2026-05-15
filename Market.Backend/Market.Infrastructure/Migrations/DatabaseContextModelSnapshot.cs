@@ -386,7 +386,8 @@ namespace Market.Infrastructure.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Organizers", (string)null);
                 });
@@ -866,7 +867,10 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("LastUpdatedAtUtc")
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Quantity")
@@ -1015,7 +1019,7 @@ namespace Market.Infrastructure.Migrations
                     b.Property<DateTime?>("ModifiedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("QuanityInStock")
+                    b.Property<decimal>("QuantityInStock")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 

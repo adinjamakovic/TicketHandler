@@ -71,6 +71,21 @@
 
       <mat-divider></mat-divider>
 
+      <a mat-list-item routerLink="/organizer/events" routerLinkActive="active">
+        <mat-icon matListItemIcon>event_note</mat-icon>
+        <!--<span matListItemTitle>{{ 'ORGANIZER_PANEL.MENU.TICKET_TYPES' | translate }}</span>-->
+        <span matListItemTitle>Events</span>
+      </a>
+
+      <a mat-list-item routerLink="/organizer/event-news" routerLinkActive="active">
+        <mat-icon matListItemIcon>newspaper</mat-icon>
+        <!--<span matListItemTitle>{{ 'ORGANIZER_PANEL.MENU.TICKET_TYPES' | translate }}</span>-->
+        <span matListItemTitle>Event News</span>
+      </a>
+
+
+      <mat-divider></mat-divider>
+
       <!-- SYSTEM SECTION -->
       <div class="nav-section-title">
         {{ 'ORGANIZER_PANEL.MENU.SYSTEM' | translate }}

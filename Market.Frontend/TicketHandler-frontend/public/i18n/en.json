@@ -98,6 +98,57 @@
       "ERROR_TOGGLE": "Error changing status of ticket type \"{{name}}\"."
     }
   },
+  "TICKETS": {
+    "TITLE": "Tickets",
+    "SEARCH_PLACEHOLDER": "",
+    "SEARCH_INPUT_PLACEHOLDER": "Enter ticket name...",
+    "NEW_TICKET": "New Ticket",
+    "ADD_NEW": "Add Ticket",
+    "LOADING": "Loading tickets...",
+    "TABLE.EVENT_NAME": "Event Name",
+    "TABLE.TICKET_TYPE": "Ticket Type",
+    "TABLE.QUANTITY": "Quantity",
+    "TABLE.TICKET_PRICE": "Ticket Price",
+    "TABLE.TICKET_BENEFITS": "Ticket Benefits",
+    "TABLE.ACTIONS": "Actions",
+    "NO_DATA": "No tickets to display",
+    "NO_DATA_FILTER": "No results found for search",
+    "ACTIONS": {
+      "EDIT_TOOLTIP": "Edit ticket",
+      "DELETE_TOOLTIP": "Delete ticket"
+    },
+    "FORM": {
+      "QUANTITYINSTOCK": "Quantity in Stock",
+      "QUANTITYINSTOCK_PLACEHOLDER": "Enter quantity in stock",
+      "PRICE": "Price",
+      "PRICE_PLACEHOLDER": "Enter ticket price",
+      "EVENT": "Event",
+      "EVENT_PLACEHOLDER": "Enter event name",
+      "TICKETTYPE": "Ticket Type",
+      "TICKETTYPE_PLACEHOLDER": "Enter ticket type",
+      "BENEFITS": "Benefits",
+      "BENEFITS_PLACEHOLDER": "Enter ticket benefits",
+      "LOADING": "Loading...",
+      "CANCEL": "Cancel",
+      "SAVE": "Save",
+      "UPDATE": "Update"
+    },
+    "DIALOGS": {
+      "DELETE_TITLE": "Delete Ticket",
+      "DELETE_MESSAGE": "Are you sure you want to delete ticket \"{{name}}\"?",
+      "CONFIRM_ENABLE": "Are you sure you want to enable ticket \"{{name}}\"?",
+      "CONFIRM_DISABLE": "Are you sure you want to disable ticket \"{{name}}\"?",
+      "SUCCESS_CREATE": "Ticket created successfully.",
+      "SUCCESS_UPDATE": "Ticket updated successfully.",
+      "SUCCESS_DELETE": "Ticket deleted successfully.",
+      "SUCCESS_ENABLE": "Ticket \"{{name}}\" has been enabled successfully.",
+      "SUCCESS_DISABLE": "Ticket \"{{name}}\" has been disabled successfully.",
+      "ERROR_CREATE": "Error creating ticket.",
+      "ERROR_UPDATE": "Error updating ticket.",
+      "ERROR_DELETE": "Error deleting ticket.",
+      "ERROR_TOGGLE": "Error changing status of ticket \"{{name}}\"."
+    }
+  },
   "PRODUCT_CATEGORIES": {
     "TITLE": "Product Categories",
     "SUBTITLE": "Manage product categories",

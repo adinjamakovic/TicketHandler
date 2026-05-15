@@ -41,7 +41,7 @@ public static class DynamicDataSeeder
         {
             EventId = 1,
             TicketTypeId = 1,
-            QuanityInStock = 10,
+            QuantityInStock = 10,
             UnitPrice = 20,
             Benefits = "Meet And Greet with performer"
         };
@@ -49,7 +49,7 @@ public static class DynamicDataSeeder
         {
             EventId = 1,
             TicketTypeId = 2,
-            QuanityInStock = 10,
+            QuantityInStock = 10,
             UnitPrice = 20,
             Benefits = ""
         };
@@ -277,12 +277,22 @@ public static class DynamicDataSeeder
             CityId = 6,
             Address = "Dummy Address",
             FirstName ="Dummy organiser name",
+            Email = "dummy_organiser2@market.local",
+            PasswordHash = hasher.HashPassword(null!, "User1234!"),
+            IsOrganiser = true,
+            IsEnabled = true,
+        };
+
+        var newUser = new PersonEntity
+        {
+            CityId = 6,
+            Address = "Dummy Address",
+            FirstName = "Dummy organiser name",
             Email = "dummy_organiser@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsOrganiser = true,
             IsEnabled = true,
         };
-
 
         var dummyForSwagger = new PersonEntity
         {
@@ -302,7 +312,7 @@ public static class DynamicDataSeeder
             IsUser = true,
             IsEnabled = true,
         };
-        context.Persons.AddRange(admin, user, dummyForSwagger, dummyForTests);
+        context.Persons.AddRange(admin, user, newUser, dummyForSwagger, dummyForTests);
         await context.SaveChangesAsync();
 
         Console.WriteLine("✅ Dynamic seed: demo users added.");

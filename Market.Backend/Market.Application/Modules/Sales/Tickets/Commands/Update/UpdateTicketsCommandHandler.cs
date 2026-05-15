@@ -30,7 +30,7 @@ namespace Market.Application.Modules.Sales.Tickets.Commands.Update
 
             Tickets.EventId = req.EventId;
             Tickets.TicketTypeId = req.TicketTypeId;
-            Tickets.QuanityInStock = req.QuanityInStock;
+            Tickets.QuantityInStock = req.QuantityInStock;
             Tickets.UnitPrice = req.UnitPrice;
             Tickets.Benefits = req.Benefits;
             

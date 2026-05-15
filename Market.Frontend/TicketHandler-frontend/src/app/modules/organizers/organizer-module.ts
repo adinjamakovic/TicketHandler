@@ -10,6 +10,12 @@ import { TicketTypesUpsertComponent } from './ticket-types/ticket-types-upsert/t
 import { TicketTypesFormService } from './ticket-types/services/ticket-types-form.service';
 import { TicketsComponent } from './tickets/tickets.component';
 import { TicketTypesComponent } from './ticket-types/ticket-types.component';
+import { TicketsUpsertComponent } from './tickets/tickets-upsert/tickets-upsert.component';
+import { EventsApiService } from '../../api-services/events/events-api.service';
+
+import { EventsComponent } from './events/events.component';
+import { EventNewsComponent } from './event-news/event-news.component';
+import { EventNewsUpsertComponent } from './event-news/event-news-upsert/event-news-upsert.component';
 
 
 @NgModule({
@@ -18,14 +24,19 @@ import { TicketTypesComponent } from './ticket-types/ticket-types.component';
     OrganizerSettingsComponent,
     TicketTypesUpsertComponent,
     TicketTypesComponent,
-    TicketsComponent
+    TicketsComponent,
+    TicketsUpsertComponent,
+    EventsComponent,
+    EventNewsComponent,
+    EventNewsUpsertComponent,
 
   ],
   imports: [
     OrganizerRoutingModule,
     SharedModule,
     MatTabBody,
-    MatDialogModule
+    MatDialogModule,
+    
 ]
 })
 export class OrganizerModule { }

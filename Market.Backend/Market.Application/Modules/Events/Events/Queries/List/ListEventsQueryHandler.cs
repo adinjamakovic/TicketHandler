@@ -6,17 +6,25 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.Events.Queries.List
 {
-    public sealed class ListEventsQueryHandler(IAppDbContext ctx)
+    public sealed class ListEventsQueryHandler(IAppDbContext ctx, IAppCurrentUser currentUser)
         : IRequestHandler<ListEventsQuery, PageResult<ListEventsQueryDto>>
     {
         public async Task<PageResult<ListEventsQueryDto>> Handle(ListEventsQuery req, CancellationToken ct)
         {
+            
+
             var q = ctx.Events.AsNoTracking();
 
             var searchTerm = req.Search?.ToLower().Trim() ?? string.Empty;
 
             if(!string.IsNullOrWhiteSpace(searchTerm))
                 q = q.Where(x=>x.Name.ToLower().Contains(searchTerm));
+
+            if(currentUser.IsOrganiser)
+            {
+                var org = await ctx.Organizers.Where(x => x.UserId == currentUser.UserId).FirstOrDefaultAsync(ct);
+                q = q.Where(x => x.OrganizerId == org.Id);
+            }    
 
             var projectedQuery = q.OrderBy(x => x.ScheduledDate)
                 .Select(x => new ListEventsQueryDto

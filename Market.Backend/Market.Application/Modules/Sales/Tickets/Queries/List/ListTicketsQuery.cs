@@ -8,6 +8,6 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.List
 {
     public class ListTicketsQuery : BasePagedQuery<ListTicketsQueryDto>
     {
-        public int? Id {  get; set; }
+        public string? EventName {  get; set; }
     }
 }

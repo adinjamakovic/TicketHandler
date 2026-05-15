@@ -1,0 +1,66 @@
+<h2 mat-dialog-title>{{ title }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" *ngIf="!isLoading && form">
+    <mat-form-field *ngIf="data.mode==='create'" appearance="outline" class="full-width">
+      <mat-label>Event</mat-label>
+      <mat-select formControlName="event">
+        @for (event of events; track event.id) {
+            <mat-option [value]="event.id">{{event.name}}</mat-option>
+        }
+      </mat-select>
+      <mat-error *ngIf="form.get('event')?.invalid">
+        {{getErrorMessage('event') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Header</mat-label>
+      <input
+        matInput
+        formControlName="header"
+        [placeholder]="'Lorem ipsum'"
+        maxlength="50"
+        autocomplete="off"/>
+      <mat-error *ngIf="form.get('header')?.invalid">
+        {{getErrorMessage('header') }}
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="body-width">
+      <mat-label>Body</mat-label>
+      <input
+        matInput
+        formControlName="body"
+        [placeholder]="'Lorem ipsum'"
+        autocomplete="off"/>
+    </mat-form-field>
+  </form>
+  <div *ngIf="isLoading && !form" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>{{ 'PRODUCT_CATEGORIES.FORM.LOADING' | translate }}</p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()" [disabled]="isLoading">
+    <mat-icon>close</mat-icon>
+    {{ 'PRODUCT_CATEGORIES.FORM.CANCEL' | translate }}
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="onSubmit()"
+    [disabled]="!form || form.invalid || isLoading"
+  >
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+    <mat-icon *ngIf="!isLoading">{{ isEditMode ? 'edit' : 'save' }}</mat-icon>
+    {{
+      isEditMode
+        ? ('PRODUCT_CATEGORIES.FORM.UPDATE' | translate)
+        : ('PRODUCT_CATEGORIES.FORM.SAVE' | translate)
+    }}
+  </button>
+</mat-dialog-actions>

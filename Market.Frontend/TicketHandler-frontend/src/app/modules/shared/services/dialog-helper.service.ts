@@ -230,6 +230,57 @@ export class DialogHelperService {
     }
   };
 
+  eventNews = {
+    confirmDelete: (newsHeader: string) => {
+      return this.confirmDelete(
+        newsHeader,
+        'Are you sure you want to delete?'
+      );
+    },
+
+    showCreateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have sucessfully added event news!'
+      );
+    },
+
+    showUpdateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have succesfully updated event news!'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'You have successfully deleted event news!'
+      );
+    },
+
+    showCreateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem while creating event news'
+      );
+    },
+
+    showUpdateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem while updating event news'
+      );
+    },
+
+    showDeleteError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'We ran into a problem trying to delete event news'
+      );
+    }
+  };
+  
   organizers = {
     confirmDelete: (organizer: string) => {
       return this.confirmDelete(
@@ -328,6 +379,56 @@ export class DialogHelperService {
       return this.showError(
         'DIALOGS.TITLES.ERROR',
         'TICKET_TYPES.DIALOGS.ERROR_DELETE'
+      );
+    }
+  };
+  tickets = {
+    confirmDelete: (categoryName: string) => {
+      return this.confirmDelete(
+        categoryName,
+        'TICKETS.DIALOGS.DELETE_MESSAGE'
+      );
+    },
+
+    showCreateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_CREATE'
+      );
+    },
+
+    showUpdateSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_UPDATE'
+      );
+    },
+
+    showDeleteSuccess: () => {
+      return this.showSuccess(
+        'DIALOGS.TITLES.SUCCESS',
+        'TICKETS.DIALOGS.SUCCESS_DELETE'
+      );
+    },
+
+    showCreateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_CREATE'
+      );
+    },
+
+    showUpdateError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_UPDATE'
+      );
+    },
+
+    showDeleteError: () => {
+      return this.showError(
+        'DIALOGS.TITLES.ERROR',
+        'TICKETS.DIALOGS.ERROR_DELETE'
       );
     }
   };

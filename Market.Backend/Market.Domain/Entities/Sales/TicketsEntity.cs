@@ -32,7 +32,7 @@ namespace Market.Domain.Entities.Sales
         /// <summary>
         /// Available quantity
         /// </summary>
-        public decimal QuanityInStock { get; set; }
+        public decimal QuantityInStock { get; set; }
         /// <summary>
         /// Price of a single ticket
         /// </summary>

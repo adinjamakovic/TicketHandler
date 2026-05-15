@@ -1,0 +1,112 @@
+<h2 mat-dialog-title  *ngIf="isEditMode"> {{ 'TICKETS.EDIT_TOOLTIP' | translate }} </h2>
+<h2 mat-dialog-title  *ngIf="!isEditMode"> {{ 'TICKETS.NEW_TICKET' | translate }} </h2>
+
+<mat-dialog-content>
+    <form [formGroup]="form" *ngIf="!isLoading && form">
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label> {{ 'TICKETS.FORM.QUANTITYINSTOCK' | translate }}</mat-label>
+            <input type = "number"
+                placeholder="{{ 'TICKETS.FORM.QUANTITYINSTOCK_PLACEHOLDER' | translate }}"
+                aria-label="Number"
+                matInput
+                formControlName="quantityInStock"
+                >
+             <mat-icon matSuffix>label</mat-icon>
+             <mat-error *ngIf="form.get('quantityInStock')?.invalid">
+                 {{ getErrorMessage('quantityInStock') }}
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label> {{ 'TICKETS.FORM.PRICE' | translate }}</mat-label>
+            <input type = "number"
+                placeholder="{{ 'TICKETS.FORM.PRICE_PLACEHOLDER' | translate }}"
+                aria-label="Number"
+                matInput
+                formControlName="unitPrice"
+                >
+             <mat-icon matSuffix>label</mat-icon>
+             <mat-error *ngIf="form.get('unitPrice')?.invalid">
+                 {{ getErrorMessage('unitPrice') }}
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label> {{ 'TICKETS.FORM.EVENT' | translate }}</mat-label>
+            <input type = "text"
+                placeholder="{{ 'TICKETS.FORM.EVENT_PLACEHOLDER' | translate }}"
+                aria-label="Number"
+                matInput
+                formControlName="eventId"
+                [matAutocomplete]="auto">
+             <mat-autocomplete #auto="matAutocomplete">
+                @for (option of filteredEvents | async; track option) {
+                <mat-option [value]="option">{{option}}</mat-option>
+                }
+             </mat-autocomplete>
+             <mat-icon matSuffix>label</mat-icon>
+             <mat-error *ngIf="form.get('eventId')?.invalid">
+                 {{ getErrorMessage('eventId') }}
+            </mat-error>
+            <mat-hint align="end">{{ form.get('eventId')?.value?.length || 0 }}/100</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label> {{ 'TICKETS.FORM.TICKETTYPE' | translate }}</mat-label>
+            <input type = "text"
+                placeholder="{{ 'TICKETS.FORM.TICKETTYPE_PLACEHOLDER' | translate }}"
+                aria-label="Number"
+                matInput
+                formControlName="ticketTypeId"
+                [matAutocomplete]="auto2">
+             <mat-autocomplete #auto2="matAutocomplete">
+                @for (ticket of filteredTicketTypes | async; track ticket) {
+                <mat-option [value]="ticket">{{ticket}}</mat-option>
+                }
+             </mat-autocomplete>
+             <mat-icon matSuffix>label</mat-icon>
+             <mat-error *ngIf="form.get('ticketTypeId')?.invalid">
+                 {{ getErrorMessage('ticketTypeId') }}
+            </mat-error>
+            <mat-hint align="end">{{ form.get('ticketTypeId')?.value?.length || 0 }}/100</mat-hint>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="full-width">
+            <mat-label> {{ 'TICKETS.FORM.BENEFITS' | translate }}</mat-label>
+            <input type = "text"
+                placeholder="{{ 'TICKETS.FORM.BENEFITS_PLACEHOLDER' | translate }}"
+                aria-label="Number"
+                matInput
+                formControlName="benefits"
+                >
+             <mat-icon matSuffix>label</mat-icon>
+             <mat-error *ngIf="form.get('benefits')?.invalid">
+                 {{ getErrorMessage('benefits') }}
+            </mat-error>
+            <mat-hint align="end">{{ form.get('benefits')?.value?.length || 0 }}/100</mat-hint>
+        </mat-form-field>
+    </form>
+    <!-- Loading State -->
+  <div *ngIf="isLoading && !form" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>{{ 'TICKETS.FORM.LOADING' | translate }}</p>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()" [disabled]="isLoading">
+    <mat-icon>close</mat-icon>
+    {{ 'TICKETS.FORM.CANCEL' | translate }}
+  </button>
+
+  <button
+    mat-raised-button
+    color="primary"
+    type="button"
+    (click)="onSubmit()"
+    [disabled]="!form || form.invalid || isLoading"
+  >
+    <mat-spinner *ngIf="isLoading" diameter="20"></mat-spinner>
+    <mat-icon *ngIf="!isLoading">{{ isEditMode ? 'edit' : 'save' }}</mat-icon>
+    {{
+      isEditMode
+        ? ('TICKETS.FORM.UPDATE' | translate)
+        : ('TICKETS.FORM.SAVE' | translate)
+    }}
+  </button>
+</mat-dialog-actions>
