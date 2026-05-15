@@ -6,6 +6,7 @@ import { DialogHelperService } from '../../shared/services/dialog-helper.service
 import { MatDialog } from '@angular/material/dialog';
 import { ToasterService } from '../../../core/services/toaster.service';
 import {Router} from '@angular/router';
+import { DialogButton } from '../../shared/models/dialog-config.model';
 
 @Component({
   selector: 'app-organizers',
@@ -18,11 +19,10 @@ export class OrganizersComponent
   implements OnInit
 {
   private api = inject(OrganizerApiService);
-  private dialog = inject(MatDialog);
+  private router = inject(Router);
   private toaster = inject(ToasterService);
   private dialogHelper = inject(DialogHelperService);
-  private router = inject(Router);
-  displayedColums: string[] = ['name', 'description', 'userName', 'cityName', 'emailAddress'];
+  displayedColums: string[] = ['name', 'description', 'userName', 'cityName', 'emailAddress', 'actions'];
 
   constructor(){
     super();
@@ -42,7 +42,7 @@ export class OrganizersComponent
         this.stopLoading();
       },
       error: (err) => {
-        this.stopLoading('Failed to load Organizers');
+        this.stopLoading('Failed to load organizers');
         console.error("Load organizers error:", err);
       },
     });
@@ -58,7 +58,44 @@ export class OrganizersComponent
     this.router.navigate(['/admin/organizers/add']);
   }
 
+  onEdit(organizer: ListOrganizersQueryDto): void {
+    this.router.navigate(['/admin/organizers', organizer.id, 'edit']);
+  }
+
+  onDelete(organizer: ListOrganizersQueryDto): void {
+    this.dialogHelper.organizers.confirmDelete(organizer.name).subscribe(result => {
+      if (result && result.button === DialogButton.DELETE) {
+        this.performDelete(organizer);
+      }
+    });
+  }
+
+  private performDelete(organizer: ListOrganizersQueryDto): void {
+    this.startLoading();
+
+    this.api.delete(organizer.id).subscribe({
+      next: () => {
+        this.dialogHelper.organizers.showDeleteSuccess().subscribe();
+        this.loadPagedData();
+      },
+      error: (err) => {
+        this.stopLoading();
+
+        this.dialogHelper.showError(
+          'DIALOGS.TITLES.ERROR',
+          'PRODUCTS.DIALOGS.ERROR_DELETE'
+        ).subscribe();
+
+        console.error('Delete organizer error:', err);
+      }
+    });
+  }
 
 
 
+
+  onSearch(): void {
+    this.request.paging.page = 1;
+    this.loadPagedData();
+  }
 }

@@ -18,10 +18,18 @@ namespace Market.Application.Modules.Events.Organizers.Commands.Delete
                 .Where(x => x.Id == req.Id)
                 .FirstOrDefaultAsync();
 
+            var User = await ctx.Persons
+                .Where(x => x.Id == Organizer!.UserId)
+                .FirstOrDefaultAsync();
+
             if (Organizer == null)
                 throw new MarketNotFoundException("Organizer was not found");
 
+            if(User == null)
+                throw new MarketNotFoundException("User associated with the organizer was not found");
+
             ctx.Organizers.Remove(Organizer);
+            ctx.Persons.Remove(User);
             await ctx.SaveChangesAsync(ct);
 
             return Unit.Value;

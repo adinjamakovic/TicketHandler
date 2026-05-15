@@ -10,6 +10,7 @@ import {AdminOrdersComponent} from './orders/admin-orders.component';
 import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
 import { OrganizersComponent } from './organizers/organizers.component';
 import {OrganizersAddComponent} from './organizers/organizers-add/organizers-add.component';
+import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
 
 
 const routes: Routes = [
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'organizers/add',
         component: OrganizersAddComponent,
+      },
+      {
+        path: 'organizers/:id/edit',
+        component: OrganizersEditComponent,
       },
       // PRODUCTS
       {

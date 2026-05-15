@@ -32,19 +32,44 @@ export interface GetOrganizerByIdQueryEventDto{
     ScheduledDate: string;
 }
 
+export interface GetOrganizerByIdQueryDtoUser {
+    firstName: string;
+    lastName: string;
+    birthDate: string;
+    cityId: number;
+    address: string;
+    gender: string;
+    phone: string;
+    email: string;
+}
+
 export interface GetOrganizerByIdQueryDto {
     id: number;
     name: string;
     description?: string | null;
     email: string;
     city: string;
+    address: string;
     cityId: number;
+    user: GetOrganizerByIdQueryDtoUser;
     events: GetOrganizerByIdQueryEventDto[];
 }
 
 // ================================================
 // ================= COMMANDS =====================
 // ================================================
+
+export interface CreateAndUpdateOrganizerCommandUser{
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  cityId: number;
+  address: string;
+  gender: string;
+  phone: string;
+  email: string;
+  password: string;
+}
 
 export interface CreateOrganizerCommand {
     name: string;
@@ -54,7 +79,7 @@ export interface CreateOrganizerCommand {
     //implement later:
     //logo: ??????;
     //
-    userid: number;
+    user: CreateAndUpdateOrganizerCommandUser;
 }
 
 export interface DeleteOrganizerCommand{
@@ -62,9 +87,12 @@ export interface DeleteOrganizerCommand{
 }
 
 export interface UpdateOrganizerCommand{
-    id: number;
     name: string;
-    description?: string| null;
-    Address: string;
-    cityid: number
+    description: string;
+    address: string;
+    cityid: number;
+    //implement later:
+    //logo: ??????;
+    //
+    user: CreateAndUpdateOrganizerCommandUser;
 }

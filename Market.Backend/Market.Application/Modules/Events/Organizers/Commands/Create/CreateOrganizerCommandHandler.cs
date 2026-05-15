@@ -20,17 +20,30 @@ namespace Market.Application.Modules.Events.Organizers.Commands.Create
                 throw new ValidationException("Name is required.");
 
             bool exists = await ctx.Organizers
-                .AnyAsync(x => x.Name == normalized || x.UserId == req.UserId, ct);
+                .AnyAsync(x => x.Name == normalized, ct);
 
             if (exists)
                 throw new MarketConflictException("This organizer already exists");
 
-            var user = await ctx.Persons
-                .Where(x => x.Id == req.UserId)
-                .FirstOrDefaultAsync(ct);
+            var hasher = new PasswordHasher<PersonEntity>();
 
-            if (user is null || !user.IsOrganiser)
-                throw new ValidationException("Invalid user");
+            var User = new PersonEntity
+            {
+                FirstName = req.User.FirstName,
+                LastName = req.User.LastName,
+                BirthDate = req.User.BirthDate,
+                CityId = req.User.CityId,
+                Address = req.User.Address,
+                Phone = req.User.Phone,
+                Email = req.User.Email,
+                PasswordHash = hasher.HashPassword(null!, req.User.Password),
+                IsAdmin = false,
+                IsUser = false,
+                IsOrganiser = true,
+                IsEnabled = true
+            };
+
+            ctx.Persons.Add(User);
 
             var city = await ctx.Cities
                 .Where(x=>x.Id==req.CityId)
@@ -46,7 +59,7 @@ namespace Market.Application.Modules.Events.Organizers.Commands.Create
                 Address = req.Address.Trim(),
                 CityId = req.CityId,
                 Logo = Array.Empty<byte>(),
-                UserId = req.UserId,
+                User = User,
                 IsDeleted = false,
                 CreatedAtUtc = DateTime.UtcNow
             };
