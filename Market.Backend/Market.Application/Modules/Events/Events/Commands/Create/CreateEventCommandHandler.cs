@@ -1,4 +1,5 @@
 ﻿using Market.Application.Modules.Sales.Orders.Commands.Create;
+using Microsoft.AspNetCore.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.Events.Commands.Create
 {
-    public class CreateEventCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
+    public class CreateEventCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser, IWebHostEnvironment env)
         : IRequestHandler<CreateEventCommand, int>
     {
         public async Task<int> Handle(CreateEventCommand req, CancellationToken ct)
@@ -22,12 +23,27 @@ namespace Market.Application.Modules.Events.Events.Commands.Create
             if (org == null)
                 throw new MarketNotFoundException("No organizer found");
 
+            string filepath = string.Empty;
+
+            if (req.Image is not null)
+            {
+                var uploadsFolder = Path.Combine(env.WebRootPath, "Upload", "Events");
+                if(!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var FileName = $"{Guid.NewGuid()}.png";
+                var filePath = Path.Combine(uploadsFolder, FileName);
+
+                if(File.Exists(filePath))
+                    File.Delete(filePath);
+
+                var stream = new FileStream(filePath, FileMode.Create);
+                await req.Image.CopyToAsync(stream, ct);
+            }
             
 
             if (await ctx.Venues.FirstOrDefaultAsync(x=>x.Id==req.VenueId, ct) == null)
                 throw new MarketNotFoundException($"Venue with an Id of {req.VenueId} does not exist");
-
-            
 
             if (await ctx.EventTypes.FirstOrDefaultAsync(x=>x.Id==req.EventTypeId, ct) == null)
                 throw new MarketNotFoundException("Event type not found");
@@ -39,7 +55,7 @@ namespace Market.Application.Modules.Events.Events.Commands.Create
                 ScheduledDate = req.ScheduledDate,
                 OrganizerId = org.Id,
                 VenueId = req.VenueId,
-                Image = new byte[0],
+                Image = filepath,
                 EventTypeId = req.EventTypeId,
             };
 

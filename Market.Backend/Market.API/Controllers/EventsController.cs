@@ -12,6 +12,7 @@ namespace Market.API.Controllers;
 [Route("[controller]")]
 public class EventsController(ISender sender) : ControllerBase
 {
+
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateEventCommand command, CancellationToken ct)
     {

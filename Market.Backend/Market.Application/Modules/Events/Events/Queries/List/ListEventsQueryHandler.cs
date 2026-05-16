@@ -41,7 +41,7 @@ namespace Market.Application.Modules.Events.Events.Queries.List
                         City = x.Organizer.City.Name,
                         UserName = x.Organizer.User.UserName
                     },
-                    Image = new byte[0],
+                    Image = string.Empty,
                     VenueName = x.Venue.Name,
                     EventType = x.EventType.Name,
                 });

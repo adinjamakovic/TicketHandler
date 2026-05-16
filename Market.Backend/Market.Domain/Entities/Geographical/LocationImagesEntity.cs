@@ -21,7 +21,7 @@ namespace Market.Domain.Entities.Geographical
         /// <summary>
         /// Location Image
         /// </summary>
-        public byte[] Image { get; set; }
+        public string? Image { get; set; }
        
     }
 }

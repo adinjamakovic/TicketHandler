@@ -58,7 +58,7 @@ namespace Market.Application.Modules.Events.Organizers.Commands.Create
                 Description = req.Description?.Trim(),
                 Address = req.Address.Trim(),
                 CityId = req.CityId,
-                Logo = Array.Empty<byte>(),
+                Logo = String.Empty,
                 User = User,
                 IsDeleted = false,
                 CreatedAtUtc = DateTime.UtcNow

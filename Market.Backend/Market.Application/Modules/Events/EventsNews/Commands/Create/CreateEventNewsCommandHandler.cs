@@ -27,7 +27,7 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Create
                 EventId=req.EventId,
                 Header= normalizedHeader,
                 Body=normalizedBody,
-                Image = new byte[0]
+                Image = string.Empty
             };
 
             ctx.EventNews.Add(EventNews);

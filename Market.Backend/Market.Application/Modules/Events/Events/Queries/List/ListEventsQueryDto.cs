@@ -13,7 +13,7 @@ namespace Market.Application.Modules.Events.Events.Queries.List
         public required string? Description { get; init; }
         public required DateTime ScheduledDate { get; init; }
         public required ListEventsQueryDtoOrganizer Organizer { get; init; }
-        public required byte[] Image { get; init; }
+        public required string? Image { get; init; }
         public required string VenueName { get; init; }
         public required string EventType { get; init; }
     }

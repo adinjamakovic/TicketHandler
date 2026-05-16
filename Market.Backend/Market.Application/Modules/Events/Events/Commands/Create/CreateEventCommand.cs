@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Market.Application.Modules.Sales.Orders.Commands.Create
 {
@@ -12,8 +13,7 @@ namespace Market.Application.Modules.Sales.Orders.Commands.Create
         public string? Description { get; set; }
         public DateTime ScheduledDate {  get; set; }
         public int VenueId { get; set; }
-        //Fix later
-        //public byte[] Image { get; set; }
+        public IFormFile? Image { get; set; }
         public int EventTypeId { get; set; }
         public List<CreateEventCommandPerformer> Performers { get; set; }
     }

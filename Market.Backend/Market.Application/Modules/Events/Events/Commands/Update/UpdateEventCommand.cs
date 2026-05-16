@@ -1,9 +1,4 @@
-﻿using Market.Application.Modules.Events.Events.Commands.Create;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace Market.Application.Modules.Events.Events.Commands.Update
 {
@@ -15,8 +10,7 @@ namespace Market.Application.Modules.Events.Events.Commands.Update
         public string? Description { get; set; }
         public DateTime ScheduledDate { get; set; }
         public int VenueId { get; set; }
-        //Fix later
-        //public byte[] Image { get; set; }
+        public IFormFile? Image { get; set; }
         public int EventTypeId { get; set; }
         public List<UpdateEventCommandPerformers> Performers { get; set; } = [];
     }
