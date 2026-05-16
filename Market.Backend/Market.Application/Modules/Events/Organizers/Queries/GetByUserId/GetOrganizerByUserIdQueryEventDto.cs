@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Market.Application.Modules.Events.Organizers.Queries.GetById
+namespace Market.Application.Modules.Events.Organizers.Queries.GetByUserId
 {
-    public class GetOrganizerByIdQueryEventDto
+    public class GetOrganizerByUserIdQueryEventDto
     {
         public required int Id { get; set; }
         public required string Name { get; set; }

@@ -1,7 +1,7 @@
 import { inject, Injectable } from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateOrganizerCommand, GetOrganizerByIdQueryDto, ListOrganizersRequest, ListOrganizersResponse, UpdateOrganizerCommand } from "./organizers-api.model";
+import { CreateOrganizerCommand, GetOrganizerByIdQueryDto, GetOrganizerByUserIdQueryDto, ListOrganizersRequest, ListOrganizersResponse, UpdateOrganizerCommand } from "./organizers-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
 
@@ -26,7 +26,10 @@ export class OrganizerApiService {
     getById(id: number): Observable<GetOrganizerByIdQueryDto> {
         return this.http.get<GetOrganizerByIdQueryDto>(`${this.baseUrl}/${id}`);
     }
-
+    //Get /Organizer by UserId
+    getByUserId(userId: number): Observable<GetOrganizerByUserIdQueryDto> {
+    return this.http.get<GetOrganizerByUserIdQueryDto>(`${this.baseUrl}/UserId/${userId}`);
+    }
     //POST /Organizers
     create(payload: CreateOrganizerCommand): Observable<number>{
         return this.http.post<number>(this.baseUrl, payload);

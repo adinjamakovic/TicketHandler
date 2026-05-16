@@ -18,7 +18,7 @@ namespace Market.Infrastructure.Database.Configurations.Sales
             b.Property(x=>x.UnitPrice)
                 .IsRequired();
 
-            b.Property(x=>x.QuanityInStock)
+            b.Property(x=>x.QuantityInStock)
                 .IsRequired();
 
             b.HasOne(x => x.Event)

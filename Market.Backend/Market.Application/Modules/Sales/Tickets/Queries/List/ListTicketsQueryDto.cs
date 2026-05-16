@@ -9,11 +9,21 @@ namespace Market.Application.Modules.Sales.Tickets.Queries.List
     public class ListTicketsQueryDto
     {
         public required int Id { get; init; }
-        public int EventId { get; set; }
-        public int TicketTypeId { get; set; }
-        public decimal QuanityInStock { get; set; }
+        public ListTicketsQueryEvent Event { get; set; }
+        public ListTicketsQueryTicketType TicketType { get; set; }
+        public decimal QuantityInStock { get; set; }
         public decimal UnitPrice { get; set; }
         public string Benefits { get; set; }
     }
 
+    public class ListTicketsQueryEvent
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class ListTicketsQueryTicketType
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }

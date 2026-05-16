@@ -1,1 +1,173 @@
+<div class="container">
+  <!-- Header Card -->
+  <div class="header-card">
+    <div class="header-card-content">
+      <!-- Left: Title with Icon -->
+      <div class="title-section">
+        <div class="title-icon">
+          <mat-icon>event_seat</mat-icon>
+        </div>
+        <h1>{{ 'TICKETS.TITLE' | translate }}</h1>
+      </div>
 
+      <!-- Right: Search, Filter, Button -->
+      <div class="actions-container">
+        
+        <!-- Search -->
+        <mat-form-field class="search-field" appearance="fill">
+          <mat-label>{{ 'TICKETS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
+          <input
+            matInput
+            [(ngModel)]="request.eventName"
+            (keyup.enter)="onSearchChange(request.eventName || '')"
+            [placeholder]="'TICKETS.SEARCH_INPUT_PLACEHOLDER' | translate"
+          />
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+
+        <!-- New ticket Button -->
+        <button mat-raised-button color="primary" (click)="onCreate()" class="add-button">
+          <mat-icon>add</mat-icon>
+          <span>{{ 'TICKETS.NEW_TICKET' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="48" color="primary"></mat-spinner>
+    <p>{{ 'TICKETS.LOADING' | translate }}</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="!isLoading && errorMessage" class="error-container">
+    <mat-icon>error_outline</mat-icon>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Table Card -->
+  <div class="table-card" *ngIf="!isLoading && !errorMessage">
+    <table mat-table [dataSource]="items">
+      <!-- EventName Column -->
+      <ng-container matColumnDef="event.name">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">confirmation_number</mat-icon>
+            {{ 'TICKETS.TABLE.EVENT_NAME' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="ticket-event">{{ ticket.event.name }}</span>
+        </td>
+      </ng-container>
+      <!-- TicketType Column -->
+      <ng-container matColumnDef="ticketTypeId">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">event_seat</mat-icon>
+            {{ 'TICKETS.TABLE.TICKET_TYPE' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="ticket-type">{{ ticket.ticketType.name }}</span>
+        </td>
+      </ng-container>
+      <!-- Quantity Column -->
+      <ng-container matColumnDef="quantityInStock">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">tag</mat-icon>
+            {{ 'TICKETS.TABLE.QUANTITY' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="ticket-quantity">{{ ticket.quantityInStock }}</span>
+        </td>
+      </ng-container>
+      <!-- Price Column -->
+      <ng-container matColumnDef="unitPrice">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">attach_money</mat-icon>
+            {{ 'TICKETS.TABLE.TICKET_PRICE' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="ticket-price">{{ ticket.unitPrice }}</span>
+        </td>
+      </ng-container>
+      <!-- Benefits Column -->
+      <ng-container matColumnDef="benefits">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">info</mat-icon>
+            {{ 'TICKETS.TABLE.TICKET_BENEFITS' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <span class="ticket-benefits">{{ ticket.benefits }}</span>
+        </td>
+      </ng-container>
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>
+          <div class="header-cell">
+            <mat-icon class="header-icon">settings</mat-icon>
+            {{ 'TICKETS.TABLE.ACTIONS' | translate }}
+          </div>
+        </th>
+        <td mat-cell *matCellDef="let ticket">
+          <div class="action-buttons">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="onEdit(ticket)"
+              [matTooltip]="'TICKETS.ACTIONS.EDIT_TOOLTIP' | translate"
+              class="action-btn edit-btn"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="onDelete(ticket)"
+              [matTooltip]="'TICKETS.ACTIONS.DELETE_TOOLTIP' | translate"
+              class="action-btn delete-btn"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Header Row -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+      <!-- Data Rows -->
+      <tr mat-row *matRowDef="let row; columns: displayedColumns" class="data-row"></tr>
+
+      <!-- No Data Row -->
+      <tr class="mat-row no-data-row" *matNoDataRow>
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <div class="no-data-content">
+            <mat-icon>inbox</mat-icon>
+            <p>
+              <ng-container *ngIf="request.eventName; else noDataDefault">
+                {{ 'TICKETS.NO_DATA_FILTER' | translate }}
+              </ng-container>
+              <ng-template #noDataDefault>
+                {{ 'TICKETS.NO_DATA' | translate }}
+              </ng-template>
+            </p>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Paginator -->
+    <div class="paginator-wrapper">
+      <app-fit-paginator-bar [vm]="this"></app-fit-paginator-bar>
+    </div>
+  </div>
+</div>

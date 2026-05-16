@@ -8,17 +8,28 @@ import { ProductsEditComponent } from './catalogs/products/products-edit/product
 import { ProductCategoriesComponent } from './catalogs/product-categories/product-categories.component';
 import {AdminOrdersComponent} from './orders/admin-orders.component';
 import {AdminSettingsComponent} from './admin-settings/admin-settings.component';
-import { AdminOrganizersComponent } from './organizers/admin-organizers/admin-organizers.component';
+import { OrganizersComponent } from './organizers/organizers.component';
+import {OrganizersAddComponent} from './organizers/organizers-add/organizers-add.component';
+import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
+
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
-      //Organizers
+      //ORGANIZERS
       {
         path: 'organizers',
-        component: AdminOrganizersComponent,
+        component: OrganizersComponent,
+      },
+      {
+        path: 'organizers/add',
+        component: OrganizersAddComponent,
+      },
+      {
+        path: 'organizers/:id/edit',
+        component: OrganizersEditComponent,
       },
       // PRODUCTS
       {

@@ -14,7 +14,10 @@ import {AdminSettingsComponent} from './admin-settings/admin-settings.component'
 import {SharedModule} from '../shared/shared-module';
 import { OrderDetailsDialogComponent } from './orders/admin-orders-details-dialog/order-details-dialog.component';
 import { ChangeStatusDialogComponent } from './orders/change-status-dialog/change-status-dialog.component';
-import { AdminOrganizersComponent } from './organizers/admin-organizers/admin-organizers.component';
+import { OrganizersComponent } from './organizers/organizers.component';
+import { OrganizersAddComponent } from './organizers/organizers-add/organizers-add.component';
+import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
+
 
 
 @NgModule({
@@ -29,7 +32,9 @@ import { AdminOrganizersComponent } from './organizers/admin-organizers/admin-or
     AdminSettingsComponent,
     OrderDetailsDialogComponent,
     ChangeStatusDialogComponent,
-    AdminOrganizersComponent,
+    OrganizersComponent,
+    OrganizersAddComponent,
+    OrganizersEditComponent,
   ],
   imports: [
     AdminRoutingModule,
