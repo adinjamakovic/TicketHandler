@@ -2,9 +2,9 @@ using Market.Application.Modules.Events.Events.Commands.Create;
 using Market.Application.Modules.Events.Events.Commands.Delete;
 using Market.Application.Modules.Events.Events.Commands.Update;
 using Market.Application.Modules.Events.Events.Queries.GetById;
+using Market.Application.Modules.Events.Events.Queries.GetByOrganizerId;
 using Market.Application.Modules.Events.Events.Queries.List;
-using Market.Application.Modules.Sales.Orders.Commands.Create;
-using System.Runtime.CompilerServices;
+using Market.Application.Modules.Events.Events.Queries.ListWithPerformers;
 
 namespace Market.API.Controllers;
 
@@ -14,7 +14,8 @@ public class EventsController(ISender sender) : ControllerBase
 {
 
     [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateEventCommand command, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<int>> Create([FromForm] CreateEventCommand command, CancellationToken ct)
     {
         int id = await sender.Send(command, ct);
 
@@ -55,7 +56,8 @@ public class EventsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task Update(int id, UpdateEventCommand command, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task Update(int id, [FromForm] UpdateEventCommand command, CancellationToken ct)
     {
         command.Id = id;
         await sender.Send(command, ct);

@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
-namespace Market.Application.Modules.Sales.Orders.Commands.Create
+namespace Market.Application.Modules.Events.Events.Commands.Create;
+
+public class CreateEventCommand : IRequest<int>
 {
-    public class CreateEventCommand : IRequest<int>
-    {
-        public string Name { get; set; }
-        public string? Description { get; set; }
-        public DateTime ScheduledDate {  get; set; }
-        public int VenueId { get; set; }
-        public IFormFile? Image { get; set; }
-        public int EventTypeId { get; set; }
-        public List<CreateEventCommandPerformer> Performers { get; set; }
-    }
+    public string Name { get; set; } = string.Empty;
+    public string? Description { get; set; }
+    public DateTime ScheduledDate { get; set; }
+    public int VenueId { get; set; }
+    public IFormFile? Image { get; set; }
+    public int EventTypeId { get; set; }
+    public List<CreateEventCommandPerformer> Performers { get; set; } = [];
+}
 
-    public class CreateEventCommandPerformer
-    {
-        public int PerformerId { get; set; }
-        public TimeOnly TimeStamp { get; set; }
-    }
+public class CreateEventCommandPerformer
+{
+    public int PerformerId { get; set; }
+    public TimeOnly TimeStamp { get; set; }
 }
