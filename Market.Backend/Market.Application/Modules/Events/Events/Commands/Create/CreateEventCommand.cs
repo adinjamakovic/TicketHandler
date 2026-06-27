@@ -4,7 +4,7 @@ namespace Market.Application.Modules.Events.Events.Commands.Create;
 
 public class CreateEventCommand : IRequest<int>
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; }
     public string? Description { get; set; }
     public DateTime ScheduledDate { get; set; }
     public int VenueId { get; set; }

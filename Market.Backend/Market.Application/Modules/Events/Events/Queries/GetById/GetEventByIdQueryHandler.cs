@@ -13,17 +13,14 @@ public sealed class GetEventByIdQueryHandler(IAppDbContext ctx, IImageStorage im
                 Name = x.Name,
                 Description = x.Description,
                 ScheduledDate = x.ScheduledDate,
-                OrganizerName = x.Organizer.Name,
-                VenueName = x.Venue.Name,
+                VenueId = x.VenueId,
                 Image = x.Image,
-                EventTypeName = x.EventType.Name,
+                EventTypeId = x.EventTypeId,
                 Performers = x.PerformerEvents
                     .Select(y => new GetEventByIdQueryDtoPerformers
                     {
-                        Id = y.Performer.Id,
-                        Name = y.Performer.Name,
-                        Description = y.Performer.Description,
-                        Genre = y.Performer.Genre.Name,
+                        PerformerId = y.Performer.Id,
+                        TimeStamp = y.TimeStamp
                     }).ToList()
             })
             .FirstOrDefaultAsync(ct);

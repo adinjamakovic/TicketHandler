@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {GetEventByIdQueryDto} from '../../../../api-services/events/events-api.model';
 
 @Injectable()
@@ -25,24 +25,29 @@ export class EventsFormService {
           Validators.required
         ]
       ],
-      venue: [
-        event?.venueName ?? '',
+      image: [
+        event?.image ?? null
+      ],
+      venueId: [
+        event?.venueId ?? '',
         [
           Validators.required
         ]
       ],
-      eventType: [
-        event?.eventTypeName ?? '',
+      eventTypeId: [
+        event?.eventTypeId ?? '',
         [
           Validators.required
         ]
       ],
-      performer: [
-
-      ],
-      time: [
-
-      ]
+      performers: this.fb.array(
+        event?.performers?.map(p =>
+          this.fb.group({
+            performerId: [p.performerId],
+            timeStamp: [p.timeStamp]
+          })
+        ) ?? []
+      )
     });
   }
 

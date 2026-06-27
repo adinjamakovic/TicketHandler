@@ -11,7 +11,7 @@ public class UpdateOrganizerCommandHandler(
         if (appCurrentUser.IsUser)
             throw new MarketBusinessRuleException("111", "User can not edit organisers... How did we get here??");
 
-        if ((await ctx.Organizers.Where(x => x.UserId != appCurrentUser.UserId).FirstOrDefaultAsync(ct))?.Id != req.Id
+        if ((await ctx.Organizers.Where(x => x.UserId == appCurrentUser.UserId).FirstOrDefaultAsync(ct))?.Id != req.Id
             && appCurrentUser.IsAdmin == false)
             throw new MarketBusinessRuleException("111", "This user cant edit this organizer");
 
