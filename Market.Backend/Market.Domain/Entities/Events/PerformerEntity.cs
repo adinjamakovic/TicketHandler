@@ -20,7 +20,7 @@ namespace Market.Domain.Entities.Events
         /// <summary>
         /// Performer image
         /// </summary>
-        public byte[] Image { get; set; }
+        public string? Image { get; set; }
         /// <summary>
         /// Performer decription
         /// </summary>

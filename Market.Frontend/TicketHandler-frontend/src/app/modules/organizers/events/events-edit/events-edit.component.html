@@ -1,0 +1,171 @@
+<div class="container">
+  <!-- Header Card -->
+  <div class="header-card">
+    <div class="header-card-content">
+      <!-- Left: Title with Icon -->
+      <div class="title-section">
+        <button mat-icon-button (click)="onCancel()" class="back-btn">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <div class="title-icon">
+          <mat-icon>event_note</mat-icon>
+        </div>
+        <div>
+          <h1>Edit event</h1>
+        </div>
+      </div>
+
+      <!-- Right: Actions -->
+      <div class="actions-container">
+        <button mat-button (click)="onCancel()" >
+          <mat-icon>close</mat-icon>
+          <span>Cancel</span>
+        </button>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="onSubmit()"
+          [disabled]="form.invalid || isLoading"
+        >
+          <span>Save</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Content -->
+  <div class="form-content" *ngIf="!isLoading && form">
+    <form [formGroup]="form">
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>notes</mat-icon>
+            Event
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Event name</mat-label>
+              <input matInput formControlName="name" type="text"  required />
+              <mat-icon matSuffix>edit</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Event type</mat-label>
+              <mat-select formControlName="eventTypeId"  required >
+                <mat-option *ngFor="let eventType of eventTypes" [value]="eventType.id">
+              {{ eventType.name }}
+            </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>event_note</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              rows="3"
+              placeholder="Describe the event..."
+              formControlName="description"
+            ></textarea>
+            <mat-icon matSuffix>description</mat-icon>
+          </mat-form-field>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Scheduled Date</mat-label>
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <input matInput [matDatepicker]="picker" formControlName="scheduledDate" readonly (click)="picker.open()">
+              <mat-datepicker #picker></mat-datepicker>
+              <mat-error *ngIf="hasError('scheduledDate')">{{ getErrorMessage('scheduledDate') }}</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Venue</mat-label>
+              <mat-select formControlName="venueId" required>
+                <mat-option *ngFor="let venue of venues" [value]="venue.id">
+                  {{ venue.name }}
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>location_on</mat-icon>
+            </mat-form-field>
+          </div>
+
+            <mat-label>Event poster</mat-label>
+          <app-image-form-control formControlName="image"/>
+        </mat-card-content>   
+      </mat-card>
+
+      <mat-card class="section-card">
+        <mat-card-header>
+          <mat-card-title>
+            <mat-icon>keyboard_voice</mat-icon>
+            Event performers
+          </mat-card-title>
+          <button
+            mat-stroked-button
+            color="primary"
+            type="button"
+            (click)="addItem()"
+            class="add-item-btn"
+          >
+            <mat-icon>add</mat-icon>
+            Add a performer
+          </button>
+        </mat-card-header>
+        <mat-card-content>
+          <div formArrayName="performers" class="items-container">
+            <div
+              *ngFor="let itemGroup of items.controls; let i = index"
+              [formGroupName]="i"
+              class="item-row"
+            >
+              <div class="item-row-header">
+                <span class="item-number">Performer #{{ i + 1 }}</span>
+                <button
+                  mat-icon-button
+                  color="warn"
+                  type="button"
+                  (click)="removeItem(i)"
+                  matTooltip="Delete performer"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Performer name</mat-label>
+                  <mat-select formControlName="performerId" required>
+                    <mat-option *ngFor="let performer of performers" [value]="performer.id">
+              {{ performer.name }}
+            </mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>inventory</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Time of performance</mat-label>
+                  <mat-select formControlName="timeStamp" required>
+                    <mat-option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</mat-option>
+                  </mat-select>
+                  <mat-icon matSuffix>schedule</mat-icon>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <!-- No Items Message -->
+            <div *ngIf="items.length === 0" class="no-items">
+              <mat-icon>keyboard_voice</mat-icon>
+              <p>Crickets!! No added performers. Click "Add a performer" to begin.</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+
+    </form>
+  </div>
+</div>

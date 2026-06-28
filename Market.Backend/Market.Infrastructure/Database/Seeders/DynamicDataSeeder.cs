@@ -333,7 +333,7 @@ public static class DynamicDataSeeder
             CityId = 2,
             UserId = 2,
             CreatedAtUtc = DateTime.UtcNow,
-            Logo = new byte[0]
+            Logo = string.Empty
         };
         
       
@@ -388,7 +388,7 @@ public static class DynamicDataSeeder
                 new PerformerEntity
                 {
                     Name = "Queen",
-                    Image = new byte[0],
+                    Image = string.Empty,
                     Description = "Dummy desc",
                     GenreId = 1,
                     CreatedAtUtc = DateTime.UtcNow
@@ -396,7 +396,7 @@ public static class DynamicDataSeeder
                 new PerformerEntity
                 {
                     Name = "Taylor Swift",
-                    Image = new byte[0],
+                    Image = string.Empty,
                     Description = "Dummy desc",
                     GenreId = 2,
                     CreatedAtUtc = DateTime.UtcNow
@@ -404,7 +404,7 @@ public static class DynamicDataSeeder
                 new PerformerEntity
                 {
                     Name = "Rammstein",
-                    Image = new byte[0],
+                    Image = string.Empty,
                     Description = "Dummy desc",
                     GenreId = 3,
                     CreatedAtUtc = DateTime.UtcNow
@@ -412,7 +412,7 @@ public static class DynamicDataSeeder
                 new PerformerEntity
                 {
                     Name = "Bob Dylan",
-                    Image = new byte[0],
+                    Image = string.Empty,
                     Description = "Dummy desc",
                     GenreId = 4,
                     CreatedAtUtc = DateTime.UtcNow
@@ -562,7 +562,7 @@ public static class DynamicDataSeeder
                     ScheduledDate= DateTime.Now,
                     OrganizerId = 1,
                     VenueId=1,
-                    Image=new byte[0],
+                    Image=string.Empty  ,
                     EventTypeId=1,
                 },
                 new EventEntity
@@ -572,7 +572,7 @@ public static class DynamicDataSeeder
                     ScheduledDate = DateTime.Now.AddDays(10),
                     OrganizerId = 1,
                     VenueId = 2,
-                    Image = new byte[0],
+                    Image = string.Empty,
                     EventTypeId = 2,
                 },
                 new EventEntity
@@ -582,7 +582,7 @@ public static class DynamicDataSeeder
                     ScheduledDate = DateTime.Now.AddDays(20),
                     OrganizerId = 1,
                     VenueId = 2,
-                    Image = new byte[0],
+                    Image = string.Empty,
                     EventTypeId = 3,
                 },
                 new EventEntity
@@ -592,7 +592,7 @@ public static class DynamicDataSeeder
                     ScheduledDate = DateTime.Now.AddDays(15),
                     OrganizerId = 1,
                     VenueId = 3,
-                    Image = new byte[0],
+                    Image = string.Empty,
                     EventTypeId = 4,
                 },
                 new EventEntity
@@ -602,7 +602,7 @@ public static class DynamicDataSeeder
                     ScheduledDate = DateTime.Now.AddDays(30),
                     OrganizerId = 1,
                     VenueId = 4,
-                    Image = new byte[0],
+                    Image = string.Empty,
                     EventTypeId = 5,
                 },
                 new EventEntity
@@ -612,7 +612,7 @@ public static class DynamicDataSeeder
                     ScheduledDate = DateTime.Now.AddDays(1),
                     OrganizerId = 1,
                     VenueId = 4,
-                    Image = new byte[0],
+                    Image = string.Empty,
                     EventTypeId = 6,
                 }
             );

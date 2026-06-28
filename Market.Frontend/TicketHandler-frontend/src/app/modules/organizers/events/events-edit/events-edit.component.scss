@@ -1,0 +1,261 @@
+$primary-color: #984ae2;
+$primary-light: #f7e8fd;
+$primary-lighter: #e8f0f9;
+$primary-dark: #3a5e91;
+
+$secondary-color: #5a8ac9;
+$accent-color: #7ba7db;
+
+$bg-gradient-start: #f0f5fb;
+$bg-gradient-end: #e3ecf7;
+
+$text-primary: #2c3e50;
+$text-secondary: #546e7a;
+$text-disabled: #90a4ae;
+
+$success-color: #66bb6a;
+$error-color: #ef5350;
+
+$border-color: rgba(73, 118, 181, 0.15);
+$hover-bg: rgba(73, 118, 181, 0.04);
+
+
+.container {
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  background: linear-gradient(135deg, $bg-gradient-start 0%, $bg-gradient-end 100%);
+  min-height: 100vh;
+}
+
+.header-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  padding: 20px 24px;
+}
+
+.header-card-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.title-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+
+  .back-btn {
+    color: #666;
+  }
+
+  .title-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
+    border-radius: 12px;
+
+    mat-icon {
+      color: white;
+      font-size: 28px;
+      width: 28px;
+      height: 28px;
+    }
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: $text-primary;
+  }
+}
+
+.actions-container {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+
+  button[mat-button] {
+    color: $text-secondary;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+
+  button[mat-raised-button] {
+    background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
+    color: white;
+    font-weight: 500;
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 8px;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    mat-spinner {
+      margin-right: 8px;
+    }
+  }
+}
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  ::ng-deep {
+    .mat-mdc-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      border-bottom: 1px solid $border-color;
+      margin-bottom: 0;
+    }
+
+    .mat-mdc-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: $text-primary;
+
+      mat-icon {
+        color: $primary-color;
+      }
+    }
+
+    .mat-mdc-card-content {
+      padding: 24px;
+    }
+  }
+
+  .add-item-btn {
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-field {
+  width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.items-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.item-row {
+  border: 2px solid $border-color;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: $primary-color;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  }
+}
+
+.item-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $border-color;
+
+  .item-number {
+    font-weight: 600;
+    color: $primary-color;
+    font-size: 14px;
+  }
+}
+
+.no-items {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  gap: 16px;
+  color: $text-secondary;
+
+  mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    opacity: 0.4;
+  }
+
+  p {
+    font-size: 14px;
+    text-align: center;
+    margin: 0;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+
+  .header-card-content {
+    flex-direction: column;
+    align-items: stretch;
+
+    .title-section {
+      justify-content: flex-start;
+    }
+
+    .actions-container {
+      justify-content: flex-end;
+    }
+  }
+
+  .summary-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+
+    .summary-value {
+      font-size: 24px;
+    }
+  }
+}
+

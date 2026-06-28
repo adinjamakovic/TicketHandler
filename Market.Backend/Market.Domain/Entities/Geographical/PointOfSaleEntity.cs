@@ -31,6 +31,6 @@ namespace Market.Domain.Entities.Geographical
         /// <summary>
         /// Point of sale picture
         /// </summary>
-        public byte[] Picture { get; set; }
+        public string? Picture { get; set; }
     }
 }

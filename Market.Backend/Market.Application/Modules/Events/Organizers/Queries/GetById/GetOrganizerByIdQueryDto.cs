@@ -14,6 +14,7 @@ namespace Market.Application.Modules.Events.Organizers.Queries.GetById
         public required int CityId { get; set; }
         public required string City { get; set; }
         public required string Address { get; set; }
+        public string? Logo { get; set; }
         public required GetOrganizerByIdQueryDtoUser User { get; set; }
         public List<GetOrganizerByIdQueryEventDto> Events { get; set; }
     }

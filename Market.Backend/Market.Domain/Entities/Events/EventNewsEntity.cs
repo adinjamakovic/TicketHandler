@@ -39,6 +39,6 @@ namespace Market.Domain.Entities.Events
         /// <summary>
         /// Post image
         /// </summary>
-        public byte[]? Image { get; set; }
+        public string? Image { get; set; }
     }
 }
