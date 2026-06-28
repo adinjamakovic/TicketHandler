@@ -1,4 +1,6 @@
-﻿using Market.Application.Common.Behaviors;
+﻿using Market.Application.Abstractions;
+using Market.Application.Common.Behaviors;
+using Market.Application.Common.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -21,6 +23,8 @@ public static class DependencyInjection
 
         // TimeProvider — if used by handlers
         services.AddSingleton(TimeProvider.System);
+
+        services.AddScoped<IImageStorage, ImageStorage>();
 
         return services;
     }

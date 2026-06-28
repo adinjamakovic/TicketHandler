@@ -1,4 +1,4 @@
-import { BasePagedQuery } from "../../core/models/paging/base-paged-query";
+    import { BasePagedQuery } from "../../core/models/paging/base-paged-query";
 import { PageResult } from "../../core/models/paging/page-result";
 
 
@@ -57,23 +57,20 @@ export interface ListEventsWithPerformersQueryDto {
 export type ListEventsWithPerformersResponse = PageResult<ListEventsWithPerformersQueryDto>;
 
 export interface GetEventByIdQueryDtoPerformers {
-    id: number;
-    name: string;
-    description?: string | null;
-    genre: string;
+    id: number,
+    performerId: number,
+    timeStamp: string
 }
 
 export interface GetEventByIdQueryDto{
-    id: number;
-    name: string;
-    description?: string | null;
-    scheduledDate: string;
-    organizerName: string;
-    venueName: string;
-    //Implement later
-    image: string;
-    eventTypeName: string;
-    performers: GetEventByIdQueryDtoPerformers[];
+   id: number,
+  name: string,
+  description: string,
+  scheduledDate: string,
+  venueId: number,
+  image: string|Blob,
+  eventTypeId: number,
+  performers: GetEventByIdQueryDtoPerformers[]
 }
 
 export class GetEventsByOrganizerIdRequest extends BasePagedQuery {
@@ -116,8 +113,7 @@ export interface CreateEventCommand{
     description?: string | null;
     scheduledDate: string;
     venueId: number;
-    //ADD LATER
-    //image: ????
+    image?: File | null;
     eventTypeId: number;
     performers: CreateEventCommandPerformer[];
 }
@@ -136,9 +132,8 @@ export interface UpdateEventCommand {
     name: string;
     description?: string | null;
     scheduledDate: string;
-    venieId: number;
-    //ADD LATER
-    //image: ????
+    venueId: number;
+    image?: File | null;
     eventTypeId: number;
     performers: UpdateEventCommandPerformer[];
 }

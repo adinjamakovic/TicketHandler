@@ -1,10 +1,24 @@
-import { inject } from "@angular/core";
+import {inject, Injectable} from "@angular/core";
 import { environment } from "../../../environments/environment";
 import { HttpClient } from "@angular/common/http";
-import { CreateEventCommand, GetEventByIdQueryDto, GetEventByOrganizerIdResponse, GetEventsByOrganizerIdRequest, ListEventsQueryDto, ListEventsRequest, ListEventsResponse, ListEventsWithPerformersRequest, ListEventsWithPerformersResponse, UpdateEventCommand } from "./events-api.model";
+import {
+  CreateEventCommand,
+  GetEventByIdQueryDto,
+  GetEventByOrganizerIdResponse,
+  GetEventsByOrganizerIdRequest,
+  ListEventsQueryDto,
+  ListEventsRequest,
+  ListEventsResponse,
+  ListEventsWithPerformersRequest,
+  ListEventsWithPerformersResponse,
+  UpdateEventCommand
+} from "./events-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
 
+@Injectable({
+  providedIn: 'root',
+})
 export class EventsApiService{
     private readonly baseUrl = `${environment.apiUrl}/Events`;
     private http = inject(HttpClient);
@@ -42,13 +56,40 @@ export class EventsApiService{
     }
 
     //POST /Events
-    create(payload: CreateEventCommand) : Observable<number>{
-        return this.http.post<number>(this.baseUrl, payload);
+    create(payload: CreateEventCommand): Observable<number> {
+        const formData = new FormData();
+        formData.append('name', payload.name);
+        formData.append('description', payload.description ?? '');
+        formData.append('scheduledDate', payload.scheduledDate);
+        formData.append('venueId', payload.venueId.toString());
+        formData.append('eventTypeId', payload.eventTypeId.toString());
+        if (payload.image) {
+            formData.append('image', payload.image);
+        }
+        payload.performers.forEach((p, i) => {
+            formData.append(`performers[${i}].performerId`, p.performerId.toString());
+            formData.append(`performers[${i}].timeStamp`, p.timeStamp);
+        });
+        return this.http.post<number>(this.baseUrl, formData);
     }
 
-    //PUT /Events
-    update(id: number, payload: UpdateEventCommand) : Observable<void>{
-        return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+    //PUT /Events/{id}
+    update(id: number, payload: UpdateEventCommand): Observable<void> {
+        const formData = new FormData();
+        formData.append('name', payload.name);
+        formData.append('description', payload.description ?? '');
+        formData.append('scheduledDate', payload.scheduledDate);
+        formData.append('venueId', payload.venueId.toString());
+        formData.append('eventTypeId', payload.eventTypeId.toString());
+        if (payload.image) {
+            formData.append('image', payload.image);
+        }
+        payload.performers.forEach((p, i) => {
+            formData.append(`performers[${i}].id`, p.id.toString());
+            formData.append(`performers[${i}].performerId`, p.performerId.toString());
+            formData.append(`performers[${i}].timeStamp`, p.timeStamp);
+        });
+        return this.http.put<void>(`${this.baseUrl}/${id}`, formData);
     }
 
     //DELETE /Events/{id}

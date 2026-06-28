@@ -1,0 +1,13 @@
+<div class="image-wrapper" (click)="fileInput.click()" matTooltip="Click to change image">
+  <img [src]="imgSrc" alt="Event poster" height="500" width="auto"/>
+  <div class="image-overlay">
+    <mat-icon>upload</mat-icon>
+  </div>
+</div>
+
+<input #fileInput
+    hidden
+    type="file"
+    accept="image/*"
+    (change)="onImageSelected($event)"
+/>

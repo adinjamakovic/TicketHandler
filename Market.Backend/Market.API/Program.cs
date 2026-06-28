@@ -50,6 +50,7 @@ public partial class Program
                 .AddInfrastructure(builder.Configuration, builder.Environment)
                 .AddApplication();
 
+
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularDev",
@@ -61,7 +62,7 @@ public partial class Program
                             .AllowCredentials();
                     });
             });
-
+                        
             var app = builder.Build();
 
             // ---------------------------------------------------------
@@ -72,6 +73,8 @@ public partial class Program
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseStaticFiles();
 
             // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();

@@ -18,6 +18,13 @@
   <ItemGroup>
     <ProjectReference Include="..\Market.Domain\Market.Domain.csproj" />
     <ProjectReference Include="..\Market.Shared\Market.Shared.csproj" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Modules\Events\EventType\Commands\" />
+    <Folder Include="Modules\Geographical\Venues\Commands\" />
+    <Folder Include="Modules\Identity\Person\Commands\" />
   </ItemGroup>
 
 </Project>

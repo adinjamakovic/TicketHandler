@@ -46,7 +46,7 @@ namespace Market.Domain.Entities.Events
         /// <summary>
         /// Event poster
         /// </summary>
-        public byte[] Image {  get; set; }
+        public string? Image {  get; set; }
         /// <summary>
         /// Event type identifier
         /// </summary>

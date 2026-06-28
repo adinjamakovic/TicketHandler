@@ -14,6 +14,7 @@ namespace Market.Application.Modules.Events.Organizers.Queries.List
         public required string CityName { get; set; }
         public required string UserName { get; set; }
         public required string EmailAddress { get; set; }
+        public string? Logo { get; set; }
         public required bool IsDeleted { get; set; }
     }
 }

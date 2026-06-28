@@ -3,6 +3,11 @@
 public sealed class PageResult<T>
 {
     public int Total { get; init; }
+    public int TotalItems { get; init; }
+    public int TotalPages { get; init; }
+    public int PageSize { get; init; }
+    public int CurrentPage { get; init; }
+    public bool IncludedTotal { get; init; }
     public IReadOnlyList<T> Items { get; init; }
 
     /// <summary>
@@ -23,6 +28,15 @@ public sealed class PageResult<T>
             .Take(paging.PageSize)
             .ToListAsync(ct);
 
-        return new PageResult<T> { Total = total, Items = items };
+        return new PageResult<T>
+        {
+            Total = total,
+            TotalItems = total,
+            TotalPages = paging.PageSize > 0 ? (int)Math.Ceiling((double)total / paging.PageSize) : 1,
+            PageSize = paging.PageSize,
+            CurrentPage = paging.Page,
+            IncludedTotal = includeTotal,
+            Items = items,
+        };
     }
 }

@@ -37,7 +37,7 @@ namespace Market.Domain.Entities.Events
         /// <summary>
         /// Organizer logo
         /// </summary>
-        public byte[] Logo { get; set; }
+        public string? Logo { get; set; }
         /// <summary>
         /// Identifier of the person that will be used for logging in 
         /// </summary>

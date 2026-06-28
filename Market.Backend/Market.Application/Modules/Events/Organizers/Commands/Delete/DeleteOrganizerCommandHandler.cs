@@ -1,38 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace Market.Application.Modules.Events.Organizers.Commands.Delete;
 
-namespace Market.Application.Modules.Events.Organizers.Commands.Delete
+public class DeleteOrganizerCommandHandler(
+    IAppDbContext ctx,
+    IAppCurrentUser appCurrentUser,
+    IImageStorage imageStorage)
+    : IRequestHandler<DeleteOrganizerCommand, Unit>
 {
-    public class DeleteOrganizerCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
-        : IRequestHandler<DeleteOrganizerCommand, Unit>
+    public async Task<Unit> Handle(DeleteOrganizerCommand req, CancellationToken ct)
     {
-        public async Task<Unit> Handle(DeleteOrganizerCommand req, CancellationToken ct)
-        {
-            if (!appCurrentUser.IsAdmin)
-                throw new MarketBusinessRuleException("111", "Only an admin can delete an organizer");
+        if (appCurrentUser.IsUser)
+            throw new MarketBusinessRuleException("111", "Only an admin or organizer user can delete an organizer");
 
-            var Organizer = await ctx.Organizers
-                .Where(x => x.Id == req.Id)
-                .FirstOrDefaultAsync();
+        var organizer = await ctx.Organizers
+            .Where(x => x.Id == req.Id)
+            .FirstOrDefaultAsync(ct);
 
-            var User = await ctx.Persons
-                .Where(x => x.Id == Organizer!.UserId)
-                .FirstOrDefaultAsync();
+        if (organizer is null)
+            throw new MarketNotFoundException("Organizer was not found");
 
-            if (Organizer == null)
-                throw new MarketNotFoundException("Organizer was not found");
+        var user = await ctx.Persons
+            .Where(x => x.Id == organizer.UserId)
+            .FirstOrDefaultAsync(ct);
 
-            if(User == null)
-                throw new MarketNotFoundException("User associated with the organizer was not found");
+        if (user is null)
+            throw new MarketNotFoundException("User associated with the organizer was not found");
 
-            ctx.Organizers.Remove(Organizer);
-            ctx.Persons.Remove(User);
-            await ctx.SaveChangesAsync(ct);
+        imageStorage.DeleteIfExists(ImageStorageCategory.Organizers, organizer.Logo);
 
-            return Unit.Value;
-        }
+        ctx.Organizers.Remove(organizer);
+        ctx.Persons.Remove(user);
+        await ctx.SaveChangesAsync(ct);
+
+        return Unit.Value;
     }
 }
