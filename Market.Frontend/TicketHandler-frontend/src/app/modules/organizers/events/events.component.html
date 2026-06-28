@@ -120,13 +120,13 @@
             {{ 'TICKET_TYPES.TABLE.ACTIONS' | translate }}
           </div>
         </th>
-        <td mat-cell *matCellDef="let type">
+        <td mat-cell *matCellDef="let event">
           <div class="action-buttons">
             <button
               mat-icon-button
               color="primary"
-              (click)="onEdit(type)"
-              [matTooltip]="'TICKET_TYPES.ACTIONS.EDIT_TOOLTIP' | translate"
+              (click)="onEdit(event)"
+              [matTooltip]="'Edit Performer'"
               class="action-btn edit-btn"
             >
               <mat-icon>edit</mat-icon>
@@ -134,8 +134,8 @@
             <button
               mat-icon-button
               color="warn"
-              (click)="onDelete(type)"
-              [matTooltip]="'TICKET_TYPES.ACTIONS.DELETE_TOOLTIP' | translate"
+              (click)="onDelete(event)"
+              [matTooltip]="'Delete performer'"
               class="action-btn delete-btn"
             >
               <mat-icon>delete</mat-icon>
@@ -155,15 +155,20 @@
             <mat-icon>inbox</mat-icon>
             <p>
               <ng-container *ngIf="request.search; else noDataDefault">
-                {{ 'TICKET_TYPES.NO_DATA_FILTER' | translate }}
+                {{ 'No results match the given query' }}
               </ng-container>
               <ng-template #noDataDefault>
-                {{ 'TICKET_TYPES.NO_DATA' | translate }}
+                {{ 'No Events' }}
               </ng-template>
             </p>
           </div>
         </td>
       </tr>
     </table>
+
+  
+    <div class="paginator-wrapper">
+      <app-fit-paginator-bar [vm]="this"></app-fit-paginator-bar>
+    </div>
   </div>
 </div>

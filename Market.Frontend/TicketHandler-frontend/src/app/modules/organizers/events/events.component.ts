@@ -5,6 +5,7 @@ import {EventsApiService} from '../../../api-services/events/events-api.service'
 import {Router} from '@angular/router';
 import {ToasterService} from '../../../core/services/toaster.service';
 import {DialogHelperService} from '../../shared/services/dialog-helper.service';
+import { DialogButton } from '../../shared/models/dialog-config.model';
 
 @Component({
   selector: 'app-events',
@@ -34,6 +35,7 @@ export class EventsComponent
   constructor() {
     super();
     this.request = new ListEventsRequest();
+    this.request.paging.pageSize = 5
   }
   ngOnInit(): void {
         this.initList();
@@ -61,7 +63,34 @@ export class EventsComponent
     this.router.navigate(['organizer/events', event.id, 'edit']);
   }
 
-  onDelete(event: number): void {}
+  onDelete(event: ListEventsQueryDto): void {
+    this.dialogHelper.confirmDelete(event.name).subscribe(result => {
+          if (result && result.button === DialogButton.DELETE) {
+            this.performDelete(event);
+          }
+        });
+  }
+
+  private performDelete(event: ListEventsQueryDto): void {
+      this.startLoading();
+  
+      this.api.delete(event.id).subscribe({
+        next: () => {
+          this.dialogHelper.showSuccess("Succesfully deleted event", `You have succesfully deleted ${event.name}`).subscribe();
+          this.loadPagedData();
+        },
+        error: (err) => {
+          this.stopLoading();
+  
+          this.dialogHelper.showError(
+            'Error while deleting',
+            `Unable to delete ${event.name}`
+          ).subscribe();
+  
+          console.error('Delete event error:', err);
+        }
+      });
+    }
 
   onSearchChange(searchTerm: string) : void {
     this.request.search = searchTerm;

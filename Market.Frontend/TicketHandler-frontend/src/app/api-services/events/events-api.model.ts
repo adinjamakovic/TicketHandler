@@ -57,6 +57,7 @@ export interface ListEventsWithPerformersQueryDto {
 export type ListEventsWithPerformersResponse = PageResult<ListEventsWithPerformersQueryDto>;
 
 export interface GetEventByIdQueryDtoPerformers {
+    id: number,
     performerId: number,
     timeStamp: string
 }

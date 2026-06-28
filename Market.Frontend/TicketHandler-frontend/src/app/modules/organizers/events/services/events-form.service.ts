@@ -43,6 +43,7 @@ export class EventsFormService {
       performers: this.fb.array(
         event?.performers?.map(p =>
           this.fb.group({
+            id: [p.id ?? 0],
             performerId: [p.performerId],
             timeStamp: [p.timeStamp]
           })
