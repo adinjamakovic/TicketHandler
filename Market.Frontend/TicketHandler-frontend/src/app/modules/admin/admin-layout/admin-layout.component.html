@@ -34,7 +34,7 @@
       <!-- Language Selector -->
       <div class="language-selector">
         <button mat-icon-button [matMenuTriggerFor]="langMenu" class="lang-button">
-          <span class="flag-icon">{{ getCurrentLanguage()?.flag }}</span>
+          <span class="flag-icon">{{ getCurrentLanguage()?.flag }}{{ getCurrentLanguage()?.name }}</span>
           <mat-icon>arrow_drop_down</mat-icon>
         </button>
 
@@ -57,29 +57,17 @@
     <mat-nav-list>
       <!-- CATALOG SECTION -->
       <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.EVENTS' | translate }}
+        {{ 'ADMIN_PANEL.MENU.EVENTS-HEADER' | translate }}
       </div>
 
       <a mat-list-item routerLink="/admin/organizers" routerLinkActive="active">
-        <mat-icon matListItemIcon>category</mat-icon>
+        <mat-icon matListItemIcon>business</mat-icon>
         <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.ORGANIZERS' | translate }}</span>
       </a>
 
-      <a mat-list-item routerLink="/admin/products" routerLinkActive="active">
-        <mat-icon matListItemIcon>inventory_2</mat-icon>
+      <a mat-list-item routerLink="/admin/events" routerLinkActive="active">
+        <mat-icon matListItemIcon>event_note</mat-icon>
         <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.EVENTS' | translate }}</span>
-      </a>
-
-      <mat-divider></mat-divider>
-
-      <!-- ORDERS SECTION -->
-      <div class="nav-section-title">
-        {{ 'ADMIN_PANEL.MENU.ORDERS_SECTION' | translate }}
-      </div>
-
-      <a mat-list-item routerLink="/admin/orders" routerLinkActive="active">
-        <mat-icon matListItemIcon>shopping_cart</mat-icon>
-        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.ORDERS' | translate }}</span>
       </a>
 
       <mat-divider></mat-divider>

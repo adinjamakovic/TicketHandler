@@ -28,6 +28,9 @@
       "EMPLOYEE": "Zaposlenik"
     },
     "MENU": {
+      "EVENTS-HEADER": "DOGAĐAJI",
+      "EVENTS": "Događaji",
+      "ORGANIZERS": "Organizatori",
       "CATALOG": "KATALOG",
       "CATEGORIES": "Kategorije Proizvoda",
       "PRODUCTS": "Proizvodi",
