@@ -10,6 +10,7 @@ public sealed class ListEventsQueryDto
     public string? Image { get; set; }
     public required string VenueName { get; init; }
     public required string EventType { get; init; }
+    public string? VenueCity { get; init; }
 }
 
 public sealed class ListEventsQueryDtoOrganizer
