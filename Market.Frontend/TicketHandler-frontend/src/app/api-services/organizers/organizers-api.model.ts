@@ -90,9 +90,7 @@ export interface CreateOrganizerCommand {
     description: string;
     address: string;
     cityid: number;
-    //implement later:
-    //logo: ??????;
-    //
+    logo?: File | null;
     user: CreateAndUpdateOrganizerCommandUser;
 }
 

@@ -15,6 +15,7 @@ import {
 } from "./events-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
+import { FormDataUtils } from "../../core/utils/FormDataUtils";
 
 @Injectable({
   providedIn: 'root',
@@ -57,39 +58,19 @@ export class EventsApiService{
 
     //POST /Events
     create(payload: CreateEventCommand): Observable<number> {
-        const formData = new FormData();
-        formData.append('name', payload.name);
-        formData.append('description', payload.description ?? '');
-        formData.append('scheduledDate', payload.scheduledDate);
-        formData.append('venueId', payload.venueId.toString());
-        formData.append('eventTypeId', payload.eventTypeId.toString());
-        if (payload.image) {
-            formData.append('image', payload.image);
-        }
-        payload.performers.forEach((p, i) => {
-            formData.append(`performers[${i}].performerId`, p.performerId.toString());
-            formData.append(`performers[${i}].timeStamp`, p.timeStamp);
-        });
+        const formData = FormDataUtils.toFormData(payload);
         return this.http.post<number>(this.baseUrl, formData);
     }
 
     //PUT /Events/{id}
     update(id: number, payload: UpdateEventCommand): Observable<void> {
-        const formData = new FormData();
-        formData.append('name', payload.name);
-        formData.append('description', payload.description ?? '');
-        formData.append('scheduledDate', payload.scheduledDate);
-        formData.append('venueId', payload.venueId.toString());
-        formData.append('eventTypeId', payload.eventTypeId.toString());
-        if (payload.image) {
-            formData.append('image', payload.image);
-        }
-        payload.performers.forEach((p, i) => {
-            formData.append(`performers[${i}].id`, p.id.toString());
-            formData.append(`performers[${i}].performerId`, p.performerId.toString());
-            formData.append(`performers[${i}].timeStamp`, p.timeStamp);
-        });
+        const formData = FormDataUtils.toFormData(payload);
         return this.http.put<void>(`${this.baseUrl}/${id}`, formData);
+    }
+
+    //GET /Events/cities
+    getCities(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.baseUrl}/cities`);
     }
 
     //DELETE /Events/{id}

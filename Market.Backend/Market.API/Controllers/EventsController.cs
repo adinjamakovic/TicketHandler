@@ -3,6 +3,7 @@ using Market.Application.Modules.Events.Events.Commands.Delete;
 using Market.Application.Modules.Events.Events.Commands.Update;
 using Market.Application.Modules.Events.Events.Queries.GetById;
 using Market.Application.Modules.Events.Events.Queries.GetByOrganizerId;
+using Market.Application.Modules.Events.Events.Queries.GetCities;
 using Market.Application.Modules.Events.Events.Queries.List;
 using Market.Application.Modules.Events.Events.Queries.ListWithPerformers;
 
@@ -27,6 +28,13 @@ public class EventsController(ISender sender) : ControllerBase
     {
         var result = await sender.Send(q, ct);
         return result;
+    }
+
+    [HttpGet("cities")]
+    [AllowAnonymous]
+    public async Task<List<string>> GetCities(CancellationToken ct)
+    {
+        return await sender.Send(new GetEventCitiesQuery(), ct);
     }
     [HttpGet("{id:int}")]
     public async Task<GetEventByIdQueryDto> GetById(int id, CancellationToken ct)

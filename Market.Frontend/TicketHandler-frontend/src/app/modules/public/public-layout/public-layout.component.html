@@ -1,24 +1,161 @@
 <div class="landing-page">
-<header class="navbar">
-  <div class="navbar__container">
-    <div class="navbar__logo" routerLink="/">
-      TicketHandler
+
+  <!-- ======= NAVBAR ======= -->
+  <header class="navbar">
+    <div class="navbar__container">
+      <div class="navbar__logo" routerLink="/">TicketHandler</div>
+      <nav class="navbar__nav">
+        <a href="#">Concerts</a>
+        <a href="#">Sport</a>
+        <a href="#">Theater</a>
+        <a href="#">Other</a>
+      </nav>
+      <div class="navbar__actions">
+        <a class="sell">Sell your tickets</a>
+        <mat-icon>person_outline</mat-icon>
+        <a class="auth-link" routerLink="/auth/login">Login / Register</a>
+      </div>
     </div>
+  </header>
 
-    <nav class="navbar__nav">
-      <a href="#">Concerts</a>
-      <a href="#">Sport</a>
-      <a href="#">Theater</a>
-      <a href="#">Other</a>
-    </nav>
-
-    <div class="navbar__actions">
-      <a class="sell">Sell your tickets</a>
-      <mat-icon>person_outline</mat-icon>
-      <a href="#" class="auth-link" routerLink="/auth/login">Login/Register</a>
+  <!-- ======= HERO SEARCH ======= -->
+  <section class="hero">
+    <div class="hero__overlay">
+      <h1 class="hero__title">Find Your Next Experience</h1>
+      <p class="hero__subtitle">Concerts, sport, theater and more — all in one place</p>
+      <app-landing-page-search (search)="onSearch($event)"></app-landing-page-search>
     </div>
-  </div>
-</header>
+  </section>
 
-<app-landing-page-search></app-landing-page-search>
+  <!-- ======= FEATURED EVENT ======= -->
+  <section class="featured" *ngIf="!isLoading && featuredEvent">
+    <div class="featured__container">
+      <h2 class="section-title">Featured Event</h2>
+      <div class="featured__card">
+        <div
+          class="featured__image"
+          [style.backgroundImage]="featuredEvent.image ? 'url(' + apiUrl + featuredEvent.image + ')' : 'none'"
+        >
+          <span class="featured__badge">{{ featuredEvent.eventType }}</span>
+        </div>
+        <div class="featured__info">
+          <h3 class="featured__name">{{ featuredEvent.name }}</h3>
+          <div class="featured__meta">
+            <mat-icon>calendar_today</mat-icon>
+            <span>{{ featuredEvent.scheduledDate | date : 'dd/MM/yyyy · HH:mm' }}</span>
+          </div>
+          <div class="featured__meta">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ featuredEvent.venueCity ?? 'TBD' }} · {{ featuredEvent.venueName }}</span>
+          </div>
+          <p class="featured__desc">{{ featuredEvent.description }}</p>
+          <button mat-flat-button class="featured__cta">Get Tickets</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= UPCOMING EVENTS CAROUSEL ======= -->
+  <section class="events" #carouselSection>
+    <div class="events__container">
+      <h2 class="section-title">Upcoming Events</h2>
+
+      <div class="carousel" *ngIf="!isLoading && carouselEvents.length > 0; else emptyState">
+        <button
+          class="carousel__arrow carousel__arrow--prev"
+          (click)="prevSlide()"
+          [disabled]="!canGoPrev"
+          mat-icon-button
+        >
+          <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="carousel__track">
+          <div class="carousel__card" *ngFor="let event of visibleSlides">
+            <div
+              class="carousel__card-image"
+              [style.backgroundImage]="event.image ? 'url(' + apiUrl + event.image + ')' : 'none'"
+            >
+              <span class="carousel__card-type">{{ event.eventType }}</span>
+            </div>
+            <div class="carousel__card-body">
+              <h4 class="carousel__card-name">{{ event.name }}</h4>
+              <div class="carousel__card-meta">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ event.scheduledDate | date : 'dd/MM/yyyy' }}</span>
+              </div>
+              <div class="carousel__card-meta">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ event.venueCity ?? 'TBD' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button
+          class="carousel__arrow carousel__arrow--next"
+          (click)="nextSlide()"
+          [disabled]="!canGoNext"
+          mat-icon-button
+        >
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </div>
+
+      <ng-template #emptyState>
+        <div class="events__empty" *ngIf="!isLoading">
+          <mat-icon>event_busy</mat-icon>
+          <p>No events found. Try adjusting your filters.</p>
+        </div>
+      </ng-template>
+
+      <div class="events__cta">
+        <button mat-stroked-button class="all-events-btn" (click)="clearFilters()">
+          All Events
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======= FOOTER ======= -->
+  <footer class="footer">
+    <div class="footer__container">
+      <div class="footer__brand">
+        <div class="footer__logo">TicketHandler</div>
+        <p>Your gateway to unforgettable events.</p>
+      </div>
+
+      <div class="footer__col">
+        <h4>Explore</h4>
+        <a href="#">Concerts</a>
+        <a href="#">Sport</a>
+        <a href="#">Theater</a>
+        <a href="#">Other</a>
+      </div>
+
+      <div class="footer__col">
+        <h4>Account</h4>
+        <a routerLink="/auth/login">Login</a>
+        <a routerLink="/auth/register">Register</a>
+        <a href="#">Sell Tickets</a>
+      </div>
+
+      <div class="footer__col">
+        <h4>Contact</h4>
+        <div class="footer__contact-row">
+          <mat-icon>email</mat-icon>
+          <span>info&#64;tickethandler.com</span>
+        </div>
+        <div class="footer__contact-row">
+          <mat-icon>phone</mat-icon>
+          <span>+1 234 567 8900</span>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <span>&copy; 2026 TicketHandler. All rights reserved.</span>
+    </div>
+  </footer>
+
 </div>

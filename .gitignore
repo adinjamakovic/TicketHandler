@@ -417,3 +417,4 @@ FodyWeavers.xsd
 *.msm
 *.msp
 CLAUDE.md
+Market.Backend/Market.API/wwwroot/Upload
