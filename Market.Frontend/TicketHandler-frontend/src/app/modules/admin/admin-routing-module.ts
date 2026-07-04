@@ -11,6 +11,7 @@ import {AdminSettingsComponent} from './admin-settings/admin-settings.component'
 import { OrganizersComponent } from './organizers/organizers.component';
 import {OrganizersAddComponent} from './organizers/organizers-add/organizers-add.component';
 import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
+import { EventsComponent } from './events/events.component';
 
 
 const routes: Routes = [
@@ -31,41 +32,16 @@ const routes: Routes = [
         path: 'organizers/:id/edit',
         component: OrganizersEditComponent,
       },
-      // PRODUCTS
+      // EVENTS
       {
-        path: 'products',
-        component: ProductsComponent,
-      },
-      {
-        path: 'products/add',
-        component: ProductsAddComponent,
-      },
-      {
-        path: 'products/:id/edit',
-        component: ProductsEditComponent,
+        path: 'events',
+        component: EventsComponent
       },
 
-      // PRODUCT CATEGORIES
-      {
-        path: 'product-categories',
-        component: ProductCategoriesComponent,
-      },
-
-      {
-        path: 'orders',
-        component: AdminOrdersComponent,
-      },
-
-      {
-        path: 'settings',
-        component: AdminSettingsComponent,
-      },
-
-
-      // default admin route → /admin/products
+      // default admin route → /admin/organizers
       {
         path: '',
-        redirectTo: 'products',
+        redirectTo: 'organizers',
         pathMatch: 'full',
       },
     ],

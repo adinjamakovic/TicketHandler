@@ -17,6 +17,7 @@ import { ChangeStatusDialogComponent } from './orders/change-status-dialog/chang
 import { OrganizersComponent } from './organizers/organizers.component';
 import { OrganizersAddComponent } from './organizers/organizers-add/organizers-add.component';
 import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
+import { EventsComponent } from './events/events.component';
 
 
 
@@ -35,6 +36,7 @@ import { OrganizersEditComponent } from './organizers/organizers-edit/organizers
     OrganizersComponent,
     OrganizersAddComponent,
     OrganizersEditComponent,
+    EventsComponent,
   ],
   imports: [
     AdminRoutingModule,

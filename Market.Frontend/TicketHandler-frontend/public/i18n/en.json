@@ -28,6 +28,7 @@
       "EMPLOYEE": "Employee"
     },
     "MENU": {
+      "EVENTS-HEADER": "EVENTS",
       "EVENTS": "Events",
       "EVENTNEWS": "Event news",
       "ORGANIZERS": "Organizers",
