@@ -1,1 +1,32 @@
-<p>landing-page-search works!</p>
+<form [formGroup]="form" (ngSubmit)="onSearch()" class="search-bar">
+  <mat-form-field appearance="outline" class="search-bar__field search-bar__field--name">
+    <mat-label>Event name</mat-label>
+    <input matInput formControlName="search" placeholder="Search events..." />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="search-bar__field search-bar__field--location">
+    <mat-label>Location</mat-label>
+    <mat-select formControlName="city">
+      <mat-option [value]="null">All locations</mat-option>
+      <mat-option *ngFor="let city of cities" [value]="city">{{ city }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="search-bar__field search-bar__field--date">
+    <mat-label>Date</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="DD/MM/YYYY" />
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <div class="search-bar__actions">
+    <button mat-flat-button type="submit" class="search-bar__btn-search">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+    <button mat-stroked-button type="button" (click)="onClear()" class="search-bar__btn-clear">
+      Clear
+    </button>
+  </div>
+</form>

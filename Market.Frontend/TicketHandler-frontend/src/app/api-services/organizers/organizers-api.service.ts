@@ -4,6 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { CreateOrganizerCommand, GetOrganizerByIdQueryDto, GetOrganizerByUserIdQueryDto, ListOrganizersRequest, ListOrganizersResponse, UpdateOrganizerCommand } from "./organizers-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
+import { FormDataUtils } from "../../core/utils/FormDataUtils";
 
 @Injectable({
     providedIn: 'root'
@@ -32,12 +33,14 @@ export class OrganizerApiService {
     }
     //POST /Organizers
     create(payload: CreateOrganizerCommand): Observable<number>{
-        return this.http.post<number>(this.baseUrl, payload);
+        const formData = FormDataUtils.toFormData(payload);
+        return this.http.post<number>(this.baseUrl, formData);
     }
 
     //PUT /Organizers/{id}
     update(id: number, payload: UpdateOrganizerCommand) : Observable<void>{
-        return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+        const formData = FormDataUtils.toFormData(payload);
+        return this.http.put<void>(`${this.baseUrl}/${id}`, formData);
     }
 
     //DELETE /Organizers/{id}

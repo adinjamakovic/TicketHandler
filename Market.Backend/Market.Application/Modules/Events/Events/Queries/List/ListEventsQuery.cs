@@ -3,4 +3,6 @@
 public class ListEventsQuery : BasePagedQuery<ListEventsQueryDto>
 {
     public string? Search { get; set; }
+    public DateTime? Date { get; set; }
+    public string? City { get; set; }
 }
