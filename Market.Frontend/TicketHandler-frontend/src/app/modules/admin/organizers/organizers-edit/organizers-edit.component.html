@@ -1,17 +1,17 @@
 <div class="container">
 
   <div class="header-card mat-elevation-z2">
-    <h1>Edit Organizer</h1>
+    <h1>Edit Organizers</h1>
   </div>
 
   <div class="form-card mat-elevation-z2">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="!isLoading || form">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
       <div *ngIf="errorMessage" class="error-banner">
         <mat-icon>error</mat-icon>
         <span>{{ errorMessage }}</span>
       </div>
 
-      <div *ngIf="isLoading && form" class="loading-overlay">
+      <div *ngIf="isLoading" class="loading-overlay">
         <mat-spinner diameter="50"></mat-spinner>
         <p>Saving organizer</p>
       </div>
@@ -25,8 +25,8 @@
           <mat-label>First Name</mat-label>
           <input
             matInput
-            formControlName="userFirstName"
-            [placeholder]="'John/Jane'"/>
+          formControlName="userFirstName"
+          [placeholder]="'John/Jane'"/>
           <mat-error *ngIf="hasError('userFirstName')">
             {{ getErrorMessage('userFirstName') }}
           </mat-error>
@@ -44,10 +44,9 @@
         </mat-form-field>
       </div>
 
-      <mat-form-field appearance="outline" class="full-width">
+      <mat-form-field  appearance="outline" class="full-width">
         <mat-label>Birth date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="userBirthdate">
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <input matInput [matDatepicker]="picker" formControlName="userBirthdate" readonly (click)="picker.open()" (keyup.enter)="picker.open()">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="hasError('userBirthdate')">
@@ -120,12 +119,12 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>New Password</mat-label>
+          <mat-label>Password</mat-label>
           <input
             matInput
             formControlName="userPassword"
             [type]="hideUserPassword ? 'password' : 'text'"
-            [placeholder]="'Leave blank to keep current password'"
+            [placeholder]="'••••••••'"
             autocomplete="new-password"
           />
           <mat-icon matPrefix>lock</mat-icon>
@@ -138,19 +137,19 @@
           >
             <mat-icon>{{ hideUserPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
-          <mat-hint>Optional. At least 8 characters with uppercase, lowercase, number, and special character</mat-hint>
+          <mat-hint>At least 8 characters with uppercase, lowercase, number, and special character</mat-hint>
           <mat-error *ngIf="hasError('userPassword')">
             {{ getErrorMessage('userPassword') }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Confirm New Password</mat-label>
+          <mat-label>Confirm Password</mat-label>
           <input
             matInput
             formControlName="passwordCheck"
             [type]="hidePasswordCheck ? 'password' : 'text'"
-            [placeholder]="'Leave blank to keep current password'"
+            [placeholder]="'••••••••'"
             autocomplete="new-password"
           />
           <mat-icon matPrefix>lock</mat-icon>
@@ -205,6 +204,7 @@
           matInput
           formControlName="address"
           [placeholder]="'Privet Drive 4'"/>
+          <mat-icon matSuffix>location_on</mat-icon>
         <mat-error *ngIf="hasError('address')">
           {{ getErrorMessage('address') }}
         </mat-error>
@@ -224,6 +224,9 @@
         </mat-error>
       </mat-form-field>
 
+      <mat-label>Organizer logo</mat-label>
+      <app-image-form-control formControlName="logo"/>
+
       <div class="form-actions">
         <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
           <mat-icon>close</mat-icon>
@@ -242,7 +245,7 @@
       </div>
     </form>
 
-    <div *ngIf="isLoading && !form" class="loading-overlay">
+    <div *ngIf="!form" class="loading-overlay">
       <mat-spinner diameter="50"></mat-spinner>
       <p>Loading organizer</p>
     </div>

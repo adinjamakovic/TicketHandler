@@ -17,24 +17,8 @@ import {ListVenuesQueryDto} from '../../../../api-services/venues/venues-api.mod
 import {ListEventTypesQueryDto} from '../../../../api-services/event-types/event-types-api.models';
 import {DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter} from '@angular/material/core';
 import { largePaging } from '../../../../core/models/paging/paging-utils';
+import { DdMmYyyyDateAdapter, DD_MM_YYYY_FORMATS } from '../../../../core/utils/DateUtilities/datepicker-utils';
 
-class DdMmYyyyDateAdapter extends NativeDateAdapter {
-  override format(date: Date, _displayFormat: any): string {
-    const d = date.getDate().toString().padStart(2, '0');
-    const m = (date.getMonth() + 1).toString().padStart(2, '0');
-    return `${d}/${m}/${date.getFullYear()}`;
-  }
-}
-
-const DD_MM_YYYY_FORMATS = {
-  parse: { dateInput: 'DD/MM/YYYY' },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'DD/MM/YYYY',
-    monthYearA11yLabel: 'MMMM YYYY',
-  },
-};
 
 @Component({
   selector: 'app-events-add',

@@ -33,6 +33,9 @@ export class OrganizerFormService {
         organizer?.description ?? '',
         [Validators.maxLength(500)]
       ],
+      logo: [
+        organizer?.logo ?? ''
+      ],
       userEmail: [
         organizer?.user.email ?? '',
         [

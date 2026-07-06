@@ -4,7 +4,7 @@ import { HttpClient } from "@angular/common/http";
 import { CreateOrganizerCommand, GetOrganizerByIdQueryDto, GetOrganizerByUserIdQueryDto, ListOrganizersRequest, ListOrganizersResponse, UpdateOrganizerCommand } from "./organizers-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
-import { FormDataUtils } from "../../core/utils/FormDataUtils";
+import { FormDataUtils } from "../../core/utils/FormUtilities/form-data-utils";
 
 @Injectable({
     providedIn: 'root'

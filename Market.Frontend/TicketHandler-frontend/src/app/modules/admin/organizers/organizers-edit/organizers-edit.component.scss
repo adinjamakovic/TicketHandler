@@ -20,10 +20,11 @@ $warning-color: #ffa726;
 $border-color: rgba(73, 118, 181, 0.15);
 $hover-bg: rgba(73, 118, 181, 0.04);
 
+
 // Container
 .container {
   padding: 24px;
-  max-width: 900px;
+  max-width: 1400px;
   margin: 0 auto;
   background: linear-gradient(135deg, $bg-gradient-start 0%, $bg-gradient-end 100%);
   min-height: 100vh;
@@ -57,19 +58,19 @@ $hover-bg: rgba(73, 118, 181, 0.04);
       content: '';
       width: 48px;
       height: 48px;
-      background: linear-gradient(135deg, $warning-color 0%, darken($warning-color, 10%) 100%);
+      background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
       border-radius: 12px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba($warning-color, 0.25);
+      box-shadow: 0 4px 12px rgba(73, 118, 181, 0.25);
       flex-shrink: 0;
     }
 
     position: relative;
 
     &::after {
-      content: 'edit';
+      content: 'add_shopping_cart';
       font-family: 'Material Icons';
       font-size: 28px;
       color: white;
@@ -89,7 +90,6 @@ $hover-bg: rgba(73, 118, 181, 0.04);
   box-shadow: 0 2px 8px rgba(73, 118, 181, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
   border: 1px solid $border-color;
   position: relative;
-  min-height: 400px;
 
   form {
     display: flex;
@@ -114,6 +114,37 @@ $hover-bg: rgba(73, 118, 181, 0.04);
         width: 24px;
         height: 24px;
         color: $error-color;
+      }
+    }
+
+    // Loading Overlay
+    .loading-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 10;
+      backdrop-filter: blur(4px);
+
+      mat-spinner {
+        ::ng-deep circle {
+          stroke: $primary-color;
+        }
+      }
+
+      p {
+        color: $text-secondary;
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0;
       }
     }
 
@@ -271,11 +302,11 @@ $hover-bg: rgba(73, 118, 181, 0.04);
           }
         }
 
-        // Submit Button (Update button - orange/warning color)
+        // Submit Button
         &[mat-raised-button] {
-          background: linear-gradient(135deg, $warning-color 0%, darken($warning-color, 5%) 100%);
+          background: linear-gradient(135deg, $primary-color 0%, $primary-light 100%);
           color: white;
-          box-shadow: 0 4px 12px rgba($warning-color, 0.3);
+          box-shadow: 0 4px 12px rgba($primary-color, 0.3);
           border: none;
 
           mat-icon {
@@ -283,12 +314,8 @@ $hover-bg: rgba(73, 118, 181, 0.04);
           }
 
           &:hover:not([disabled]) {
-            background: linear-gradient(
-              135deg,
-              darken($warning-color, 10%) 0%,
-              darken($warning-color, 5%) 100%
-            );
-            box-shadow: 0 6px 16px rgba($warning-color, 0.4);
+            background: linear-gradient(135deg, $primary-dark 0%, $primary-color 100%);
+            box-shadow: 0 6px 16px rgba($primary-color, 0.4);
             transform: translateY(-2px);
           }
 
@@ -309,37 +336,6 @@ $hover-bg: rgba(73, 118, 181, 0.04);
           width: 100%;
         }
       }
-    }
-  }
-
-  // Loading Overlay
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-    z-index: 10;
-    backdrop-filter: blur(4px);
-
-    mat-spinner {
-      ::ng-deep circle {
-        stroke: $primary-color;
-      }
-    }
-
-    p {
-      color: $text-secondary;
-      font-size: 16px;
-      font-weight: 500;
-      margin: 0;
     }
   }
 }

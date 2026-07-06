@@ -46,8 +46,7 @@
 
       <mat-form-field  appearance="outline" class="full-width">
         <mat-label>Birth date</mat-label>
-        <input matInput [matDatepicker]="picker" formControlName="userBirthdate">
-        <mat-hint>MM/DD/YYYY</mat-hint>
+        <input matInput [matDatepicker]="picker" formControlName="userBirthdate" readonly (click)="picker.open()" (keyup.enter)="picker.open()">
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
         <mat-error *ngIf="hasError('userBirthdate')">
@@ -205,6 +204,7 @@
           matInput
           formControlName="address"
           [placeholder]="'Privet Drive 4'"/>
+          <mat-icon matSuffix>location_on</mat-icon>
         <mat-error *ngIf="hasError('address')">
           {{ getErrorMessage('address') }}
         </mat-error>
@@ -223,6 +223,9 @@
           {{ getErrorMessage('description') }}
         </mat-error>
       </mat-form-field>
+
+      <mat-label>Organizer logo</mat-label>
+      <app-image-form-control formControlName="logo"/>
 
       <div class="form-actions">
         <button type="button" mat-stroked-button (click)="onCancel()" [disabled]="isLoading">
