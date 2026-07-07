@@ -27,6 +27,7 @@ export class OrganizersComponent
   constructor(){
     super();
     this.request = new ListOrganizersRequest();
+    this.request.paging.pageSize = 5;
   }
 
   ngOnInit(): void {

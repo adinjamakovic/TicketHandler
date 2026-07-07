@@ -12,13 +12,19 @@ import { CitiesApiService } from '../../../../api-services/cities/cities-api.ser
 import { ListCitiesQueryDto } from '../../../../api-services/cities/cities-api.models';
 import { ToasterService } from '../../../../core/services/toaster.service';
 import { OrganizerFormService } from '../services/organizer-form.service';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DdMmYyyyDateAdapter, DD_MM_YYYY_FORMATS } from '../../../../core/utils/DateUtilities/datepicker-utils';
 
 @Component({
   selector: 'app-organizers-edit',
   standalone: false,
   templateUrl: './organizers-edit.component.html',
   styleUrl: './organizers-edit.component.scss',
-  providers: [OrganizerFormService],
+  providers: [
+    OrganizerFormService,
+    {provide: DateAdapter, useClass: DdMmYyyyDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_FORMATS}
+  ],
 })
 export class OrganizersEditComponent
   extends BaseFormComponent<GetOrganizerByIdQueryDto>
@@ -83,6 +89,7 @@ export class OrganizersEditComponent
       description: this.form.value.description,
       cityid: this.form.value.cityId,
       address: this.form.value.address,
+      logo: this.form.value.logo,
       user: {
         firstName: this.form.value.userFirstName,
         lastName: this.form.value.userLastName,
@@ -92,7 +99,7 @@ export class OrganizersEditComponent
         gender: this.form.value.userGender,
         phone: this.form.value.userPhone,
         email: this.form.value.userEmail,
-        password,
+        password
       },
     };
 

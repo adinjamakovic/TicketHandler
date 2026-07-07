@@ -49,6 +49,7 @@ export interface GetOrganizerByIdQueryDto {
     description?: string | null;
     email: string;
     city: string;
+    logo: string;
     address: string;
     cityId: number;
     user: GetOrganizerByIdQueryDtoUser;
@@ -103,8 +104,6 @@ export interface UpdateOrganizerCommand{
     description: string;
     address: string;
     cityid: number;
-    //implement later:
-    //logo: ??????;
-    //
+    logo?: File | null;
     user: CreateAndUpdateOrganizerCommandUser;
 }
