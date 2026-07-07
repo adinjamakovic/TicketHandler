@@ -31,6 +31,7 @@ public class CreateOrganizerCommandHandler(
             BirthDate = req.User.BirthDate,
             CityId = req.User.CityId,
             Address = req.User.Address,
+            Gender = req.User.Gender,
             Phone = req.User.Phone,
             Email = req.User.Email,
             PasswordHash = hasher.HashPassword(null!, req.User.Password),
@@ -41,7 +42,7 @@ public class CreateOrganizerCommandHandler(
         };
 
         ctx.Persons.Add(user);
-
+        
         var logoPath = await imageStorage.SaveAsync(ImageStorageCategory.Organizers, req.Logo, ct);
 
         var organizer = new OrganizerEntity

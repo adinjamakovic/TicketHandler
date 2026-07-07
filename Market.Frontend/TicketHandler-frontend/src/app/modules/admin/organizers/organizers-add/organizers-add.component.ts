@@ -12,13 +12,19 @@ import {ToasterService} from '../../../../core/services/toaster.service';
 import {OrganizerFormService} from '../services/organizer-form.service';
 import {CitiesApiService} from '../../../../api-services/cities/cities-api.service';
 import {ListCitiesQueryDto} from '../../../../api-services/cities/cities-api.models';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DdMmYyyyDateAdapter, DD_MM_YYYY_FORMATS } from '../../../../core/utils/DateUtilities/datepicker-utils';
 
 @Component({
   selector: 'app-organizers-add',
   standalone: false,
   templateUrl: './organizers-add.component.html',
   styleUrl: './organizers-add.component.scss',
-  providers: [OrganizerFormService],
+  providers: [
+    OrganizerFormService,
+    {provide: DateAdapter, useClass: DdMmYyyyDateAdapter},
+    {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_FORMATS}
+  ],
 })
 export class OrganizersAddComponent
   extends BaseFormComponent<GetOrganizerByIdQueryDto>
@@ -59,6 +65,7 @@ export class OrganizersAddComponent
         description: this.form.value.description,
         cityid: this.form.value.cityId,
         address: this.form.value.address,
+        logo: this.form.value.logo,
         user: {
           firstName: this.form.value.userFirstName,
           lastName: this.form.value.userLastName,
