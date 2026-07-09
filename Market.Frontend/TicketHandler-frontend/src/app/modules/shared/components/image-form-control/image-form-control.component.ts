@@ -18,22 +18,14 @@ import { environment } from '../../../../../environments/environment';
 export class ImageFormControlComponent implements ControlValueAccessor, OnDestroy {
   protected imgSrc?: string;
 
-  // A function to notify the form of value changes (set by Angular)
   protected onChange: Function | undefined;
 
-
-
-  /**
-   * Obtains a reference to the file input element using ViewChild.
-   * This reference is used to clear the input's value after an image is selected or written.
-   * The {static: true} option ensures the reference is available during initialization.
-   */
   @ViewChild('fileInput', {static: true})
   protected fileInput!: ElementRef<HTMLInputElement>;
 
   writeValue(value: string): void {
     this.fileInput.nativeElement.value = '';
-    this.imgSrc = value ? `${environment.apiUrl}/${value}` : `${environment.apiUrl}/no_image.jpg`;
+    this.imgSrc = value ? value : `https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg`;
   }
   registerOnChange(fn: any): void {
     this.onChange = fn;

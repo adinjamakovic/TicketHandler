@@ -1,4 +1,5 @@
-﻿using Market.API;
+﻿using Azure.Storage.Blobs;
+using Market.API;
 using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
@@ -38,6 +39,10 @@ public partial class Program
                    .Enrich.WithProcessId()
                    .Enrich.WithMachineName();
             });
+
+            // Register blob service client with connection string from user-secrets
+            builder.Services.AddSingleton(x =>
+                    new BlobServiceClient(builder.Configuration.GetConnectionString("AzureBlob")));
 
             // Optional: remove default providers to have only Serilog
             builder.Logging.ClearProviders();

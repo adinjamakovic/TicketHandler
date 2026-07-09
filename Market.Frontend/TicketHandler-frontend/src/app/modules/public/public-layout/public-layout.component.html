@@ -34,7 +34,7 @@
       <div class="featured__card">
         <div
           class="featured__image"
-          [style.backgroundImage]="featuredEvent.image ? 'url(' + apiUrl + featuredEvent.image + ')' : 'none'"
+          [style.backgroundImage]="featuredEvent.image ? 'url(' + featuredEvent.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"
         >
           <span class="featured__badge">{{ featuredEvent.eventType }}</span>
         </div>
@@ -74,7 +74,7 @@
           <div class="carousel__card" *ngFor="let event of visibleSlides">
             <div
               class="carousel__card-image"
-              [style.backgroundImage]="event.image ? 'url(' + apiUrl + event.image + ')' : 'none'"
+              [style.backgroundImage]="event.image ? 'url(' + event.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"
             >
               <span class="carousel__card-type">{{ event.eventType }}</span>
             </div>

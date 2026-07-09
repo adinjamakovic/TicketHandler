@@ -45,21 +45,29 @@ public class CreateOrganizerCommandHandler(
         
         var logoPath = await imageStorage.SaveAsync(ImageStorageCategory.Organizers, req.Logo, ct);
 
-        var organizer = new OrganizerEntity
+        try
         {
-            Name = normalized!,
-            Description = req.Description?.Trim(),
-            Address = req.Address.Trim(),
-            CityId = req.CityId,
-            Logo = logoPath,
-            User = user,
-            IsDeleted = false,
-            CreatedAtUtc = DateTime.UtcNow
-        };
+            var organizer = new OrganizerEntity
+            {
+                Name = normalized!,
+                Description = req.Description?.Trim(),
+                Address = req.Address.Trim(),
+                CityId = req.CityId,
+                Logo = logoPath,
+                User = user,
+                IsDeleted = false,
+                CreatedAtUtc = DateTime.UtcNow
+            };
 
-        ctx.Organizers.Add(organizer);
-        await ctx.SaveChangesAsync(ct);
+            ctx.Organizers.Add(organizer);
+            await ctx.SaveChangesAsync(ct);
 
-        return organizer.Id;
+            return organizer.Id;
+        }
+        catch (Exception ex)
+        {
+            await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, logoPath, ct);
+            Console.WriteLine(ex);
+        }
     }
 }
