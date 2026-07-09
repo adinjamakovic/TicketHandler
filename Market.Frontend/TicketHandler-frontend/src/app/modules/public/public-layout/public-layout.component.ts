@@ -3,7 +3,6 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { EventsApiService } from '../../../api-services/events/events-api.service';
 import { ListEventsQueryDto } from '../../../api-services/events/events-api.model';
 import { LandingSearchEvent } from '../../shared/components/landing-page-search/landing-page-search.component';
-import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-public-layout',
@@ -18,7 +17,6 @@ export class PublicLayoutComponent implements OnInit {
   carouselEvents: ListEventsQueryDto[] = [];
   carouselIndex = 0;
   isLoading = true;
-  readonly apiUrl = environment.apiUrl;
 
   private eventsApi = inject(EventsApiService);
   private cdr = inject(ChangeDetectorRef);

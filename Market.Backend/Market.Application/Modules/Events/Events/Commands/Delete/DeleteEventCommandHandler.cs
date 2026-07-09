@@ -17,7 +17,7 @@ public class DeleteEventCommandHandler(
         if (eventEntity is null)
             throw new MarketNotFoundException($"Event with Id {req.Id} does not exist");
 
-        imageStorage.DeleteIfExists(ImageStorageCategory.Events, eventEntity.Image);
+        await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Events, eventEntity.Image, ct);
 
         var performerEvents = await ctx.PerformerEvents
             .Where(x => x.EventId == req.Id)

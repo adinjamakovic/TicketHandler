@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 namespace Market.Application.Abstractions;
 
 /// <summary>
-/// Service for storing entity images under wwwroot and exposing web-relative paths.
+/// Service for storing entity images in Azure Blob Storage and exposing public URLs.
 /// </summary>
 public interface IImageStorage
 {
@@ -13,9 +13,9 @@ public interface IImageStorage
     Task<string?> SaveAsync(ImageStorageCategory category, IFormFile? image, CancellationToken ct = default);
 
     /// <summary>
-    /// Deletes the physical file for a stored path, if it exists.
+    /// Deletes the blob for a stored path, if it exists.
     /// </summary>
-    void DeleteIfExists(ImageStorageCategory category, string? storedPath);
+    Task DeleteIfExistsAsync(ImageStorageCategory category, string? storedPath, CancellationToken ct = default);
 
     /// <summary>
     /// Replaces the stored image only when a new file is uploaded; otherwise returns the current path unchanged.
@@ -27,7 +27,7 @@ public interface IImageStorage
         CancellationToken ct = default);
 
     /// <summary>
-    /// Normalizes a stored value to a public URL path such as <c>/Upload/Events/{file}</c>.
+    /// Normalizes a stored blob name to its public blob URL.
     /// </summary>
     string? ToPublicPath(ImageStorageCategory category, string? storedPath);
 }
