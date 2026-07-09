@@ -25,7 +25,7 @@ public class DeleteOrganizerCommandHandler(
         if (user is null)
             throw new MarketNotFoundException("User associated with the organizer was not found");
 
-        imageStorage.DeleteIfExists(ImageStorageCategory.Organizers, organizer.Logo);
+        await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, organizer.Logo, ct);
 
         ctx.Organizers.Remove(organizer);
         ctx.Persons.Remove(user);
