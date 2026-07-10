@@ -7,10 +7,13 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const currentUser = inject(CurrentUserService);
   const router = inject(Router);
 
-  const requireAuth = route.data['requireAuth'] === true;
-  const requireAdmin = route.data['requireAdmin'] === true;
-  const requireOrganiser = route.data['requireOrganiser'] === true;
-  const requireUser = route.data['requireUser'] === true;
+  // myAuthData() ugnježđuje flagove pod 'auth' ključ
+  const authData: MyAuthRouteData = route.data['auth'] ?? {};
+
+  const requireAuth = authData.requireAuth === true;
+  const requireAdmin = authData.requireAdmin === true;
+  const requireOrganiser = authData.requireOrganiser === true;
+  const requireUser = authData.requireUser === true;
 
   const isAuth = currentUser.isAuthenticated();
 

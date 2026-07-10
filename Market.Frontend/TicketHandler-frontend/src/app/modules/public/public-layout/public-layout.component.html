@@ -13,7 +13,25 @@
       <div class="navbar__actions">
         <a class="sell">Sell your tickets</a>
         <mat-icon>person_outline</mat-icon>
-        <a class="auth-link" routerLink="/auth/login">Login / Register</a>
+        @if (currentUser(); as user) {
+          <button type="button" class="auth-link user-menu" [matMenuTriggerFor]="userMenu">
+            <span class="user-menu__email">{{ user.email }}</span>
+            <mat-icon class="user-menu__caret">expand_more</mat-icon>
+          </button>
+
+          <mat-menu #userMenu="matMenu" xPosition="before">
+            <a mat-menu-item [routerLink]="profileRoute()">
+              <mat-icon>account_circle</mat-icon>
+              <span>Profile</span>
+            </a>
+            <button mat-menu-item type="button" (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              <span>Logout</span>
+            </button>
+          </mat-menu>
+        } @else {
+          <a class="auth-link" routerLink="/auth/login">Login / Register</a>
+        }
       </div>
     </div>
   </header>

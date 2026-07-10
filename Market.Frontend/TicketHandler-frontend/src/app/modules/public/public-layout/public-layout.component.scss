@@ -103,6 +103,29 @@ $text-muted: #666;
       }
     }
 
+    .user-menu {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255, 255, 255, 0.12);
+      border-color: transparent;
+      font-family: inherit;
+      cursor: pointer;
+
+      &__email {
+        max-width: 200px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &__caret {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+      }
+    }
+
     .sell {
       color: $text-white;
       font-size: 0.9rem;
