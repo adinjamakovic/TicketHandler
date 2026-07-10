@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <UserSecretsId>eb6125ac-8481-43d3-a8e3-622f4e9a2d15</UserSecretsId>
+    <StaticWebAssetsEnabled>false</StaticWebAssetsEnabled>
   </PropertyGroup>
 
 

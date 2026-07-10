@@ -266,31 +266,59 @@ public static class DynamicDataSeeder
         {
             CityId = 6,
             Address = "Dummy Address",
+            FirstName = "Edvin",
+            LastName = "Spahić",
             Email = "admin@market.local",
             PasswordHash = hasher.HashPassword(null!, "Admin123!"),
             IsAdmin = true,
             IsEnabled = true,
         };
 
-        var user = new PersonEntity
+        var organizerUser1 = new PersonEntity
         {
             CityId = 6,
             Address = "Dummy Address",
-            FirstName ="Dummy organiser name",
-            Email = "dummy_organiser2@market.local",
-            PasswordHash = hasher.HashPassword(null!, "User1234!"),
+            FirstName = "Nejra",
+            LastName = "Mujčić",
+            Email = "dummy_organiser@market.local",
+            PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsOrganiser = true,
             IsEnabled = true,
         };
 
-        var newUser = new PersonEntity
+        var organizerUser2 = new PersonEntity
         {
-            CityId = 6,
+            CityId = 1,
             Address = "Dummy Address",
-            FirstName = "Dummy organiser name",
-            Email = "dummy_organiser@market.local",
+            FirstName = "Adin",
+            LastName = "Jamaković",
+            Email = "dummy_organiser2@market.local",
             PasswordHash = hasher.HashPassword(null!, "User123!"),
             IsOrganiser = true,
+            IsEnabled = true,
+        };
+
+        var normalUser1 = new PersonEntity
+        {
+            CityId = 4,
+            Address = "Dummy Address",
+            FirstName = "Kenan",
+            LastName = "Jamaković",
+            Email = "kenan.jamakovic@market.local",
+            PasswordHash = hasher.HashPassword(null!, "User123!"),
+            IsUser = true,
+            IsEnabled = true,
+        };
+
+        var normalUser2 = new PersonEntity
+        {
+            CityId = 3,
+            Address = "Dummy Address",
+            FirstName = "Merisa",
+            LastName = "Jamaković",
+            Email = "merisa.jamakovic@market.local",
+            PasswordHash = hasher.HashPassword(null!, "User123!"),
+            IsUser = true,
             IsEnabled = true,
         };
 
@@ -312,7 +340,7 @@ public static class DynamicDataSeeder
             IsUser = true,
             IsEnabled = true,
         };
-        context.Persons.AddRange(admin, user, newUser, dummyForSwagger, dummyForTests);
+        context.Persons.AddRange(admin, organizerUser1, organizerUser2, normalUser1, normalUser2, dummyForSwagger, dummyForTests);
         await context.SaveChangesAsync();
 
         Console.WriteLine("✅ Dynamic seed: demo users added.");
@@ -333,11 +361,21 @@ public static class DynamicDataSeeder
             CityId = 2,
             UserId = 2,
             CreatedAtUtc = DateTime.UtcNow,
-            Logo = string.Empty
+            Logo = "Organizers/MKG.png"
         };
-        
-      
-        context.Organizers.AddRange(mkg);
+
+        var apexProductions = new OrganizerEntity
+        {
+            Name = "Apex Productions",
+            Description = "Dummy desc",
+            Address = "Dummy address",
+            CityId = 1,
+            UserId = 3,
+            CreatedAtUtc = DateTime.UtcNow,
+            Logo = "Organizers/ApexProductions.png"
+        };
+
+        context.Organizers.AddRange(mkg, apexProductions);
         await context.SaveChangesAsync();
         Console.WriteLine("✅ Dynamic seed: demo organizers added.");
     }
@@ -557,62 +595,32 @@ public static class DynamicDataSeeder
             context.Events.AddRange(
                 new EventEntity
                 {
-                    Name="Dummy Concert",
-                    Description="Dummy Desc",
-                    ScheduledDate= DateTime.Now,
-                    OrganizerId = 1,
-                    VenueId=1,
-                    Image=string.Empty  ,
-                    EventTypeId=1,
-                },
-                new EventEntity
-                {
-                    Name = "Dummy Festival",
+                    Name = "Dummy Rock Night",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(10),
                     OrganizerId = 1,
-                    VenueId = 2,
-                    Image = string.Empty,
-                    EventTypeId = 2,
+                    VenueId = 1,
+                    Image = "Events/DummyRockNight.png",
+                    EventTypeId = 1,
                 },
                 new EventEntity
                 {
-                    Name = "Dummy Movie",
+                    Name = "Dummy Summer Festival",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(20),
                     OrganizerId = 1,
                     VenueId = 2,
-                    Image = string.Empty,
-                    EventTypeId = 3,
+                    Image = "Events/DummySummerFestival.png",
+                    EventTypeId = 2,
                 },
                 new EventEntity
                 {
-                    Name = "Dummy Screen Play",
+                    Name = "Dummy Opera Night",
                     Description = "Dummy Desc",
                     ScheduledDate = DateTime.Now.AddDays(15),
-                    OrganizerId = 1,
-                    VenueId = 3,
-                    Image = string.Empty,
-                    EventTypeId = 4,
-                },
-                new EventEntity
-                {
-                    Name = "Dummy Theater Act",
-                    Description = "Dummy Desc",
-                    ScheduledDate = DateTime.Now.AddDays(30),
-                    OrganizerId = 1,
-                    VenueId = 4,
-                    Image = string.Empty,
-                    EventTypeId = 5,
-                },
-                new EventEntity
-                {
-                    Name = "Dummy Opera/Ballet",
-                    Description = "Dummy Desc",
-                    ScheduledDate = DateTime.Now.AddDays(1),
-                    OrganizerId = 1,
-                    VenueId = 4,
-                    Image = string.Empty,
+                    OrganizerId = 2,
+                    VenueId = 5,
+                    Image = "Events/DummyOperaNight.png",
                     EventTypeId = 6,
                 }
             );
