@@ -32,8 +32,8 @@ public sealed class JwtTokenService : IJwtTokenService
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-            new(ClaimTypes.NameIdentifier,   user.Id.ToString()),
-            new(ClaimTypes.Email,            user.Email),
+            new(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Email,  user.Email),
             new("is_admin",    user.IsAdmin.ToString().ToLowerInvariant()),
             new("is_organiser",  user.IsOrganiser.ToString().ToLowerInvariant()),
             new("is_user", user.IsUser.ToString().ToLowerInvariant()),

@@ -79,8 +79,6 @@ public partial class Program
                 app.UseSwaggerUI();
             }
 
-            app.UseStaticFiles();
-
             // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();

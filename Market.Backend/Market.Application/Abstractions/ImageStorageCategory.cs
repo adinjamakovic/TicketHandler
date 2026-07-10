@@ -1,7 +1,7 @@
 namespace Market.Application.Abstractions;
 
 /// <summary>
-/// Identifies the wwwroot upload subfolder for a given entity image.
+/// Identifies the blob storage upload subfolder for a given entity image.
 /// </summary>
 public enum ImageStorageCategory
 {

@@ -16,12 +16,12 @@
               <mat-icon>admin_panel_settings</mat-icon>
               {{ 'ADMIN_PANEL.ROLES.ADMIN' | translate }}
             </mat-chip>
-            } @else if (auth.isManager()) {
+            } @else if (auth.isOrganiser()) {
             <mat-chip class="role-chip manager">
               <mat-icon>manage_accounts</mat-icon>
               {{ 'ADMIN_PANEL.ROLES.MANAGER' | translate }}
             </mat-chip>
-            } @else if (auth.isEmployee()) {
+            } @else if (auth.isUser()) {
             <mat-chip class="role-chip employee">
               <mat-icon>badge</mat-icon>
               {{ 'ADMIN_PANEL.ROLES.EMPLOYEE' | translate }}

@@ -44,8 +44,8 @@ export class AuthFacadeService {
   /** computed signali nad current userom */
   isAuthenticated = computed(() => !!this._currentUser());
   isAdmin = computed(() => this._currentUser()?.isAdmin ?? false);
-  isManager = computed(() => this._currentUser()?.IsOrganiser ?? false);
-  isEmployee = computed(() => this._currentUser()?.IsUser ?? false);
+  isOrganiser = computed(() => this._currentUser()?.IsOrganiser ?? false);
+  isUser = computed(() => this._currentUser()?.IsUser ?? false);
 
   constructor() {
     // pokušaj inicijalizacije iz postojećeg access tokena
@@ -110,7 +110,7 @@ export class AuthFacadeService {
    */
   redirectToLogin(): void {
     this.clearUserState();
-    this.router.navigate(['/login']);
+    this.router.navigate(['/auth/login']);
   }
 
   // =========================================================
@@ -140,9 +140,17 @@ export class AuthFacadeService {
    */
   private initializeFromToken(): void {
     const token = this.storage.getAccessToken();
-    if (token) {
-      this.decodeAndSetUser(token);
+    if (!token) {
+      return;
     }
+
+    // Refresh token je i dalje validan → interceptor će obnoviti access token
+    // na prvom 401, pa je dovoljno da ne restauriramo istekli access token.
+    if (this.isExpired(token)) {
+      return;
+    }
+
+    this.decodeAndSetUser(token);
   }
 
   /**
@@ -165,6 +173,16 @@ export class AuthFacadeService {
     } catch (error) {
       console.error('Failed to decode JWT token:', error);
       this._currentUser.set(null);
+    }
+  }
+
+  /** `exp` je u sekundama; ako ga nema, tretiramo token kao neupotrebljiv. */
+  private isExpired(token: string): boolean {
+    try {
+      const { exp } = jwtDecode<JwtPayloadDto>(token);
+      return !exp || exp * 1000 <= Date.now();
+    } catch {
+      return true;
     }
   }
 

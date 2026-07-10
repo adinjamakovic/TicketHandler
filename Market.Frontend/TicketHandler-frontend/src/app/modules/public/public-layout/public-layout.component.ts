@@ -1,8 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, computed, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { EventsApiService } from '../../../api-services/events/events-api.service';
 import { ListEventsQueryDto } from '../../../api-services/events/events-api.model';
 import { LandingSearchEvent } from '../../shared/components/landing-page-search/landing-page-search.component';
+import { AuthFacadeService } from '../../../core/services/auth/auth-facade.service';
+import { CurrentUserService } from '../../../core/services/auth/current-user.service';
 
 @Component({
   selector: 'app-public-layout',
@@ -18,8 +21,22 @@ export class PublicLayoutComponent implements OnInit {
   carouselIndex = 0;
   isLoading = true;
 
+  private auth = inject(AuthFacadeService);
+  private currentUserService = inject(CurrentUserService);
   private eventsApi = inject(EventsApiService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
+
+  /** null kada korisnik nije prijavljen */
+  currentUser = this.auth.currentUser;
+
+  /** /admin, /organizer ili /client – ovisno o roli */
+  profileRoute = computed(() => this.currentUserService.getProfileRoute());
+
+  /** LogoutComponent radi API logout + čišćenje state-a */
+  logout(): void {
+    this.router.navigate(['/auth/logout']);
+  }
 
   ngOnInit(): void {
     this.loadEvents({});
