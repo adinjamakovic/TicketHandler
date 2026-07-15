@@ -8,7 +8,8 @@ import { PageResult } from "../../core/models/paging/page-result";
 
 export class ListEventsRequest extends BasePagedQuery {
     search?: string | null;
-    date?: Date | null;
+    dateFrom?: Date | null;
+    dateTo?: Date | null;
     city?: string | null;
 }
 
