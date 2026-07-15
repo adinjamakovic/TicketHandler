@@ -7,7 +7,7 @@ import {
 } from "./event-news-api.model";
 import { Observable } from "rxjs";
 import { buildHttpParams } from "../../core/models/build-http-params";
-import { GetEventByIdQueryDto } from "../events/events-api.model";
+import { FormDataUtils } from "../../core/utils/FormUtilities/form-data-utils";
 
 @Injectable({
     providedIn: 'root'
@@ -32,12 +32,14 @@ export class EventNewsApiService {
 
     //POST /EventNews
     create(payload: CreateEventNewsCommand): Observable<Number> {
-        return this.http.post<number>(this.baseUrl, payload);
+        const formData = FormDataUtils.toFormData(payload);
+        return this.http.post<number>(this.baseUrl, formData);
     }
 
     //PUT /EventNews/{id}
     update(id: number, payload: UpdateEventNewsCommand): Observable<void>{
-        return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+        const formData = FormDataUtils.toFormData(payload);
+        return this.http.put<void>(`${this.baseUrl}/${id}`, formData);
     }
 
     //DELETE /EventNews/{id}

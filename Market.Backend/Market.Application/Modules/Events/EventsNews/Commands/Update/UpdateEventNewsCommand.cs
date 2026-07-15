@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
 namespace Market.Application.Modules.Events.EventsNews.Commands.Update
 {
@@ -12,6 +8,6 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Update
         public int Id { get; set; }
         public string Header { get; set; }
         public string Body { get; set; }
-        //public byte[] Image { get; set; }
+        public IFormFile? Image { get; set; }
     }
 }

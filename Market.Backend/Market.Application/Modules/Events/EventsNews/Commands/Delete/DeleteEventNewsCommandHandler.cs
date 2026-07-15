@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.EventsNews.Commands.Delete
 {
-    public class DeleteEventNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
+    public class DeleteEventNewsCommandHandler(
+        IAppDbContext ctx,
+        IAppCurrentUser appCurrentUser,
+        IImageStorage imageStorage)
         : IRequestHandler<DeleteEventNewsCommand, Unit>
     {
         public async Task<Unit> Handle(DeleteEventNewsCommand req, CancellationToken ct)
@@ -23,8 +26,12 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Delete
                 throw new MarketNotFoundException("Event News not found");
             
             if (!appCurrentUser.IsOrganiser ||
-                EventNews.OrganizerId != org.Id)
+                EventNews.OrganizerId != org.Id ||
+                EventNews.Organizer.Id != org.Id)
                 throw new MarketBusinessRuleException("111","You are not allowed to do this");
+
+            if (string.IsNullOrWhiteSpace(EventNews.Image))
+                await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.EventNews, EventNews.Image, ct);
 
             ctx.EventNews.Remove(EventNews);
             await ctx.SaveChangesAsync(ct);
