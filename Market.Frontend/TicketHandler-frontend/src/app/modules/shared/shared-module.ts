@@ -14,6 +14,8 @@ import { ImageFormControlComponent } from './components/image-form-control/image
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { UpcomingEventsCarouselComponent } from './components/upcoming-events-carousel/upcoming-events-carousel.component';
+import { QrOverlayComponent } from './components/qr-overlay/qr-overlay.component';
+import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
 
 
 @NgModule({
@@ -27,6 +29,8 @@ import { UpcomingEventsCarouselComponent } from './components/upcoming-events-ca
     NavbarComponent,
     FooterComponent,
     UpcomingEventsCarouselComponent,
+    QrOverlayComponent,
+    GoogleMapsComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +49,8 @@ import { UpcomingEventsCarouselComponent } from './components/upcoming-events-ca
     NavbarComponent,
     FooterComponent,
     UpcomingEventsCarouselComponent,
+    QrOverlayComponent,
+    GoogleMapsComponent,
     CommonModule,
     RouterModule,
     ReactiveFormsModule,

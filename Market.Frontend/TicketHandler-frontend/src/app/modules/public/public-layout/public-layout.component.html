@@ -31,7 +31,7 @@
             <span>{{ featuredEvent.venueCity ?? 'TBD' }} · {{ featuredEvent.venueName }}</span>
           </div>
           <p class="featured__desc">{{ featuredEvent.description }}</p>
-          <button mat-flat-button class="featured__cta">Get Tickets</button>
+          <button mat-flat-button class="featured__cta" (click)="openEvent(featuredEvent)">Get Tickets</button>
         </div>
       </div>
     </div>
@@ -41,6 +41,7 @@
     [events]="carouselEvents"
     [isLoading]="isLoading"
     (allEvents)="clearFilters()"
+    (eventSelected)="openEvent($event)"
   ></app-upcoming-events-carousel>
 
   <app-footer/>

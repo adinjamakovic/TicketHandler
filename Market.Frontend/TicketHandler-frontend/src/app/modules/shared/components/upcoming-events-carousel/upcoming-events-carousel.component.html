@@ -13,7 +13,7 @@
       </button>
 
       <div class="carousel__track">
-        <div class="carousel__card" *ngFor="let event of visibleSlides">
+        <div class="carousel__card" *ngFor="let event of visibleSlides" (click)="eventSelected.emit(event)">
           <div
             class="carousel__card-image"
             [style.backgroundImage]="event.image ? 'url(' + event.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"

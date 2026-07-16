@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { EventsApiService } from '../../../api-services/events/events-api.service';
 import { ListEventsQueryDto } from '../../../api-services/events/events-api.model';
@@ -19,6 +20,7 @@ export class PublicLayoutComponent implements OnInit {
 
   private eventsApi = inject(EventsApiService);
   private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadEvents({});
@@ -30,6 +32,10 @@ export class PublicLayoutComponent implements OnInit {
 
   clearFilters(): void {
     this.loadEvents({});
+  }
+
+  openEvent(event: ListEventsQueryDto): void {
+    this.router.navigate(['/event', event.id]);
   }
 
   private loadEvents(filters: LandingSearchEvent): void {

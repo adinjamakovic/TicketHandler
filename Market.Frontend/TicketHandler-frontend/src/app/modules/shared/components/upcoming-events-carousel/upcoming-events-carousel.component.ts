@@ -13,6 +13,7 @@ export class UpcomingEventsCarouselComponent implements OnChanges {
   @Input() isLoading = false;
 
   @Output() allEvents = new EventEmitter<void>();
+  @Output() eventSelected = new EventEmitter<ListEventsQueryDto>();
 
   carouselIndex = 0;
 

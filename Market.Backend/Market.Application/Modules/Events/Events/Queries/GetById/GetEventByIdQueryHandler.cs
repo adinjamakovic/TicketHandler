@@ -14,8 +14,12 @@ public sealed class GetEventByIdQueryHandler(IAppDbContext ctx, IImageStorage im
                 Description = x.Description,
                 ScheduledDate = x.ScheduledDate,
                 VenueId = x.VenueId,
+                VenueName = x.Venue.Name,
+                VenueCity = x.Venue.Location.City.Name,
                 Image = x.Image,
                 EventTypeId = x.EventTypeId,
+                EventTypeName = x.EventType.Name,
+                OrganizerName = x.Organizer.Name,
                 Performers = x.PerformerEvents
                     .Select(y => new GetEventByIdQueryDtoPerformers
                     {

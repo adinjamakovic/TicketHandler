@@ -72,8 +72,12 @@ export interface GetEventByIdQueryDto{
   description: string,
   scheduledDate: string,
   venueId: number,
+  venueName: string,
+  venueCity?: string | null,
   image: string|Blob,
   eventTypeId: number,
+  eventTypeName: string,
+  organizerName: string,
   performers: GetEventByIdQueryDtoPerformers[]
 }
 

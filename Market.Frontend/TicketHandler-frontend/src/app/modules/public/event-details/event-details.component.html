@@ -1,0 +1,139 @@
+<div class="event-details-page">
+
+  <app-navbar/>
+
+  <ng-container *ngIf="!isLoading && event; else loadingOrMissing">
+
+    <section class="details">
+      <div class="details__container">
+        <div class="details__card">
+          <div
+            class="details__image"
+            [style.backgroundImage]="event.image ? 'url(' + event.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"
+          >
+            <span class="details__badge">{{ event.eventTypeName }}</span>
+          </div>
+
+          <div class="details__info">
+            <div class="details__header">
+              <h1 class="details__name">{{ event.name }}</h1>
+
+              <button mat-stroked-button class="details__share-btn" [matMenuTriggerFor]="shareMenu">
+                <mat-icon>share</mat-icon>
+                Share
+              </button>
+              <mat-menu #shareMenu="matMenu">
+                <button mat-menu-item (click)="copyLink()">
+                  <mat-icon>content_copy</mat-icon>
+                  <span>Copy link</span>
+                </button>
+                <button mat-menu-item (click)="openQrDialog()">
+                  <mat-icon>qr_code_2</mat-icon>
+                  <span>QR code</span>
+                </button>
+              </mat-menu>
+            </div>
+
+            <div class="details__meta">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ event.scheduledDate | date : 'dd/MM/yyyy · HH:mm' }}</span>
+            </div>
+            <div class="details__meta">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ event.venueCity ?? 'TBD' }} · {{ event.venueName }}</span>
+            </div>
+            <div class="details__meta">
+              <mat-icon>groups</mat-icon>
+              <span>Organized by {{ event.organizerName }}</span>
+            </div>
+
+            <p class="details__desc">{{ event.description }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="tickets">
+      <div class="tickets__container">
+        <h2 class="section-title">Ticket Options</h2>
+
+        <div class="tickets__loading" *ngIf="ticketsLoading">
+          <mat-spinner diameter="36"></mat-spinner>
+        </div>
+
+        <div class="tickets__grid" *ngIf="!ticketsLoading && tickets.length > 0">
+          <div class="ticket-card" *ngFor="let ticket of tickets">
+            <div class="ticket-card__header">
+              <h3 class="ticket-card__name">{{ ticket.ticketType.name }}</h3>
+              <span class="ticket-card__price">{{ ticket.unitPrice | currency:'BAM':'symbol':'1.2-2' }}</span>
+            </div>
+            <p class="ticket-card__benefits" *ngIf="ticket.benefits">{{ ticket.benefits }}</p>
+            <div class="ticket-card__footer">
+              <span
+                class="ticket-card__stock"
+                [class.ticket-card__stock--out]="ticket.quantityInStock === 0"
+              >
+                {{ ticket.quantityInStock > 0 ? ticket.quantityInStock + ' available' : 'Sold out' }}
+              </span>
+              <button mat-flat-button class="ticket-card__cta" [disabled]="ticket.quantityInStock === 0">
+                Select
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tickets__empty" *ngIf="!ticketsLoading && tickets.length === 0">
+          <mat-icon>confirmation_number</mat-icon>
+          <p>No tickets available for this event yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="venue">
+      <div class="venue__container">
+        <h2 class="section-title">Location &amp; Seating</h2>
+        <div class="venue__grid">
+
+          <app-google-maps/>
+
+          <div class="placeholder-panel">
+            <h3 class="placeholder-panel__title">Seat Selection</h3>
+            <div class="placeholder-panel__box">
+              <mat-icon>event_seat</mat-icon>
+              <p>Seat selection will be available here</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <app-upcoming-events-carousel
+      [events]="relatedEvents"
+      [isLoading]="relatedLoading"
+      (eventSelected)="onRelatedEventSelected($event)"
+      (allEvents)="goToAllEvents()"
+    ></app-upcoming-events-carousel>
+
+  </ng-container>
+
+  <ng-template #loadingOrMissing>
+    <div class="details-state" *ngIf="isLoading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+    <div class="details-state" *ngIf="!isLoading && notFound">
+      <mat-icon>event_busy</mat-icon>
+      <p>Event not found.</p>
+      <button mat-stroked-button (click)="goToAllEvents()">Back to events</button>
+    </div>
+  </ng-template>
+
+  <app-footer/>
+
+  <app-qr-overlay
+    [visible]="showQrDialog"
+    title="Event QR Code"
+    (closed)="closeQrDialog()"
+  ></app-qr-overlay>
+
+</div>
