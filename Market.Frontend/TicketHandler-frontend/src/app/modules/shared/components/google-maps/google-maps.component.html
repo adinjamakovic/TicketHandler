@@ -7,9 +7,10 @@
             [zoom]="zoom"
             [options]="mapOptions"
             class="map"
+            (mapInitialized)="onMapReady($event)"
         >
             <map-advanced-marker
-                *ngIf="markerPosition"
+                *ngIf="markerPosition && !routeSummary"
                 [position]="markerPosition"
                 [title]="address || ''"
             />
@@ -17,6 +18,34 @@
 
         <p *ngIf="isMapLoaded && geocodeFailed" class="panel__hint">
             Couldn't pinpoint this location on the map.
+        </p>
+
+        <p *ngIf="routeSummary" class="panel__route">
+            <strong>{{ routeSummary.distance }}</strong> · about {{ routeSummary.duration }} by car
+        </p>
+
+        <div *ngIf="isMapLoaded && markerPosition" class="panel__actions">
+            <button
+                type="button"
+                class="panel__directions"
+                [disabled]="locating"
+                (click)="getDirections()"
+            >
+                {{ locating ? 'Getting your location…' : (routeSummary ? 'Recalculate route' : 'Show route from my location') }}
+            </button>
+
+            <button
+                *ngIf="routeSummary"
+                type="button"
+                class="panel__directions panel__directions--secondary"
+                (click)="clearDirections()"
+            >
+                Clear route
+            </button>
+        </div>
+
+        <p *ngIf="directionsError" class="panel__hint panel__hint--error">
+            {{ directionsError }}
         </p>
     </div>
 </div>

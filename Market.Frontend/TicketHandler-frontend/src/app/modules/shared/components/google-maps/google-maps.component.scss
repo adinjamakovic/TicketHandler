@@ -40,4 +40,59 @@ $text-muted: #666;
   margin: 0;
   font-size: 0.85rem;
   color: $text-muted;
+
+  &--error {
+    color: #c62828;
+  }
+}
+
+.panel__route {
+  margin: 0;
+  font-size: 0.9rem;
+  color: $text-main;
+
+  strong {
+    color: $purple-dark;
+  }
+}
+
+.panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-self: stretch;
+  margin-top: 4px;
+}
+
+.panel__directions {
+  flex: 1 1 auto;
+  padding: 11px 18px;
+  border: none;
+  border-radius: 10px;
+  background: $purple;
+  color: $text-white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover:not(:disabled) {
+    background: $purple-dark;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: default;
+  }
+
+  &--secondary {
+    flex: 0 0 auto;
+    background: transparent;
+    color: $purple;
+    border: 1px solid $purple-light;
+
+    &:hover:not(:disabled) {
+      background: $bg-page;
+    }
+  }
 }

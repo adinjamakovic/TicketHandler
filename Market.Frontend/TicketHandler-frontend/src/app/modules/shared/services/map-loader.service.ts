@@ -13,7 +13,7 @@ export class MapLoaderService {
             const params = new URLSearchParams({
                 key: environment.GApiKey,
                 v: 'beta',
-                libraries: 'marker',
+                libraries: 'marker,routes',
                 callback: 'initMap'
             });
 
@@ -28,5 +28,33 @@ export class MapLoaderService {
         }).then(() => {
             this.isLoaded = true;
         })
+    }
+
+    getCurrentPosition(): Promise<GeolocationPosition> {
+        return new Promise((resolve, reject) => {
+            if (!navigator.geolocation) {
+                reject(new Error('Geolocation is not supported by this browser'));
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+            });
+        });
+    }
+
+    getRoute(
+        origin: google.maps.LatLngLiteral,
+        destination: string,
+        travelMode: google.maps.TravelMode = google.maps.TravelMode.DRIVING,
+    ): Promise<google.maps.DirectionsResult> {
+        const directionsService = new google.maps.DirectionsService();
+
+        return directionsService.route({
+            origin,
+            destination,
+            travelMode,
+        });
     }
 }
