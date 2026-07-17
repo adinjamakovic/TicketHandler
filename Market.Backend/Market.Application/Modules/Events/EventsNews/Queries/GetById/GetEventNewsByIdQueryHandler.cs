@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.EventsNews.Queries.GetById
 {
-    public class GetEventNewsByIdQueryHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
+    public class GetEventNewsByIdQueryHandler(
+        IAppDbContext ctx,
+        IAppCurrentUser appCurrentUser,
+        IImageStorage imageStorage)
         : IRequestHandler<GetEventNewsByIdQuery, GetEventNewsByIdQueryDto>
     {
         public async Task<GetEventNewsByIdQueryDto> Handle(GetEventNewsByIdQuery req, CancellationToken ct)
@@ -20,11 +23,12 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.GetById
                     Organizer = x.Organizer.Name,
                     Header = x.Header,
                     Body = x.Body ?? string.Empty,
-                    Image = new byte[0]
+                    Image = imageStorage.ToPublicPath(ImageStorageCategory.EventNews, x.Image)
                 })
                 .FirstOrDefaultAsync(ct);
             if (EventNews is null)
                 throw new MarketNotFoundException("Event News not found");
+
 
             return EventNews;
         }

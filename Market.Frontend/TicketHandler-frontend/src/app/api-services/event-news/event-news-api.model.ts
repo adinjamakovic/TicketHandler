@@ -16,7 +16,6 @@ export interface ListEventNewsQueryDto{
     organizer: string;
     header: string;
     body: string;
-    //THIS needs to be fixed later on!
     image: string;
 }
 
@@ -32,7 +31,6 @@ export interface GetEventNewsByIdQueryDto {
     organizer: string;
     header: string;
     body: string;
-    //FIX LATER
     image: string;
 }
 
@@ -44,15 +42,13 @@ export interface CreateEventNewsCommand {
     eventId: number;
     header: string;
     body: string;
-    //ADD LATER
-    //image: ?????
+    image?: File | null;
 }
 
 export interface  UpdateEventNewsCommand {
     header: string;
     body: string;
-    //ADD LATER
-    //image: ?????
+    image?: File | null;
 }
 
 export interface DeleteEventNewsCommand {

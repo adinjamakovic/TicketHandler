@@ -27,6 +27,9 @@ export class EventNewsService {
         [
           Validators.maxLength(1000),
         ]
+      ],
+      image: [
+        news?.image ?? null
       ]
     })
   }

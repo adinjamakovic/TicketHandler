@@ -20,7 +20,8 @@ public class EventNewsController(ISender sender) : ControllerBase
         await sender.Send(new DeleteEventNewsCommand { Id = id}, ct);
     }
     [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateEventNewsCommand command, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task<ActionResult<int>> Create([FromForm] CreateEventNewsCommand command, CancellationToken ct)
     {
         int id = await sender.Send(command, ct);
 
@@ -44,7 +45,8 @@ public class EventNewsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:int}")]
-    public async Task Update(int id, UpdateEventNewsCommand command, CancellationToken ct)
+    [Consumes("multipart/form-data")]
+    public async Task Update(int id, [FromForm] UpdateEventNewsCommand command, CancellationToken ct)
     {
         command.Id=id;
         await sender.Send(command, ct);

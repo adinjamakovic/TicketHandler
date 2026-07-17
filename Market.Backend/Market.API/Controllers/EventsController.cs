@@ -37,6 +37,7 @@ public class EventsController(ISender sender) : ControllerBase
         return await sender.Send(new GetEventCitiesQuery(), ct);
     }
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<GetEventByIdQueryDto> GetById(int id, CancellationToken ct)
     {
         var dto = await sender.Send(new GetEventByIdQuery { Id = id }, ct);

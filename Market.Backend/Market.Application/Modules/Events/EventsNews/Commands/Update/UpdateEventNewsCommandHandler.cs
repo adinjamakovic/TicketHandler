@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.EventsNews.Commands.Update
 {
-    public class UpdateEventNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
+    public class UpdateEventNewsCommandHandler(
+        IAppDbContext ctx,
+        IAppCurrentUser appCurrentUser,
+        IImageStorage imageStorage)
         : IRequestHandler<UpdateEventNewsCommand, Unit>
     {
         public async Task<Unit> Handle(UpdateEventNewsCommand req, CancellationToken ct)
@@ -26,14 +29,14 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Update
                 FirstOrDefaultAsync(x => x.UserId == appCurrentUser.UserId, ct))?.Id)
                 throw new MarketBusinessRuleException("111", "Only the organiser who made the EventNews can edit them");
 
-            req.Header = req.Header.Trim();
+            if (!string.IsNullOrWhiteSpace(req.Header.Trim()))
+                entity.Header = req.Header;
+                
 
-            if (string.IsNullOrWhiteSpace(req.Header))
-                req.Header = entity.Header;
-
-            entity.Header = req.Header;
             entity.Body = req.Body.Trim();
-            //entity.Image = req.Image;
+
+            entity.Image = await imageStorage.ReplaceIfUploadedAsync(
+                ImageStorageCategory.EventNews, entity.Image, req.Image, ct);
 
             await ctx.SaveChangesAsync(ct);
 

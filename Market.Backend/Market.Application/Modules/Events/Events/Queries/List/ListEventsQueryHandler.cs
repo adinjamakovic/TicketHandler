@@ -14,16 +14,24 @@ public sealed class ListEventsQueryHandler(
         if (!string.IsNullOrWhiteSpace(searchTerm))
             q = q.Where(x => x.Name.ToLower().Contains(searchTerm));
 
-        if (req.Date.HasValue)
+        if (req.DateFrom.HasValue && req.DateTo.HasValue)
         {
-            var date = req.Date.Value.Date;
-            q = q.Where(x => x.ScheduledDate.Date == date);
+            var from = req.DateFrom.Value.Date;
+            var to = req.DateTo.Value.Date;
+            q = q.Where(x => x.ScheduledDate.Date >= from && x.ScheduledDate.Date <= to);
         }
+
 
         if (!string.IsNullOrWhiteSpace(req.City))
         {
             var city = req.City.ToLower().Trim();
             q = q.Where(x => x.Venue.Location.City.Name.ToLower() == city);
+        }
+
+        if (!string.IsNullOrWhiteSpace(req.EventType))
+        {
+            var eventType = req.EventType.ToLower().Trim();
+            q = q.Where(x => x.EventType.Name.ToLower() == eventType);
         }
 
         if (currentUser.IsOrganiser)
@@ -47,19 +55,13 @@ public sealed class ListEventsQueryHandler(
                     City = x.Organizer.City.Name,
                     UserName = x.Organizer.User.UserName
                 },
-                Image = x.Image,
+                Image = imageStorage.ToPublicPath(ImageStorageCategory.Events, x.Image),
                 VenueName = x.Venue.Name,
                 EventType = x.EventType.Name,
                 VenueCity = x.Venue.Location.City.Name,
             });
 
         var result = await PageResult<ListEventsQueryDto>.FromQueryableAsync(projectedQuery, req.Paging, ct);
-
-        result.Items.ApplyPublicImagePaths(
-            imageStorage,
-            ImageStorageCategory.Events,
-            x => x.Image,
-            (x, path) => x.Image = path);
 
         return result;
     }

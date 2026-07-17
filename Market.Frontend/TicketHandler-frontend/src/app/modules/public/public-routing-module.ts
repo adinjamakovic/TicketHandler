@@ -3,8 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { PublicLayoutComponent } from './public-layout/public-layout.component';
 import { SearchProductsComponent } from './search-products/search-products.component';
+import { EventDetailsComponent } from './event-details/event-details.component';
+import { ListEventsComponent } from './list-events/list-events.component';
 
 const routes: Routes = [
+  {
+    path: 'event/:id',
+    component: EventDetailsComponent
+  },
+  {
+    path: 'events',
+    component: ListEventsComponent
+  },
   {
     path: '',
     component: PublicLayoutComponent,

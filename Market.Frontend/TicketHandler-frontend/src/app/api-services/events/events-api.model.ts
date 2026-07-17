@@ -8,8 +8,10 @@ import { PageResult } from "../../core/models/paging/page-result";
 
 export class ListEventsRequest extends BasePagedQuery {
     search?: string | null;
-    date?: Date | null;
+    dateFrom?: Date | null;
+    dateTo?: Date | null;
     city?: string | null;
+    eventType?: string | null;
 }
 
 export interface ListEventsQueryDtoOrganizer {
@@ -71,8 +73,12 @@ export interface GetEventByIdQueryDto{
   description: string,
   scheduledDate: string,
   venueId: number,
+  venueName: string,
+  venueCity?: string | null,
   image: string|Blob,
   eventTypeId: number,
+  eventTypeName: string,
+  organizerName: string,
   performers: GetEventByIdQueryDtoPerformers[]
 }
 

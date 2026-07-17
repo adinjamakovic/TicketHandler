@@ -96,6 +96,7 @@ export class EventNewsUpsertComponent implements OnInit{
         eventId: this.form.value.event,
         header: this.form.value.header,
         body: this.form.value.body,
+        image: this.form.value.image,
       }
 
       this.api.create(command).subscribe({
@@ -114,6 +115,7 @@ export class EventNewsUpsertComponent implements OnInit{
       const command: UpdateEventNewsCommand = {
         header: this.form.value.header,
         body: this.form.value.body,
+        image: this.form.value.image,
       };
 
       this.api.update(this.data.eventNewsId!, command).subscribe({
