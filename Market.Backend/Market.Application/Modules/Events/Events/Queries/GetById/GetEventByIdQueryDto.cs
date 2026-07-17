@@ -8,6 +8,8 @@ public sealed class GetEventByIdQueryDto
     public DateTime ScheduledDate { get; set; }
     public int VenueId { get; set; }
     public string VenueName { get; set; }
+    public string? LocationName { get; set; }
+    public string? LocationAddress { get; set; }
     public string? VenueCity { get; set; }
     public string? Image { get; set; }
     public int EventTypeId { get; set; }

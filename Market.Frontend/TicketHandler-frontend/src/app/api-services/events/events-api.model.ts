@@ -74,6 +74,8 @@ export interface GetEventByIdQueryDto{
   scheduledDate: string,
   venueId: number,
   venueName: string,
+  locationName: string,
+  locationAddress: string,
   venueCity?: string | null,
   image: string|Blob,
   eventTypeId: number,
