@@ -11,6 +11,7 @@ export class ListEventsRequest extends BasePagedQuery {
     dateFrom?: Date | null;
     dateTo?: Date | null;
     city?: string | null;
+    eventType?: string | null;
 }
 
 export interface ListEventsQueryDtoOrganizer {

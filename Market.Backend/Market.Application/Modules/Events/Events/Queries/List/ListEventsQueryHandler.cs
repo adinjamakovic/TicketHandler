@@ -28,6 +28,12 @@ public sealed class ListEventsQueryHandler(
             q = q.Where(x => x.Venue.Location.City.Name.ToLower() == city);
         }
 
+        if (!string.IsNullOrWhiteSpace(req.EventType))
+        {
+            var eventType = req.EventType.ToLower().Trim();
+            q = q.Where(x => x.EventType.Name.ToLower() == eventType);
+        }
+
         if (currentUser.IsOrganiser)
         {
             var org = await ctx.Organizers.Where(x => x.UserId == currentUser.UserId).FirstOrDefaultAsync(ct);

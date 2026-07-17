@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
 import { EventsApiService } from '../../../../api-services/events/events-api.service';
@@ -25,6 +25,7 @@ export interface LandingSearchEvent {
   ],
 })
 export class LandingPageSearchComponent implements OnInit {
+  @Input() initialValue: LandingSearchEvent | null = null;
   @Output() search = new EventEmitter<LandingSearchEvent>();
 
   form!: FormGroup;
@@ -35,10 +36,10 @@ export class LandingPageSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      search: [null],
-      dateFrom: [null],
-      dateTo: [null],
-      city: [null],
+      search: [this.initialValue?.search ?? null],
+      dateFrom: [this.initialValue?.dateFrom ?? null],
+      dateTo: [this.initialValue?.dateTo ?? null],
+      city: [this.initialValue?.city ?? null],
     });
 
     this.eventsApi.getCities().subscribe(cities => (this.cities = cities));

@@ -27,11 +27,18 @@ export class PublicLayoutComponent implements OnInit {
   }
 
   onSearch(filters: LandingSearchEvent): void {
-    this.loadEvents(filters);
+    this.router.navigate(['/events'], {
+      queryParams: {
+        search: filters.search || null,
+        city: filters.city || null,
+        dateFrom: filters.dateFrom ? filters.dateFrom.toISOString() : null,
+        dateTo: filters.dateTo ? filters.dateTo.toISOString() : null,
+      },
+    });
   }
 
-  clearFilters(): void {
-    this.loadEvents({});
+  viewAllEvents(): void {
+    this.router.navigate(['/events']);
   }
 
   openEvent(event: ListEventsQueryDto): void {

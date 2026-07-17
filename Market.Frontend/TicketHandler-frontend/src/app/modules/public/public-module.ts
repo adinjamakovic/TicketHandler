@@ -6,13 +6,15 @@ import {SearchProductsComponent} from './search-products/search-products.compone
 import {EventDetailsComponent} from './event-details/event-details.component';
 import {SharedModule} from '../shared/shared-module';
 import { MatIcon } from "@angular/material/icon";
+import { ListEventsComponent } from './list-events/list-events.component';
 
 
 @NgModule({
   declarations: [
     PublicLayoutComponent,
     SearchProductsComponent,
-    EventDetailsComponent
+    EventDetailsComponent,
+    ListEventsComponent
   ],
   imports: [
     SharedModule,

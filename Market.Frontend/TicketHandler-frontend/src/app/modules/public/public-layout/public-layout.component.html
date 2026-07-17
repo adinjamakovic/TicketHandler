@@ -40,7 +40,7 @@
   <app-upcoming-events-carousel
     [events]="carouselEvents"
     [isLoading]="isLoading"
-    (allEvents)="clearFilters()"
+    (allEvents)="viewAllEvents()"
     (eventSelected)="openEvent($event)"
   ></app-upcoming-events-carousel>
 

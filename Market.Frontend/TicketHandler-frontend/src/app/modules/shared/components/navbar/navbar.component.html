@@ -2,10 +2,10 @@
     <div class="navbar__container">
       <div class="navbar__logo" routerLink="/">TicketHandler</div>
       <nav class="navbar__nav">
-        <a href="#">Concerts</a>
-        <a href="#">Sport</a>
-        <a href="#">Theater</a>
-        <a href="#">Other</a>
+        <a routerLink="/events" [queryParams]="{ eventType: 'Concert' }">Concerts</a>
+        <a routerLink="/events" [queryParams]="{ eventType: 'Festival' }">Festivals</a>
+        <a routerLink="/events" [queryParams]="{ eventType: 'Theater Act' }">Theater</a>
+        <a routerLink="/events">Other</a>
       </nav>
       <div class="navbar__actions">
         <a class="sell">Sell your tickets</a>
