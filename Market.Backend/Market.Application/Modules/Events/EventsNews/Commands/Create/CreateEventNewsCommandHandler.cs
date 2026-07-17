@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.EventsNews.Commands.Create
 {
-    public class CreateEventNewsCommandHandler(IAppDbContext ctx, IAppCurrentUser appCurrentUser)
+    public class CreateEventNewsCommandHandler(
+        IAppDbContext ctx,
+        IAppCurrentUser appCurrentUser,
+        IImageStorage imageStorage)
         : IRequestHandler<CreateEventNewsCommand, int>
     {
         public async Task<int> Handle(CreateEventNewsCommand req, CancellationToken ct)
@@ -27,7 +30,7 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Create
                 EventId=req.EventId,
                 Header= normalizedHeader,
                 Body=normalizedBody,
-                Image = string.Empty
+                Image = await imageStorage.SaveAsync(ImageStorageCategory.EventNews, req.Image, ct)
             };
 
             ctx.EventNews.Add(EventNews);

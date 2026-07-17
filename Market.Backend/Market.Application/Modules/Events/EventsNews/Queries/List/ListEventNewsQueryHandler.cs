@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Market.Application.Modules.Events.EventsNews.Queries.List
 {
-    public class ListEventNewsQueryHandler(IAppDbContext ctx, IAppCurrentUser appCurrent)
+    public class ListEventNewsQueryHandler(
+        IAppDbContext ctx,
+        IAppCurrentUser appCurrent,
+        IImageStorage imageStorage)
         : IRequestHandler<ListEventNewsQuery, PageResult<ListEventNewsQueryDto>>
     {
         public async Task<PageResult<ListEventNewsQueryDto>> Handle(ListEventNewsQuery req, CancellationToken ct)
@@ -32,7 +35,7 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.List
                     Organizer = x.Organizer.Name,
                     Header = x.Header,
                     Body = x.Body ?? string.Empty,
-                    Image = new byte[0]
+                    Image = imageStorage.ToPublicPath(ImageStorageCategory.EventNews, x.Image)
                 });
 
             return await PageResult<ListEventNewsQueryDto>.FromQueryableAsync(projectedQ, req.Paging, ct);

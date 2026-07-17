@@ -9,6 +9,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {EventNewsUpsertComponent} from './event-news-upsert/event-news-upsert.component';
 import {ListEventsQueryDto} from '../../../api-services/events/events-api.model';
 import {DialogButton} from '../../shared/models/dialog-config.model';
+import { EventsApiService } from '../../../api-services/events/events-api.service';
 
 @Component({
   selector: 'app-event-news',
@@ -20,10 +21,11 @@ export class EventNewsComponent
   extends BaseListPagedComponent<ListEventNewsQueryDto, ListEventNewsRequest>
   implements OnInit {
     private api = inject(EventNewsApiService);
-    private router = inject(Router);
+    private eventsApi = inject(EventsApiService);
     private toaster = inject(ToasterService);
     private dialogHelper = inject(DialogHelperService);
     private dialog = inject(MatDialog);
+    events: ListEventsQueryDto[] = [];
     displayedColumns: string[] = [
       'event',
       'header',
@@ -34,6 +36,20 @@ export class EventNewsComponent
     constructor() {
       super();
       this.request = new ListEventNewsRequest();
+      this.request.paging.pageSize = 5;
+      this.loadEvents();
+    }
+
+    private loadEvents() : void {
+        this.eventsApi.list().subscribe({
+          next: (response)=>{
+            this.events = response.items;
+          },
+          error: (err) => {
+            this.toaster.error('Failed to load events.');
+            console.error('Load events error', err);
+          }
+        });
     }
 
     ngOnInit(): void {
@@ -63,7 +79,7 @@ export class EventNewsComponent
 
   onCreate(): void {
       const dialogRef = this.dialog.open(EventNewsUpsertComponent, {
-        width: '500px',
+        width: '715px',
         maxWidth: '90vw',
         panelClass: 'event-news-dialog',
         autoFocus: true,
@@ -83,7 +99,7 @@ export class EventNewsComponent
 
   onEdit(news: ListEventNewsQueryDto): void {
       const dialogRef = this.dialog.open(EventNewsUpsertComponent, {
-        width: '500px',
+        width: '715px',
         maxWidth: '90vw',
         panelClass: 'event-news-dialog',
         autoFocus: true,

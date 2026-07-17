@@ -14,10 +14,13 @@
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="search-bar__field search-bar__field--date">
-    <mat-label>Date</mat-label>
-    <input matInput [matDatepicker]="picker" formControlName="date" placeholder="DD/MM/YYYY" />
+    <mat-label>Date range</mat-label>
+    <mat-date-range-input [rangePicker]="picker">
+      <input matStartDate formControlName="dateFrom" placeholder="DD/MM/YYYY" />
+      <input matEndDate formControlName="dateTo" placeholder="DD/MM/YYYY" />
+    </mat-date-range-input>
     <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
+    <mat-date-range-picker #picker></mat-date-range-picker>
   </mat-form-field>
 
   <div class="search-bar__actions">

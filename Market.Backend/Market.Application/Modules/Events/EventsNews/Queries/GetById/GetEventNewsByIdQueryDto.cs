@@ -13,6 +13,6 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.GetById
         public string Organizer { get; set; }
         public string Header { get; set; }
         public string? Body { get; set; }
-        public byte[] Image {  get; set; }
+        public string? Image {  get; set; }
     }
 }

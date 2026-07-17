@@ -1,0 +1,61 @@
+<section class="events">
+  <div class="events__container">
+    <h2 class="section-title">Upcoming Events</h2>
+
+    <div class="carousel" *ngIf="!isLoading && events.length > 0; else emptyState">
+      <button
+        class="carousel__arrow carousel__arrow--prev"
+        (click)="prevSlide()"
+        [disabled]="!canGoPrev"
+        mat-icon-button
+      >
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <div class="carousel__track">
+        <div class="carousel__card" *ngFor="let event of visibleSlides" (click)="eventSelected.emit(event)">
+          <div
+            class="carousel__card-image"
+            [style.backgroundImage]="event.image ? 'url(' + event.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"
+          >
+            <span class="carousel__card-type">{{ event.eventType }}</span>
+          </div>
+          <div class="carousel__card-body">
+            <h4 class="carousel__card-name">{{ event.name }}</h4>
+            <div class="carousel__card-meta">
+              <mat-icon>calendar_today</mat-icon>
+              <span>{{ event.scheduledDate | date : 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="carousel__card-meta">
+              <mat-icon>location_on</mat-icon>
+              <span>{{ event.venueCity ?? 'TBD' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button
+        class="carousel__arrow carousel__arrow--next"
+        (click)="nextSlide()"
+        [disabled]="!canGoNext"
+        mat-icon-button
+      >
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="events__empty" *ngIf="!isLoading">
+        <mat-icon>event_busy</mat-icon>
+        <p>No events found. Try adjusting your filters.</p>
+      </div>
+    </ng-template>
+
+    <div class="events__cta">
+      <button mat-stroked-button class="all-events-btn" (click)="allEvents.emit()">
+        All Events
+        <mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </div>
+</section>

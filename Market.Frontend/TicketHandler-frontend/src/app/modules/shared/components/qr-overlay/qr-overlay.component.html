@@ -1,0 +1,14 @@
+<div class="qr-overlay" *ngIf="visible" (click)="close()">
+  <div class="qr-overlay__card" (click)="$event.stopPropagation()">
+    <div class="qr-overlay__header">
+      <h3>{{ title }}</h3>
+      <button mat-icon-button (click)="close()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="qr-overlay__placeholder">
+      <mat-icon>qr_code_2</mat-icon>
+      <p>QR code will be generated here</p>
+    </div>
+  </div>
+</div>

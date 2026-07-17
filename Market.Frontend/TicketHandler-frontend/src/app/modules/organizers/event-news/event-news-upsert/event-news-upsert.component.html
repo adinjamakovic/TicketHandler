@@ -35,6 +35,9 @@
         [placeholder]="'Lorem ipsum'"
         autocomplete="off"/>
     </mat-form-field>
+
+    <mat-label>News image</mat-label>
+    <app-image-form-control formControlName="image"/>
   </form>
   <div *ngIf="isLoading && !form" class="loading-container">
     <mat-spinner diameter="40"></mat-spinner>
