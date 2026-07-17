@@ -1,7 +1,22 @@
 <div class="panel">
     <h3 class="panel__title">Venue Location</h3>
     <div class="panel__box">
-        <mat-icon>map</mat-icon>
-        <p>Google Maps will be displayed here</p>
+        <google-map
+            *ngIf="isMapLoaded"
+            [center]="center"
+            [zoom]="zoom"
+            [options]="mapOptions"
+            class="map"
+        >
+            <map-advanced-marker
+                *ngIf="markerPosition"
+                [position]="markerPosition"
+                [title]="address || ''"
+            />
+        </google-map>
+
+        <p *ngIf="isMapLoaded && geocodeFailed" class="panel__hint">
+            Couldn't pinpoint this location on the map.
+        </p>
     </div>
 </div>

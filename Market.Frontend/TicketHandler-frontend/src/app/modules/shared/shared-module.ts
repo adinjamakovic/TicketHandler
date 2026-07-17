@@ -16,6 +16,7 @@ import { FooterComponent } from './components/footer/footer.component';
 import { UpcomingEventsCarouselComponent } from './components/upcoming-events-carousel/upcoming-events-carousel.component';
 import { QrOverlayComponent } from './components/qr-overlay/qr-overlay.component';
 import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
+import { GoogleMapsModule } from '@angular/google-maps'
 
 
 @NgModule({
@@ -38,6 +39,7 @@ import { GoogleMapsComponent } from './components/google-maps/google-maps.compon
     ReactiveFormsModule,
     FormsModule,
     TranslatePipe,
+    GoogleMapsModule,
     ...materialModules
   ],
   providers: [

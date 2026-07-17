@@ -94,7 +94,7 @@
         <h2 class="section-title">Location &amp; Seating</h2>
         <div class="venue__grid">
 
-          <app-google-maps/>
+          <app-google-maps [address]="event.locationName + ', ' + event.locationAddress + ', ' + event.venueCity" />
 
           <div class="placeholder-panel">
             <h3 class="placeholder-panel__title">Seat Selection</h3>

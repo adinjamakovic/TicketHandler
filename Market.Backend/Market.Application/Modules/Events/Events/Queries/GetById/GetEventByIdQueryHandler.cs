@@ -15,6 +15,8 @@ public sealed class GetEventByIdQueryHandler(IAppDbContext ctx, IImageStorage im
                 ScheduledDate = x.ScheduledDate,
                 VenueId = x.VenueId,
                 VenueName = x.Venue.Name,
+                LocationName = x.Venue.Location.Name,
+                LocationAddress = x.Venue.Location.Address,
                 VenueCity = x.Venue.Location.City.Name,
                 Image = x.Image,
                 EventTypeId = x.EventTypeId,

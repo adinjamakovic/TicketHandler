@@ -28,20 +28,16 @@ $text-muted: #666;
     justify-content: center;
     gap: 10px;
     min-height: 280px;
-    border: 2px dashed $purple-light;
-    border-radius: 12px;
-    color: $text-muted;
-
-    mat-icon {
-      font-size: 44px;
-      width: 44px;
-      height: 44px;
-      color: $purple-light;
-    }
-
-    p {
-      font-size: 0.92rem;
-      margin: 0;
-    }
   }
+}
+
+.map {
+  min-height: 280px;
+  width: 100%;
+}
+
+.panel__hint {
+  margin: 0;
+  font-size: 0.85rem;
+  color: $text-muted;
 }
