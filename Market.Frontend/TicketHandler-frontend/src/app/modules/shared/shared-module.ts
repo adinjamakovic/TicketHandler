@@ -17,7 +17,7 @@ import { UpcomingEventsCarouselComponent } from './components/upcoming-events-ca
 import { QrOverlayComponent } from './components/qr-overlay/qr-overlay.component';
 import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
 import { GoogleMapsModule } from '@angular/google-maps'
-
+import { QrCodeComponent } from 'ng-qrcode'
 
 @NgModule({
   declarations: [
@@ -40,6 +40,7 @@ import { GoogleMapsModule } from '@angular/google-maps'
     FormsModule,
     TranslatePipe,
     GoogleMapsModule,
+    QrCodeComponent,
     ...materialModules
   ],
   providers: [
