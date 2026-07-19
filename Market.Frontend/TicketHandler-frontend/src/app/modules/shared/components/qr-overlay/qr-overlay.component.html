@@ -7,8 +7,11 @@
       </button>
     </div>
     <div class="qr-overlay__placeholder">
-      <mat-icon>qr_code_2</mat-icon>
-      <p>QR code will be generated here</p>
+      <qr-code
+        [value]="value"
+        size="250"
+        errorCorrectionLevel="H"
+      />
     </div>
   </div>
 </div>
