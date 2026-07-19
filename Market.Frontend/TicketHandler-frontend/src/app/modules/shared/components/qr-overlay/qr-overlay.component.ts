@@ -10,6 +10,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from 
 export class QrOverlayComponent {
   @Input() visible = false;
   @Input() title = 'QR Code';
+  @Input() value = 'placeholder';
+
 
   @Output() closed = new EventEmitter<void>();
 

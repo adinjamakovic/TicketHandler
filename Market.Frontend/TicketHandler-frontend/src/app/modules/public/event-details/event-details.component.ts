@@ -23,6 +23,10 @@ export class EventDetailsComponent implements OnInit {
   relatedLoading = true;
   notFound = false;
   showQrDialog = false;
+  
+  get currentUrl(): string {
+    return window.location.href;
+  }
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -39,7 +43,7 @@ export class EventDetailsComponent implements OnInit {
   }
 
   copyLink(): void {
-    navigator.clipboard.writeText(window.location.href).then(
+    navigator.clipboard.writeText(this.currentUrl).then(
       () => this.toaster.success('Event link copied to clipboard'),
       () => this.toaster.error('Could not copy the link')
     );

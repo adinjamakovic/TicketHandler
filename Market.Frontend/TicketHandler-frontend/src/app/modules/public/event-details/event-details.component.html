@@ -132,7 +132,8 @@
 
   <app-qr-overlay
     [visible]="showQrDialog"
-    title="Event QR Code"
+    [title]="event?.name ?? 'Event QR Code'"
+    [value]="currentUrl"
     (closed)="closeQrDialog()"
   ></app-qr-overlay>
 
