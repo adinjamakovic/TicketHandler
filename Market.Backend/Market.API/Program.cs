@@ -63,8 +63,7 @@ public partial class Program
                     {
                         policy.WithOrigins("http://localhost:4200")
                             .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowAnyMethod();
                     });
             });
                         
@@ -78,6 +77,10 @@ public partial class Program
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseForwardedHeaders();
+            app.UseMiddleware<SecurityMiddleware>();
+            app.UseResponseCaching();
 
             // Global exception handler (IExceptionHandler)
             app.UseExceptionHandler();
