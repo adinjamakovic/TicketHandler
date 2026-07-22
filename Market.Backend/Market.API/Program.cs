@@ -4,6 +4,7 @@ using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
 using Serilog;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Cryptography;
 
 public partial class Program
@@ -47,6 +48,15 @@ public partial class Program
             // Optional: remove default providers to have only Serilog
             builder.Logging.ClearProviders();
 
+            builder.Services.AddAuthentication()
+                .AddJwtBearer(options =>
+                {
+                   options.Authority = "https://localhost:5001";
+                   options.TokenValidationParameters.ValidateAudience = false; 
+                });
+
+            builder.Services.AddAuthorization();
+
             // ---------------------------------------------------------
             // 3. Layer registrations
             // ---------------------------------------------------------
@@ -89,8 +99,8 @@ public partial class Program
             app.UseHttpsRedirection();
             app.UseCors("AllowAngularDev");
             
-            app.UseAuthentication();
-            app.UseAuthorization();
+            //app.UseAuthentication();
+            //app.UseAuthorization();
 
             app.MapControllers();
 
