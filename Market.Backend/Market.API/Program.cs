@@ -4,7 +4,6 @@ using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
 using Serilog;
-using System.Security.Cryptography;
 
 public partial class Program
 {
@@ -75,7 +74,22 @@ public partial class Program
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerUI(c =>
+                {
+                    // Wire the "Authorize" button to the IdentityServer "swagger" client.
+                    c.OAuthClientId("swagger");
+                    c.OAuthAppName("Market API - Swagger UI");
+                    c.OAuthScopes("openid", "profile", "email", "market.api");
+                    c.OAuthUsePkce();
+                    // Ignore any existing IdentityServer SSO cookie so the login page is
+                    // always shown. Without this, "Logout" in Swagger only drops the local
+                    // token while IdentityServer's `idsrv` cookie survives, and the next
+                    // Authorize silently re-issues a token for the previous user.
+                    c.OAuthAdditionalQueryStringParams(new Dictionary<string, string>
+                    {
+                        ["prompt"] = "login"
+                    });
+                });
             }
 
             app.UseForwardedHeaders();
@@ -88,7 +102,7 @@ public partial class Program
 
             app.UseHttpsRedirection();
             app.UseCors("AllowAngularDev");
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 

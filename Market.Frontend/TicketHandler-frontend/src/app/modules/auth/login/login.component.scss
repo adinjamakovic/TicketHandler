@@ -283,6 +283,17 @@ form {
   }
 }
 
+.redirect-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 28px 0 8px;
+  font-size: 15px;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-out;
+}
+
 // === FORM ROW ===
 .form-row {
   display: flex;
