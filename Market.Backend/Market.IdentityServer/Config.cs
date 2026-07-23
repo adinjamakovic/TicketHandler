@@ -92,7 +92,7 @@ public static class Config
                 RequireConsent = false,
                 AllowAccessTokensViaBrowser = true,
 
-                RedirectUris = { "http://localhost:4200" },
+                RedirectUris = { "http://localhost:4200/auth/callback" },
                 PostLogoutRedirectUris = { "http://localhost:4200" },
                 AllowedCorsOrigins = { "http://localhost:4200" },
 
@@ -102,7 +102,14 @@ public static class Config
                     IdentityServerConstants.StandardScopes.Profile,
                     IdentityServerConstants.StandardScopes.Email,
                     ApiScopeName
-                }
+                },
+
+                AllowOfflineAccess = true,
+                RefreshTokenUsage = TokenUsage.OneTimeOnly,
+                RefreshTokenExpiration = TokenExpiration.Sliding,
+                SlidingRefreshTokenLifetime = 8 * 60 * 60,   // 8h of inactivity
+                AbsoluteRefreshTokenLifetime = 24 * 60 * 60, // 24h hard cap
+                AccessTokenLifetime = 3600
             }
         };
 }
