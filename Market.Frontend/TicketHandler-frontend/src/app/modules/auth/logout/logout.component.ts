@@ -24,10 +24,9 @@ export class LogoutComponent implements OnInit {
   countdownSeconds = 2;
 
   ngOnInit(): void {
-    // Call logout (handles API call + clears state)
     this.auth.logout().subscribe({
       next: () => this.startCountdown(),
-      error: () => this.startCountdown() // Even if API fails, clear local state
+      error: () => this.startCountdown()
     });
   }
 

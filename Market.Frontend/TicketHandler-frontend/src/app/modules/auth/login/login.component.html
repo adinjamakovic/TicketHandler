@@ -19,104 +19,38 @@
     <mat-card class="auth-card mat-elevation-z8">
       <mat-card-header>
         <mat-card-title>{{ 'AUTH.LOGIN.TITLE' | translate }}</mat-card-title>
-        <mat-card-subtitle>Enter your credentials below</mat-card-subtitle>
+        <mat-card-subtitle>You will be redirected to the secure sign-in page</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
         <!-- Error message -->
-        <div *ngIf="errorMessage" class="error-message" @fadeIn>
+        <div *ngIf="errorMessage" class="error-message">
           <mat-icon>error_outline</mat-icon>
           <span>{{ errorMessage }}</span>
         </div>
 
-        <form [formGroup]="form" (ngSubmit)="onSubmit()">
-          <!-- Email -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'AUTH.LOGIN.EMAIL_LABEL' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="email"
-              type="email"
-              placeholder="vasa.email@primjer.com"
-              autocomplete="email"
-            />
-            <mat-icon matPrefix>person</mat-icon>
-            <mat-error *ngIf="form.get('email')?.hasError('required')">
-              Email is a mandatory field
-            </mat-error>
-            <mat-error *ngIf="form.get('email')?.hasError('email')">
-              Enter a valid email
-            </mat-error>
-          </mat-form-field>
+        <div class="redirect-status">
+          <mat-progress-spinner
+            mode="indeterminate"
+            diameter="32"
+            strokeWidth="3"
+          ></mat-progress-spinner>
+          <span>Redirecting to secure sign-in…</span>
+        </div>
 
-          <!-- Password -->
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>{{ 'AUTH.LOGIN.PASSWORD_LABEL' | translate }}</mat-label>
-            <input
-              matInput
-              formControlName="password"
-              [type]="hidePassword ? 'password' : 'text'"
-              placeholder="••••••••"
-              autocomplete="current-password"
-            />
-            <mat-icon matPrefix>lock</mat-icon>
-            <button
-              mat-icon-button
-              matSuffix
-              type="button"
-              (click)="hidePassword = !hidePassword"
-              [attr.aria-label]="'Hide password'"
-            >
-              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            <mat-error *ngIf="form.get('password')?.hasError('required')">
-              Password is a mandatory field
-            </mat-error>
-          </mat-form-field>
-
-          <!-- Remember Me & Forgot Password -->
-          <div class="form-row">
-            <mat-checkbox formControlName="rememberMe" color="primary">
-              {{ 'AUTH.LOGIN.REMEMBER_ME' | translate }}
-            </mat-checkbox>
-            <a href="#" class="forgot-link">Forgot your password?</a>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="actions">
-            <button
-              mat-raised-button
-              color="primary"
-              type="submit"
-              class="submit-button"
-              [disabled]="form.invalid || isLoading"
-            >
-              <ng-container *ngIf="!isLoading; else loadingTpl">
-                <mat-icon>login</mat-icon>
-                {{ 'AUTH.LOGIN.BUTTON' | translate }}
-              </ng-container>
-              <ng-template #loadingTpl>
-                <mat-progress-spinner
-                  mode="indeterminate"
-                  diameter="20"
-                  strokeWidth="3"
-                ></mat-progress-spinner>
-                <span>Logging in...</span>
-              </ng-template>
-            </button>
-          </div>
-
-          <!-- Divider -->
-          <div class="divider">
-            <span>or</span>
-          </div>
-
-          <!-- Register Link -->
-          <div class="register-prompt">
-            <span>Not registered?</span>
-            <a routerLink="/auth/register" class="register-link">Register now!</a>
-          </div>
-        </form>
+        <!-- Fallback if the automatic redirect is blocked -->
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            class="submit-button"
+            (click)="signIn()"
+          >
+            <mat-icon>login</mat-icon>
+            {{ 'AUTH.LOGIN.BUTTON' | translate }}
+          </button>
+        </div>
       </mat-card-content>
     </mat-card>
 

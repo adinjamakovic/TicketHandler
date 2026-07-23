@@ -1,9 +1,12 @@
 // src/app/core/guards/auth.guard.ts
 import { inject } from '@angular/core';
-import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
+import { CanActivateFn, ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { CurrentUserService } from '../services/auth/current-user.service';
 
-export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const myAuthGuard: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot
+) => {
   const currentUser = inject(CurrentUserService);
   const router = inject(Router);
 
@@ -17,9 +20,9 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
 
   const isAuth = currentUser.isAuthenticated();
 
-  // 1) ako ruta traži auth, a user nije logiran → login
+  // 1) ako ruta traži auth, a user nije logiran → login (redirect na IdentityServer)
   if (requireAuth && !isAuth) {
-    router.navigate(['/auth/login']);
+    router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 
@@ -31,7 +34,7 @@ export const myAuthGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   // 2) role check – admin > manager > employee
   const user = currentUser.snapshot;
   if (!user) {
-    router.navigate(['/auth/login']);
+    router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 

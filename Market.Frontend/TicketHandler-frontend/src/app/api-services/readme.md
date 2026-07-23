@@ -36,9 +36,6 @@ Backend (C# Controllers)
 
 ```
 api-services/
-├── auth/
-│   ├── auth-api.model.ts
-│   └── auth-api.service.ts
 ├── product-categories/
 │   ├── product-categories-api.model.ts
 │   └── product-categories-api.service.ts
