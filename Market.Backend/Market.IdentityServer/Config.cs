@@ -5,6 +5,9 @@ namespace Market.IdentityServer;
 
 public static class Config
 {
+    // The scope that represents access to the Market.API resource.
+    public const string ApiScopeName = "market.api";
+
     public static IEnumerable<IdentityResource> IdentityResources =>
         new IdentityResource[]
         {
@@ -16,35 +19,90 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope(name: "api1", displayName: "TicketHandlerAPI")
+            new ApiScope(ApiScopeName, "TicketHandler API access")
+        };
+    public static IEnumerable<ApiResource> ApiResources =>
+        new ApiResource[]
+        {
+            new ApiResource(ApiScopeName, "TicketHandler API")
+            {
+                Scopes = { ApiScopeName },
+                UserClaims =
+                {
+                    "email",
+                    "name",
+                    "is_admin",
+                    "is_organiser",
+                    "is_user"
+                }
+            }
         };
 
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
-            // Dummy Client added by IdentityServer template
+            // Swagger UI (Market.API)
             new Client
             {
-                ClientId = "client",
-                AllowedGrantTypes = GrantTypes.ClientCredentials,
-                ClientSecrets = { new Secret("secret".Sha256()) },
-                AllowedScopes = { "ap1" }
-            },
-            // Client for Market.API
-            new Client
-            {
-                ClientId = "web",
-                ClientSecrets = { new Secret("N3k1SuperJakS3cret!".Sha256()) },
+                ClientId = "swagger",
+                ClientName = "Market API - Swagger UI",
+
                 AllowedGrantTypes = GrantTypes.Code,
-                RedirectUris = { "https://localhost:5002/signin-oidc" },
-                PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+                RequirePkce = true,
+                RequireClientSecret = false,   // public client, secured by PKCE
+                RequireConsent = false,
+                AllowAccessTokensViaBrowser = true,
+
+                RedirectUris =
+                {
+                    "https://localhost:7260/swagger/oauth2-redirect.html",
+                    "http://localhost:5177/swagger/oauth2-redirect.html"
+                },
+                PostLogoutRedirectUris =
+                {
+                    "https://localhost:7260/swagger/index.html",
+                    "http://localhost:5177/swagger/index.html"
+                },
+                AllowedCorsOrigins =
+                {
+                    "https://localhost:7260",
+                    "http://localhost:5177"
+                },
+
                 AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    ApiScopeName
+                },
+
+                AccessTokenLifetime = 3600
+            },
+
+            // Angular SPA (Market.Frontend) 
+            new Client
             {
-                IdentityServerConstants.StandardScopes.OpenId,
-                IdentityServerConstants.StandardScopes.Profile,
-                "verification",
-                "api1"
-            }
+                ClientId = "market.spa",
+                ClientName = "TicketHandler Angular SPA",
+
+                AllowedGrantTypes = GrantTypes.Code,
+                RequirePkce = true,
+                RequireClientSecret = false,
+                RequireConsent = false,
+                AllowAccessTokensViaBrowser = true,
+
+                RedirectUris = { "http://localhost:4200" },
+                PostLogoutRedirectUris = { "http://localhost:4200" },
+                AllowedCorsOrigins = { "http://localhost:4200" },
+
+                AllowedScopes =
+                {
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Email,
+                    ApiScopeName
+                }
             }
         };
 }

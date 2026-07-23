@@ -2,9 +2,7 @@
 using Market.Shared.Dtos;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Text;
 
 namespace Market.API;
 
@@ -34,33 +32,21 @@ public static class DependencyInjection
                 };
             });
 
-        // Typed options + validation on startup
-        services.AddOptions<JwtOptions>()
-            .Bind(configuration.GetSection(JwtOptions.SectionName))
-            .ValidateDataAnnotations()
-            .ValidateOnStart();
+        // Bearer auth: access tokens are issued and signed by Duende IdentityServer.
+        var idsvr = configuration.GetSection(IdentityServerOptions.SectionName).Get<IdentityServerOptions>()
+                    ?? new IdentityServerOptions();
 
-        // JWT auth (reads from IOptions<JwtOptions>)
         services.AddAuthentication(o =>
         {
             o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-        .AddJwtBearer((o) =>
+        .AddJwtBearer(o =>
         {
-            var jwt = configuration.GetSection(JwtOptions.SectionName).Get<JwtOptions>()!;
-
-            o.TokenValidationParameters = new()
-            {
-                ValidateIssuer = true,
-                ValidIssuer = jwt.Issuer,
-                ValidateAudience = true,
-                ValidAudience = jwt.Audience,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key)),
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
+            o.Authority = idsvr.Authority;              
+            o.Audience = idsvr.Audience;                
+            o.RequireHttpsMetadata = idsvr.RequireHttpsMetadata;
+            o.TokenValidationParameters.ValidateAudience = true;
         });
 
         services.AddAuthorization(o =>
@@ -79,18 +65,35 @@ public static class DependencyInjection
             if (File.Exists(xml))
                 c.IncludeXmlComments(xml, includeControllerXmlComments: true);
 
-            var bearer = new OpenApiSecurityScheme
+            var authorizationUrl = new Uri($"{idsvr.Authority}/connect/authorize");
+            var tokenUrl = new Uri($"{idsvr.Authority}/connect/token");
+
+            var oauth = new OpenApiSecurityScheme
             {
-                Name = "Authorization",
-                Description = "Unesi JWT token. Format: **Bearer {token}**",
-                In = ParameterLocation.Header,
-                Type = SecuritySchemeType.Http,
-                Scheme = "bearer",
-                BearerFormat = "JWT",
-                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                Type = SecuritySchemeType.OAuth2,
+                Description = "Log in through Duende IdentityServer (Authorization Code + PKCE).",
+                Flows = new OpenApiOAuthFlows
+                {
+                    AuthorizationCode = new OpenApiOAuthFlow
+                    {
+                        AuthorizationUrl = authorizationUrl,
+                        TokenUrl = tokenUrl,
+                        Scopes = new Dictionary<string, string>
+                        {
+                            ["openid"] = "Your user identifier",
+                            ["profile"] = "Your profile information",
+                            ["email"] = "Your email address",
+                            [idsvr.Audience] = "Access to the Market API"
+                        }
+                    }
+                },
+                Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "oauth2" }
             };
-            c.AddSecurityDefinition("Bearer", bearer);
-            c.AddSecurityRequirement(new OpenApiSecurityRequirement { { bearer, Array.Empty<string>() } });
+            c.AddSecurityDefinition("oauth2", oauth);
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                { oauth, new[] { "openid", "profile", "email", idsvr.Audience } }
+            });
         });
 
         services.AddExceptionHandler<MarketExceptionHandler>();

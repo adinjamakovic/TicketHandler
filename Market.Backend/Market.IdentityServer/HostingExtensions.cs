@@ -1,5 +1,10 @@
 using System.Globalization;
+using Market.Domain.Entities.Identity;
+using Market.IdentityServer.Services;
+using Market.Infrastructure.Database;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Filters;
 
@@ -45,10 +50,19 @@ internal static class HostingExtensions
     {
         builder.Services.AddRazorPages();
 
+        var connectionString = builder.Configuration.GetConnectionString("Main");
+        builder.Services.AddSingleton<TimeProvider>(TimeProvider.System);
+        builder.Services.AddDbContext<DatabaseContext>(options =>
+            options.UseSqlServer(connectionString));
+        builder.Services.AddScoped<IPasswordHasher<PersonEntity>, PasswordHasher<PersonEntity>>();
+        builder.Services.AddScoped<PersonCredentialStore>();
+
         _ = builder.Services.AddIdentityServer()
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
+            .AddInMemoryApiResources(Config.ApiResources)
             .AddInMemoryClients(Config.Clients)
+            .AddProfileService<PersonProfileService>()
             .AddLicenseSummary();
 
         // add `.PersistKeysTo…()` and `.ProtectKeysWith…()` calls
