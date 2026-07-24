@@ -104,6 +104,9 @@ public partial class Program
             app.UseCors("AllowAngularDev");
 
             app.UseAuthentication();
+
+            app.UseRateLimiter();
+
             app.UseAuthorization();
 
             app.MapControllers();

@@ -17,7 +17,8 @@ import { UpcomingEventsCarouselComponent } from './components/upcoming-events-ca
 import { QrOverlayComponent } from './components/qr-overlay/qr-overlay.component';
 import { GoogleMapsComponent } from './components/google-maps/google-maps.component';
 import { GoogleMapsModule } from '@angular/google-maps'
-import { QrCodeComponent } from 'ng-qrcode'
+import { QrCodeComponent } from 'ng-qrcode';
+import { AiChatComponent } from './components/ai-chat/ai-chat.component'
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { QrCodeComponent } from 'ng-qrcode'
     UpcomingEventsCarouselComponent,
     QrOverlayComponent,
     GoogleMapsComponent,
+    AiChatComponent,
   ],
   imports: [
     CommonModule,
@@ -54,6 +56,7 @@ import { QrCodeComponent } from 'ng-qrcode'
     UpcomingEventsCarouselComponent,
     QrOverlayComponent,
     GoogleMapsComponent,
+    AiChatComponent,
     CommonModule,
     RouterModule,
     ReactiveFormsModule,

@@ -3,11 +3,14 @@ using Market.Shared.Dtos;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using System.Threading.RateLimiting;
 
 namespace Market.API;
 
 public static class DependencyInjection
 {
+    public const string AiRateLimitPolicy = "ai";
+
     public static IServiceCollection AddAPI(
         this IServiceCollection services,
         IConfiguration configuration,
@@ -94,6 +97,22 @@ public static class DependencyInjection
             {
                 { oauth, new[] { "openid", "profile", "email", idsvr.Audience } }
             });
+        });
+
+        services.AddRateLimiter(o =>
+        {
+            o.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+
+            o.AddPolicy(AiRateLimitPolicy, ctx => RateLimitPartition.GetFixedWindowLimiter(
+                partitionKey: ctx.User.Identity?.IsAuthenticated == true
+                    ? ctx.User.FindFirst("sub")?.Value ?? "authenticated"
+                    : ctx.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                factory: _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                }));
         });
 
         services.AddExceptionHandler<MarketExceptionHandler>();

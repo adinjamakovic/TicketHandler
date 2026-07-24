@@ -1,0 +1,140 @@
+<button
+  type="button"
+  class="ai-chat-launcher"
+  *ngIf="!isOpen"
+  (click)="toggle()"
+  matTooltip="Ask the ticket assistant"
+  matTooltipPosition="left">
+  <mat-icon>auto_awesome</mat-icon>
+  <span class="ai-chat-launcher__ping"></span>
+</button>
+
+<section class="ai-chat" *ngIf="isOpen" role="dialog" aria-label="AI assistant">
+
+  <header class="ai-chat__header">
+    <div class="ai-chat__identity">
+      <span class="ai-chat__avatar">
+        <mat-icon>auto_awesome</mat-icon>
+      </span>
+      <div class="ai-chat__identity-text">
+        <h3>Ticket Assistant</h3>
+        <p>
+          <span class="ai-chat__status-dot" [class.ai-chat__status-dot--busy]="isLoading"></span>
+          {{ isLoading ? 'Thinking…' : 'Online' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="ai-chat__header-actions">
+      <button
+        mat-icon-button
+        type="button"
+        (click)="clearConversation()"
+        [disabled]="isLoading || !messages.length"
+        matTooltip="Clear conversation">
+        <mat-icon>delete_sweep</mat-icon>
+      </button>
+      <button mat-icon-button type="button" (click)="close()" matTooltip="Close">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <div class="ai-chat__body" #messageList>
+
+    <div class="ai-chat__empty" *ngIf="!messages.length && !isLoading">
+      <span class="ai-chat__empty-icon">
+        <mat-icon>{{ isAuthenticated() ? 'chat_bubble_outline' : 'lock_outline' }}</mat-icon>
+      </span>
+
+      <ng-container *ngIf="isAuthenticated(); else anonymousEmptyState">
+        <h4>How can I help?</h4>
+        <p>Ask about events, tickets or your orders.</p>
+
+        <div class="ai-chat__suggestions">
+          <button
+            type="button"
+            class="ai-chat__suggestion"
+            *ngFor="let suggestion of suggestions; trackBy: trackByIndex"
+            (click)="useSuggestion(suggestion)">
+            {{ suggestion }}
+          </button>
+        </div>
+      </ng-container>
+
+      <ng-template #anonymousEmptyState>
+        <h4>Sign in to chat</h4>
+        <p>The ticket assistant is available to signed-in users.</p>
+      </ng-template>
+    </div>
+
+    <div
+      class="ai-chat__message"
+      [ngClass]="'ai-chat__message--' + message.role"
+      *ngFor="let message of messages; trackBy: trackByIndex">
+
+      <span class="ai-chat__message-avatar">
+        <mat-icon>{{ message.role === 'assistant' ? 'auto_awesome' : 'person' }}</mat-icon>
+      </span>
+
+      <div class="ai-chat__message-content">
+        <div class="ai-chat__bubble">{{ message.content }}</div>
+        <span class="ai-chat__timestamp">{{ message.timestamp | date: 'shortTime' }}</span>
+      </div>
+    </div>
+
+    <div class="ai-chat__message ai-chat__message--assistant" *ngIf="isLoading">
+      <span class="ai-chat__message-avatar">
+        <mat-icon>auto_awesome</mat-icon>
+      </span>
+      <div class="ai-chat__message-content">
+        <div class="ai-chat__bubble ai-chat__bubble--skeleton">
+          <span class="ai-chat__skeleton-line skeleton-shine"></span>
+          <span class="ai-chat__skeleton-line ai-chat__skeleton-line--short skeleton-shine"></span>
+          <span class="ai-chat__skeleton-line ai-chat__skeleton-line--tiny skeleton-shine"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-chat__error" *ngIf="errorMessage">
+    <mat-icon>error_outline</mat-icon>
+    <span class="ai-chat__error-text">{{ errorMessage }}</span>
+    <button mat-button type="button" *ngIf="isAuthenticated()" (click)="retry()">Retry</button>
+  </div>
+
+  <footer class="ai-chat__composer" *ngIf="isAuthenticated(); else signInPrompt">
+    <textarea
+      class="ai-chat__input"
+      rows="1"
+      placeholder="Write a message…"
+      [maxlength]="maxPromptLength"
+      [(ngModel)]="prompt"
+      [disabled]="isLoading"
+      (keydown)="onKeydown($event)"></textarea>
+
+    <button
+      type="button"
+      class="ai-chat__send"
+      (click)="send()"
+      [disabled]="isLoading || !prompt.trim()"
+      matTooltip="Send">
+      <mat-spinner *ngIf="isLoading; else sendIcon" diameter="18"></mat-spinner>
+      <ng-template #sendIcon>
+        <mat-icon>send</mat-icon>
+      </ng-template>
+    </button>
+  </footer>
+
+  <ng-template #signInPrompt>
+    <footer class="ai-chat__signin">
+      <mat-icon>lock_outline</mat-icon>
+      <span class="ai-chat__signin-text">Sign in to send a message.</span>
+      <button mat-flat-button class="ai-chat__signin-button" type="button" (click)="signIn()">
+        Sign in
+      </button>
+    </footer>
+  </ng-template>
+
+  <p class="ai-chat__disclaimer">AI generated — answers may be inaccurate.</p>
+</section>
