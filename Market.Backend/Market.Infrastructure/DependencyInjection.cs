@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Net.Http.Headers;
 
 namespace Market.Infrastructure;
 
@@ -42,6 +43,23 @@ public static class DependencyInjection
 
         // Identity hasher
         services.AddScoped<IPasswordHasher<PersonEntity>, PasswordHasher<PersonEntity>>();
+
+        services.AddOptions<OpenAiOptions>()
+            .Bind(configuration.GetSection(OpenAiOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        services.AddHttpClient<IAiCompletionService, OpenAiCompletionService>((sp, client) =>
+        {
+            var openAi = sp.GetRequiredService<IOptions<OpenAiOptions>>().Value;
+
+            client.BaseAddress = new Uri(openAi.BaseUrl.TrimEnd('/') + "/");
+            client.Timeout = TimeSpan.FromSeconds(openAi.TimeoutSeconds);
+
+            if (!string.IsNullOrWhiteSpace(openAi.ApiKey))
+                client.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", openAi.ApiKey);
+        });
 
         // HttpContext accessor + current user
         services.AddHttpContextAccessor();
