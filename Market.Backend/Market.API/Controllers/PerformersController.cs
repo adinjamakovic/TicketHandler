@@ -7,19 +7,19 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PerformersController(ISender sender) : ControllerBase
+public class PerformersController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpGet]
     [AllowAnonymous]
     public async Task<PageResult<ListPerformersQueryDto>> List([FromQuery] ListPerformersQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpGet("{id:int}")]
     public async Task<GetPerformerByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var dto = await sender.Send(new GetPerformerByIdQuery { Id = id }, ct);
+        var dto = await SendTraced(new GetPerformerByIdQuery { Id = id }, ct);
         return dto;
     }
 }

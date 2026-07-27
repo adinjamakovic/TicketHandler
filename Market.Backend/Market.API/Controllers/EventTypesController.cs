@@ -6,13 +6,13 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EventTypesController(ISender sender) : ControllerBase
+public class EventTypesController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpGet]
     [AllowAnonymous]
     public async Task<PageResult<ListEventTypesQueryDto>> List([FromQuery] ListEventTypesQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     
