@@ -5,13 +5,13 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class AiController(ISender sender) : ControllerBase
+public class AiController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpPost("chat")]
     [EnableRateLimiting(DependencyInjection.AiRateLimitPolicy)]
     public async Task<GenerateChatReplyCommandDto> Chat(GenerateChatReplyCommand command, CancellationToken ct)
     {
-        var result = await sender.Send(command, ct);
+        var result = await SendTraced(command, ct);
 
         return result;
     }

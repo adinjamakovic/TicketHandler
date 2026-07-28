@@ -1,7 +1,6 @@
-import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
-import { inject } from '@angular/core';
+import { HttpInterceptorFn, HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { catchError, throwError } from 'rxjs';
-import { ToasterService } from '../services/toaster.service';
+import * as Sentry from '@sentry/angular';
 
 /**
  * HTTP interceptor that logs errors.
@@ -12,14 +11,13 @@ import { ToasterService } from '../services/toaster.service';
  *
  * Features:
  * - Logs all HTTP errors to console
- * - Can be extended to send errors to logging service (Sentry, etc.)
+ * - Reports server/network failures to Sentry
  * - Re-throws errors so components can handle them
  */
 export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       // Log error to console
-      // In production, send to logging service like Sentry
       console.error('HTTP Error:', {
         url: req.url,
         method: req.method,
@@ -30,8 +28,7 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
         timestamp: new Date().toISOString()
       });
 
-      // Optional: Send to external logging service
-      // logToSentry(error, req);
+      logToSentry(error, req);
 
       // Re-throw error so components can handle it
       // Components should show appropriate toaster messages with context
@@ -41,21 +38,37 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
 };
 
 /**
- * Optional: Send errors to external logging service
- * Uncomment and implement when using Sentry, LogRocket, etc.
+ * Send server-side and network failures to Sentry.
  */
-// function logToSentry(error: HttpErrorResponse, req: HttpRequest<any>): void {
-//   if (environment.production) {
-//     Sentry.captureException(error, {
-//       extra: {
-//         url: req.url,
-//         method: req.method,
-//         status: error.status,
-//         body: req.body
-//       }
-//     });
-//   }
-// }
+function logToSentry(error: HttpErrorResponse, req: HttpRequest<any>): void {
+  const isServerError = error.status >= 500;
+  const isNetworkError = error.status === 0;
+
+  if (!isServerError && !isNetworkError) {
+    Sentry.addBreadcrumb({
+      category: 'http',
+      level: 'warning',
+      message: `${req.method} ${req.url} -> ${error.status}`,
+      data: { status: error.status, traceId: error.error?.traceId }
+    });
+    return;
+  }
+
+  Sentry.captureException(error, {
+    tags: {
+      'http.status_code': String(error.status),
+      'http.method': req.method,
+      // Correlates the frontend issue with the backend event logged by MarketExceptionHandler.
+      traceId: error.error?.traceId ?? 'unknown'
+    },
+    extra: {
+      url: req.url,
+      status: error.status,
+      statusText: error.statusText,
+      responseBody: error.error
+    }
+  });
+}
 
 /**
  * Helper: Get user-friendly error message

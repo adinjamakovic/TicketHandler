@@ -9,13 +9,13 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class OrganizersController(ISender sender) : ControllerBase
+public class OrganizersController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<int>> Create([FromForm] CreateOrganizerCommand cmd, CancellationToken ct)
     {
-        int id = await sender.Send(cmd, ct);
+        int id = await SendTraced(cmd, ct);
 
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
@@ -24,21 +24,21 @@ public class OrganizersController(ISender sender) : ControllerBase
     [AllowAnonymous]
     public async Task<PageResult<ListOrganizersQueryDto>> List([FromQuery] ListOrganizersQuery query, CancellationToken ct)
     {
-        var result = await sender.Send(query, ct);
+        var result = await SendTraced(query, ct);
         return result;
     }
 
     [HttpGet("{id:int}")]
     public async Task<GetOrganizerByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var organizer = await sender.Send(new GetOrganizerByIdQuery { Id = id }, ct);
+        var organizer = await SendTraced(new GetOrganizerByIdQuery { Id = id }, ct);
         return organizer;
     }
 
     [HttpGet("UserId/{userId:int}")]
     public async Task<GetOrganizerByUserIdQueryDto> GetByUserId(int userId, CancellationToken ct)
     {
-        var organizer = await sender.Send(new GetOrganizerByUserIdQuery { UserId = userId }, ct);
+        var organizer = await SendTraced(new GetOrganizerByUserIdQuery { UserId = userId }, ct);
         return organizer;
     }
 
@@ -47,12 +47,12 @@ public class OrganizersController(ISender sender) : ControllerBase
     public async Task Update(int id, [FromForm] UpdateOrganizerCommand command, CancellationToken ct)
     {
         command.Id = id;
-        await sender.Send(command, ct);
+        await SendTraced(command, ct);
     }
 
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
-        await sender.Send(new DeleteOrganizerCommand { Id = id }, ct);
+        await SendTraced(new DeleteOrganizerCommand { Id = id }, ct);
     }
 }

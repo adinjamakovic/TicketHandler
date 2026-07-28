@@ -12,18 +12,18 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class EventNewsController(ISender sender) : ControllerBase
+public class EventNewsController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
-        await sender.Send(new DeleteEventNewsCommand { Id = id}, ct);
+        await SendTraced(new DeleteEventNewsCommand { Id = id}, ct);
     }
     [HttpPost]
     [Consumes("multipart/form-data")]
     public async Task<ActionResult<int>> Create([FromForm] CreateEventNewsCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
+        int id = await SendTraced(command, ct);
 
         return CreatedAtAction(nameof(GetById),new { id }, new { id });
     }
@@ -31,7 +31,7 @@ public class EventNewsController(ISender sender) : ControllerBase
     [HttpGet]
     public async Task<PageResult<ListEventNewsQueryDto>> List([FromQuery] ListEventNewsQuery query, CancellationToken ct)
     {
-        var result = await sender.Send(query, ct);
+        var result = await SendTraced(query, ct);
 
         return result;
     }
@@ -39,7 +39,7 @@ public class EventNewsController(ISender sender) : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<GetEventNewsByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var EventNews = await sender.Send(new GetEventNewsByIdQuery { Id = id }, ct);
+        var EventNews = await SendTraced(new GetEventNewsByIdQuery { Id = id }, ct);
 
         return EventNews;
     }
@@ -49,6 +49,6 @@ public class EventNewsController(ISender sender) : ControllerBase
     public async Task Update(int id, [FromForm] UpdateEventNewsCommand command, CancellationToken ct)
     {
         command.Id=id;
-        await sender.Send(command, ct);
+        await SendTraced(command, ct);
     }
 }

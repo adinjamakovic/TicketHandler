@@ -7,13 +7,13 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class VenuesController(ISender sender) : ControllerBase
+public class VenuesController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpGet]
     [AllowAnonymous]
     public async Task<PageResult<ListVenuesQueryDto>> List([FromQuery] ListVenuesQuery query, CancellationToken ct)
     {
-        var result = await sender.Send(query, ct);
+        var result = await SendTraced(query, ct);
 
         return result;
     }

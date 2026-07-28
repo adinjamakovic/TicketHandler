@@ -10,17 +10,17 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TicketTypeController(ISender sender) : ControllerBase
+public class TicketTypeController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
-        await sender.Send(new DeleteTicketTypesCommand { Id = id}, ct);
+        await SendTraced(new DeleteTicketTypesCommand { Id = id}, ct);
     }
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateTicketTypesCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
+        int id = await SendTraced(command, ct);
     
         return CreatedAtAction(nameof(GetById),new { id }, new { id });
     }
@@ -28,7 +28,7 @@ public class TicketTypeController(ISender sender) : ControllerBase
     [HttpGet]
     public async Task<PageResult<ListTicketTypesQueryDto>> List([FromQuery] ListTicketTypesQuery query, CancellationToken ct)
     {
-        var result = await sender.Send(query, ct);
+        var result = await SendTraced(query, ct);
     
         return result;
     }
@@ -36,7 +36,7 @@ public class TicketTypeController(ISender sender) : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<GetTicketTypesByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var EventNews = await sender.Send(new GetTicketTypesByIdQuery { Id = id }, ct);
+        var EventNews = await SendTraced(new GetTicketTypesByIdQuery { Id = id }, ct);
     
         return EventNews;
     }
@@ -45,6 +45,6 @@ public class TicketTypeController(ISender sender) : ControllerBase
     public async Task Update(int id, UpdateTicketTypesCommand command, CancellationToken ct)
     {
         command.Id=id;
-        await sender.Send(command, ct);
+        await SendTraced(command, ct);
     }
 }
