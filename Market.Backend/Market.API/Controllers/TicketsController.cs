@@ -16,12 +16,12 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class TicketsController(ISender sender) : ControllerBase
+public class TicketsController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateTicketsCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
+        int id = await SendTraced(command, ct);
 
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
@@ -29,38 +29,38 @@ public class TicketsController(ISender sender) : ControllerBase
     [AllowAnonymous]
     public async Task<PageResult<ListTicketsQueryDto>> List([FromQuery] ListTicketsQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpGet("{id:int}")]
     public async Task<GetTicketsByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var dto = await sender.Send(new GetTicketsByIdQuery { Id = id }, ct);
+        var dto = await SendTraced(new GetTicketsByIdQuery { Id = id }, ct);
         return dto;
     }
 
     [HttpGet("EventId")]
     public async Task<PageResult<GetTicketsByEventIdQueryDto>> ListTicketsByEventId([FromQuery] GetTicketsByEventIdQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpGet("EventName")]
     public async Task<PageResult<GetTicketsByEventNameQueryDto>> ListTicketsByEventName([FromQuery] GetTicketsByEventNameQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
-        await sender.Send(new DeleteTicketsCommand { Id = id }, ct); 
+        await SendTraced(new DeleteTicketsCommand { Id = id }, ct); 
     }
 
     [HttpPut("{id:int}")]
     public async Task Update(int id, UpdateTicketsCommand command, CancellationToken ct)
     {
         command.Id = id;
-        await sender.Send(command, ct);
+        await SendTraced(command, ct);
     }
 }

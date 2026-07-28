@@ -4,6 +4,7 @@ using Market.API.Middleware;
 using Market.Application;
 using Market.Infrastructure;
 using Serilog;
+using Sentry.AspNetCore;
 
 public partial class Program
 {
@@ -55,6 +56,15 @@ public partial class Program
                 .AddApplication();
 
 
+            builder.WebHost.UseSentry(o =>
+            {
+              o.Dsn = builder.Configuration.GetValue<string>("Sentry:Dsn");
+              o.Debug = builder.Environment.IsDevelopment();
+              o.TracesSampleRate = builder.Environment.IsDevelopment() ? 1.0 : 0.1;
+              o.EnableLogs = true;
+              o.AutoRegisterTracing = true;
+            });
+            
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularDev",
@@ -65,8 +75,10 @@ public partial class Program
                             .AllowAnyMethod();
                     });
             });
+
                         
             var app = builder.Build();
+
 
             // ---------------------------------------------------------
             // 4. Middleware pipeline
@@ -109,6 +121,8 @@ public partial class Program
 
             app.UseAuthorization();
 
+            app.UseMiddleware<SentryPerformanceMiddleware>();
+
             app.MapControllers();
 
             // Database migrations + seeding
@@ -116,6 +130,7 @@ public partial class Program
 
             Log.Information("Market API started successfully.");
             app.Run();
+
         }
         catch (HostAbortedException)
         {

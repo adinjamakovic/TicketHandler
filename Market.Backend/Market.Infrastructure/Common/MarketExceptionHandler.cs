@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sentry;
 using System.Diagnostics;
 
 namespace Market.Infrastructure.Common;
@@ -45,6 +46,11 @@ public sealed class MarketExceptionHandler(
             ValidationException => StatusCodes.Status400BadRequest,
             _ => StatusCodes.Status500InternalServerError
         };
+
+        if (ctx.Response.StatusCode == StatusCodes.Status500InternalServerError)
+        {
+            SentrySdk.CaptureException(ex, scope => scope.SetTag("traceId", traceId));
+        }
 
         var error = BuildErrorDto(ex, env.IsDevelopment(), traceId);
 

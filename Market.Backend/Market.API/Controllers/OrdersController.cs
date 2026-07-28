@@ -17,12 +17,12 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class OrdersController(ISender sender) : ControllerBase
+public class OrdersController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreateOrderCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
+        int id = await SendTraced(command, ct);
 
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
@@ -30,46 +30,46 @@ public class OrdersController(ISender sender) : ControllerBase
     [AllowAnonymous]
     public async Task<PageResult<ListOrdersQueryDto>> List([FromQuery] ListOrdersQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpGet("{id:int}")]
     public async Task<GetOrderByIdQueryDto> GetById(int id, CancellationToken ct)
     { 
-        var dto = await sender.Send(new GetOrderByIdQuery { Id = id }, ct);
+        var dto = await SendTraced(new GetOrderByIdQuery { Id = id }, ct);
         return dto;
     }
     
     [HttpGet("with-tickets")]
     public async Task<PageResult<ListOrdersWithTicketsQueryDto>> ListWithTickets([FromQuery] ListOrdersWithTicketsQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
     [HttpGet("with-events")]
     public async Task<PageResult<ListOrdersWithTicketsAndEventsQueryDto>> ListWithTicketsAndEvents([FromQuery] ListOrdersWithTicketsAndEventsQuery q, CancellationToken ct)
     {
-        var result = await sender.Send(q, ct);
+        var result = await SendTraced(q, ct);
         return result;
     }
 
     [HttpGet("PersonId:int")]
     public async Task<PageResult<GetOrderByPersonIdQueryDto>> GetOrdersByPersonId(int PersonId, CancellationToken ct)
     {
-        var dto = await sender.Send(new GetOrderByPersonIdQuery { PersonId = PersonId }, ct);
+        var dto = await SendTraced(new GetOrderByPersonIdQuery { PersonId = PersonId }, ct);
         return dto;
     }
     
     [HttpDelete("{id:int}")]
     public async Task Delete(int id, CancellationToken ct)
     {
-        await sender.Send(new DeleteOrderCommand { Id = id }, ct); 
+        await SendTraced(new DeleteOrderCommand { Id = id }, ct); 
     }
 
     [HttpPut("id:int")]
     public async Task Update(int id, UpdateOrderCommand command, CancellationToken ct)
     {
         command.Id = id;
-        await sender.Send(command, ct);
+        await SendTraced(command, ct);
     }
 }

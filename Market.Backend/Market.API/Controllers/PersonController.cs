@@ -12,19 +12,19 @@ namespace Market.API.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class PersonController(ISender sender) : ControllerBase
+public class PersonController(ISender sender) : ApiControllerBase(sender)
 {
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreatePersonCommand command, CancellationToken ct)
     {
-        int id = await sender.Send(command, ct);
+        int id = await SendTraced(command, ct);
 
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
     [HttpGet("{id:int}")]
     public async Task<GetPersonByIdQueryDto> GetById(int id, CancellationToken ct)
     {
-        var Person = await sender.Send(new GetPersonByIdQuery { Id = id }, ct);
+        var Person = await SendTraced(new GetPersonByIdQuery { Id = id }, ct);
     
         return Person;
     }
