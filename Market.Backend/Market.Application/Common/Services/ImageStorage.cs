@@ -1,6 +1,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 using Market.Application.Abstractions;
+using Market.Application.Common.Validation;
 using Microsoft.AspNetCore.Http;
 
 namespace Market.Application.Common.Services;
@@ -14,11 +15,6 @@ public sealed class ImageStorage : IImageStorage
     {
         _client = client;
     }
-
-    private static readonly HashSet<string> AllowedExtensions = new(StringComparer.OrdinalIgnoreCase)
-    {
-        ".jpg", ".jpeg", ".png", ".webp", ".gif"
-    };
 
     private static string GetCategoryFolder(ImageStorageCategory category) => category switch
     {
@@ -37,7 +33,7 @@ public sealed class ImageStorage : IImageStorage
             return null;
 
         var extension = Path.GetExtension(image.FileName);
-        if (string.IsNullOrWhiteSpace(extension) || !AllowedExtensions.Contains(extension))
+        if (string.IsNullOrWhiteSpace(extension) || !ImageValidationRules.AllowedExtensions.Contains(extension))
             throw new MarketBusinessRuleException(
                 "image.invalid",
                 "Image must be a JPG, PNG, WEBP, or GIF file.");

@@ -7,7 +7,7 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Update
         [JsonIgnore]
         public int Id { get; set; }
         public string Header { get; set; }
-        public string Body { get; set; }
+        public string? Body { get; set; }
         public IFormFile? Image { get; set; }
     }
 }
