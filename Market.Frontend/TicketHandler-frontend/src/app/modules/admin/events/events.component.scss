@@ -72,7 +72,7 @@ $hover-bg: rgba(73, 118, 181, 0.04);
         flex-shrink: 0;
       }
 
-      // Ikona preko ::before elementa
+      // Icon via the ::before element
       position: relative;
 
       &::after {
@@ -246,7 +246,7 @@ $hover-bg: rgba(73, 118, 181, 0.04);
       color: $text-primary;
       font-size: 14px;
 
-      // Ikone za enabled/disabled
+      // Icons for enabled/disabled
       .icon-enabled {
         color: $success-color;
         font-size: 24px;

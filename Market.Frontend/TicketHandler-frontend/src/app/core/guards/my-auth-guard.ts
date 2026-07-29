@@ -10,7 +10,7 @@ export const myAuthGuard: CanActivateFn = (
   const currentUser = inject(CurrentUserService);
   const router = inject(Router);
 
-  // myAuthData() ugnježđuje flagove pod 'auth' ključ
+  // myAuthData() nests the flags under the 'auth' key
   const authData: MyAuthRouteData = route.data['auth'] ?? {};
 
   const requireAuth = authData.requireAuth === true;
@@ -20,13 +20,13 @@ export const myAuthGuard: CanActivateFn = (
 
   const isAuth = currentUser.isAuthenticated();
 
-  // 1) ako ruta traži auth, a user nije logiran → login (redirect na IdentityServer)
+  // 1) if the route requires auth and the user is not logged in → login (redirect to IdentityServer)
   if (requireAuth && !isAuth) {
     router.navigate(['/auth/login'], { queryParams: { returnUrl: state.url } });
     return false;
   }
 
-  // Ako ne traži auth → pusti (javne rute)
+  // If auth is not required → allow (public routes)
   if (!requireAuth) {
     return true;
   }

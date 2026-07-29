@@ -123,7 +123,7 @@ export class AdminOrdersComponent
   // === Actions ===
 
   onViewDetails(order: ListOrdersQueryDto, event?: MouseEvent): void {
-    // spriječi da klik sa dugmeta ode na <tr> i ponovo otvori dialog
+    // prevent the button click from bubbling to <tr> and reopening the dialog
     event?.stopPropagation();
 
     const dialogRef = this.dialog.open(OrderDetailsDialogComponent, {

@@ -1,15 +1,15 @@
 ﻿namespace Market.Infrastructure.Database.Seeders;
 
 /// <summary>
-/// Dynamic seeder koji se pokreće u runtime-u,
-/// obično pri startu aplikacije (npr. u Program.cs).
-/// Koristi se za unos demo/test podataka koji nisu dio migracije.
+/// Dynamic seeder that runs at runtime,
+/// usually at application startup (e.g. in Program.cs).
+/// Used to insert demo/test data that is not part of a migration.
 /// </summary>
 public static class DynamicDataSeeder
 {
     public static async Task SeedAsync(DatabaseContext context)
     {
-        // Osiguraj da baza postoji (bez migracija)
+        // Make sure the database exists (without migrations)
         await context.Database.EnsureCreatedAsync();
 
         await SeedCountries(context);
@@ -253,7 +253,7 @@ public static class DynamicDataSeeder
     }
 
     /// <summary>
-    /// Kreira demo korisnike ako ih još nema u bazi.
+    /// Creates demo users if they do not already exist in the database.
     /// </summary>
     private static async Task SeedUsersAsync(DatabaseContext context)
     {
@@ -346,7 +346,7 @@ public static class DynamicDataSeeder
         Console.WriteLine("✅ Dynamic seed: demo users added.");
     }
     /// <summary>
-    /// Kreira demo organizatore ako ih još nema u bazi.
+    /// Creates demo organizers if they do not already exist in the database.
     /// </summary>
     private static async Task SeedOrganizersAsync(DatabaseContext context)
     {
@@ -380,7 +380,7 @@ public static class DynamicDataSeeder
         Console.WriteLine("✅ Dynamic seed: demo organizers added.");
     }
     /// <summary>
-    /// Kreira demo Zanrove ako ih još nema u bazi.
+    /// Creates demo genres if they do not already exist in the database.
     /// </summary>
     private static async Task SeedGenresAsync(DatabaseContext context)
     {
