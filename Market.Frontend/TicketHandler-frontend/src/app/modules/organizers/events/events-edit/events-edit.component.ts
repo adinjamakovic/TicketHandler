@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit }
 import { BaseFormComponent } from '../../../../core/components/base-classes/base-form-component';
 import { GetEventByIdQueryDto, UpdateEventCommand } from '../../../../api-services/events/events-api.model';
 import { EventsApiService } from '../../../../api-services/events/events-api.service';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray } from '@angular/forms';
 import { EventsFormService } from '../services/events-form.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToasterService } from '../../../../core/services/toaster.service';
@@ -15,6 +15,7 @@ import { ListEventTypesQueryDto } from '../../../../api-services/event-types/eve
 import { DateAdapter, MAT_DATE_FORMATS, NativeDateAdapter } from '@angular/material/core';
 import { largePaging } from '../../../../core/models/paging/paging-utils';
 import { forkJoin } from 'rxjs';
+import { buildTimeSlots, toTimeOnlyString, withExtraTimeSlots } from '../../../../core/utils/DateUtilities/time-utils';
 
 class DdMmYyyyDateAdapter extends NativeDateAdapter {
   override format(date: Date, _displayFormat: any): string {
@@ -55,7 +56,6 @@ export class EventsEditComponent
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private cdr = inject(ChangeDetectorRef);
-  private fb = inject(FormBuilder);
   private formService = inject(EventsFormService);
   private toaster = inject(ToasterService);
   private api = inject(EventsApiService);
@@ -69,11 +69,7 @@ export class EventsEditComponent
   eventTypes: ListEventTypesQueryDto[] = [];
   performers: ListPerformersQueryDto[] = [];
 
-  timeSlots: string[] = Array.from({ length: 48 }, (_, i) => {
-    const h = Math.floor(i / 2).toString().padStart(2, '0');
-    const m = i % 2 === 0 ? '00' : '30';
-    return `${h}:${m}`;
-  });
+  timeSlots: string[] = buildTimeSlots();
 
   ngOnInit(): void {
     this.eventId = +this.route.snapshot.params['id'];
@@ -99,6 +95,10 @@ export class EventsEditComponent
         this.venues = venues.items;
         this.eventTypes = eventTypes.items;
         this.performers = performers.items;
+        this.timeSlots = withExtraTimeSlots(
+          buildTimeSlots(),
+          event.performers?.map(p => p.timeStamp) ?? []
+        );
         this.form = this.formService.createEventsForm(event);
         this.form.patchValue({ scheduledDate: new Date(event.scheduledDate) });
         this.stopLoading();
@@ -129,7 +129,13 @@ export class EventsEditComponent
       venueId: this.form.value.venueId,
       image: this.form.value.image,
       eventTypeId: this.form.value.eventTypeId,
-      performers: this.form.value.performers,
+      // id keeps an existing row attached to its performer-event so the handler updates its
+      // time instead of adding a duplicate; 0 marks a newly added performer.
+      performers: (this.form.value.performers ?? []).map((performer: any) => ({
+        id: performer.id ?? 0,
+        performerId: performer.performerId,
+        timeStamp: toTimeOnlyString(performer.timeStamp),
+      })),
     };
 
     this.api.update(this.eventId, command).subscribe({
@@ -151,16 +157,15 @@ export class EventsEditComponent
   }
 
   addItem(): void {
-    const itemGroup = this.fb.group({
-      id: [0],
-      performerId: [0],
-      timeStamp: [''],
-    });
-    this.items.push(itemGroup);
+    this.items.push(this.formService.createPerformerGroup());
   }
 
   removeItem(index: number): void {
     this.items.removeAt(index);
+  }
+
+  getPerformerErrorMessage(index: number, controlName: string): string {
+    return this.formService.getErrorMessage(this.form, `performers.${index}.${controlName}`);
   }
 
   onCancel(): void {

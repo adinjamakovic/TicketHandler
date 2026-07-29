@@ -21,9 +21,6 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Create
             var normalizedHeader = req.Header.Trim();
             var normalizedBody = req.Body?.Trim() ?? string.Empty;
 
-            if (string.IsNullOrWhiteSpace(normalizedHeader))
-                throw new ValidationException("Header is required");
-
             var EventNews = new EventNewsEntity
             {
                 OrganizerId = org.Id,
