@@ -33,7 +33,7 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Update
                 entity.Header = req.Header;
                 
 
-            entity.Body = req.Body.Trim();
+            entity.Body = req.Body?.Trim() ?? string.Empty;
 
             entity.Image = await imageStorage.ReplaceIfUploadedAsync(
                 ImageStorageCategory.EventNews, entity.Image, req.Image, ct);

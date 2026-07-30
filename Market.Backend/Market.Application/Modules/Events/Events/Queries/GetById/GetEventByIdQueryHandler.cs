@@ -25,6 +25,7 @@ public sealed class GetEventByIdQueryHandler(IAppDbContext ctx, IImageStorage im
                 Performers = x.PerformerEvents
                     .Select(y => new GetEventByIdQueryDtoPerformers
                     {
+                        Id = y.Id,
                         PerformerId = y.Performer.Id,
                         TimeStamp = y.TimeStamp
                     }).ToList()

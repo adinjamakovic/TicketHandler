@@ -1,6 +1,6 @@
-// Payload kako dolazi iz IdentityServer access tokena.
-// `is_*` i `email` claimovi dolaze iz ApiResource UserClaims (Market.IdentityServer/Config.cs),
-// pa žive u access tokenu – ne u id_tokenu.
+// Payload as it comes from the IdentityServer access token.
+// The `is_*` and `email` claims come from ApiResource UserClaims (Market.IdentityServer/Config.cs),
+// so they live in the access token - not in the id_token.
 export interface JwtPayloadDto {
   sub: string;
   email?: string;

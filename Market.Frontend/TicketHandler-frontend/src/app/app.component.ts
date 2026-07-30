@@ -14,11 +14,11 @@ export class AppComponent implements OnInit {
   constructor(private translate: TranslateService) {
     console.log('AppComponent constructor - initializing TranslateService');
 
-    // Inicijalizacija translate servisa
+    // Translate service initialization
     this.translate.addLangs(['en', 'bs']);
     this.translate.setDefaultLang('bs');
 
-    // Učitaj jezik iz localStorage ili koristi default
+    // Load the language from localStorage or use the default
     const savedLang = localStorage.getItem('language') || 'bs';
     this.currentLang = savedLang;
 

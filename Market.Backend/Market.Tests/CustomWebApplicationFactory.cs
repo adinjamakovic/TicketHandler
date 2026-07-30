@@ -1,5 +1,4 @@
-﻿using Market.Application.Modules.Auth.Commands.Login;
-using System.Net.Http.Headers;
+﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace Market.Tests;
@@ -27,11 +26,17 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<Progr
             var response = await client.PostAsJsonAsync("api/auth/login", loginRequest);
             response.EnsureSuccessStatusCode();
 
-            var loginResponse = await response.Content.ReadFromJsonAsync<LoginCommandDto>();
-            _cachedToken = loginResponse.AccessToken;
+            var loginResponse = await response.Content.ReadFromJsonAsync<LoginResponse>();
+            _cachedToken = loginResponse!.AccessToken;
         }
         client.DefaultRequestHeaders.Authorization =
             new AuthenticationHeaderValue("Bearer", _cachedToken);
         return client;
     }
+
+    /// <summary>
+    /// Token shape of the login endpoint. Declared locally because the old
+    /// <c>Modules.Auth</c> command DTOs were removed with the IdentityServer migration.
+    /// </summary>
+    private sealed record LoginResponse(string AccessToken);
 }

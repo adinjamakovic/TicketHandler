@@ -419,3 +419,5 @@ FodyWeavers.xsd
 CLAUDE.md
 Market.Backend/Market.API/wwwroot/Upload
 Market.Frontend/TicketHandler-frontend/src/environments/environment.ts
+Market.Backend/.idea
+.vscode

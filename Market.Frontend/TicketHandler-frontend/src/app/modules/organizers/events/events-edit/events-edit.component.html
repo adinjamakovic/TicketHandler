@@ -144,6 +144,9 @@
             </mat-option>
                   </mat-select>
                   <mat-icon matSuffix>inventory</mat-icon>
+                  <mat-error *ngIf="hasError('performers.' + i + '.performerId')">
+                    {{ getPerformerErrorMessage(i, 'performerId') }}
+                  </mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
@@ -152,6 +155,9 @@
                     <mat-option *ngFor="let slot of timeSlots" [value]="slot">{{ slot }}</mat-option>
                   </mat-select>
                   <mat-icon matSuffix>schedule</mat-icon>
+                  <mat-error *ngIf="hasError('performers.' + i + '.timeStamp')">
+                    {{ getPerformerErrorMessage(i, 'timeStamp') }}
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
