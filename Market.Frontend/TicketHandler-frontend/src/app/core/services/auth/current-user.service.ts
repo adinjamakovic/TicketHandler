@@ -6,7 +6,7 @@ import { AuthFacadeService } from './auth-facade.service';
 export class CurrentUserService {
   private auth = inject(AuthFacadeService);
 
-  /** Signal koji UI može čitati (readonly) */
+  /** Signal the UI can read (readonly) */
   currentUser = computed(() => this.auth.currentUser());
 
   isAuthenticated = computed(() => this.auth.isAuthenticated());
@@ -17,7 +17,7 @@ export class CurrentUserService {
     return this.auth.currentUser();
   }
 
-  /** Pravilo: admin > ostali → client */
+  /** Rule: admin > everyone else → client */
   getDefaultRoute(): string {
     const user = this.snapshot;
     if (!user) return '/auth/login';
@@ -28,9 +28,9 @@ export class CurrentUserService {
   }
 
   /**
-   * Ruta "Profile" iz navbar dropdowna – portal koji odgovara roli.
-   * Razlika u odnosu na getDefaultRoute(): običan user ide na /client,
-   * a ne na landing page.
+   * The "Profile" route from the navbar dropdown - the portal matching the role.
+   * Difference from getDefaultRoute(): a regular user goes to /client,
+   * not to the landing page.
    */
   getProfileRoute(): string {
     const user = this.snapshot;

@@ -13,9 +13,6 @@ public class CreateOrganizerCommandHandler(
 
         var normalized = req.Name?.Trim();
 
-        if (string.IsNullOrWhiteSpace(normalized))
-            throw new ValidationException("Name is required.");
-
         if (await ctx.Organizers.AnyAsync(x => x.Name == normalized, ct))
             throw new MarketConflictException("This organizer already exists");
 

@@ -1,6 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {GetEventByIdQueryDto} from '../../../../api-services/events/events-api.model';
+import {GetEventByIdQueryDto, GetEventByIdQueryDtoPerformers} from '../../../../api-services/events/events-api.model';
+import {toTimeSlot} from '../../../../core/utils/DateUtilities/time-utils';
 
 @Injectable()
 export class EventsFormService {
@@ -41,14 +42,20 @@ export class EventsFormService {
         ]
       ],
       performers: this.fb.array(
-        event?.performers?.map(p =>
-          this.fb.group({
-            id: [p.id ?? 0],
-            performerId: [p.performerId],
-            timeStamp: [p.timeStamp]
-          })
-        ) ?? []
+        event?.performers?.map(p => this.createPerformerGroup(p)) ?? []
       )
+    });
+  }
+
+  /**
+   * One performer row. `timeStamp` is normalized to "HH:mm" so the value matches the
+   * time slot options — the API returns a TimeOnly as "HH:mm:ss".
+   */
+  createPerformerGroup(performer?: GetEventByIdQueryDtoPerformers): FormGroup {
+    return this.fb.group({
+      id: [performer?.id ?? 0],
+      performerId: [performer?.performerId ?? null, [Validators.required]],
+      timeStamp: [toTimeSlot(performer?.timeStamp), [Validators.required]]
     });
   }
 

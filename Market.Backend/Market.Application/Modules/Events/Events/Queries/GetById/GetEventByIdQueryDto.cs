@@ -20,6 +20,11 @@ public sealed class GetEventByIdQueryDto
 
 public sealed class GetEventByIdQueryDtoPerformers
 {
+    /// <summary>
+    /// Identifier of the performer-event row itself, so an edit can update the existing entry
+    /// instead of being treated as a new performer.
+    /// </summary>
+    public int Id { get; set; }
     public int PerformerId { get; set; }
     public TimeOnly TimeStamp { get; set; }
 }

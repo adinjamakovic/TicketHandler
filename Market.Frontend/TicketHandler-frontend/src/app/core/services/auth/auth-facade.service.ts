@@ -9,15 +9,15 @@ import { CurrentUserDto } from './current-user.dto';
 import { JwtPayloadDto } from './jwt-payload.dto';
 
 /**
- * Glavni auth servis (façade) nad Duende IdentityServerom.
- * - login/logout ide kroz OIDC authorization code + PKCE (redirect na IdentityServer)
- * - tokene drži angular-auth-oidc-client (storage + silent renew), ne mi
- * - dekodira access token i drži CurrentUser kao signal
+ * Main auth service (facade) over Duende IdentityServer.
+ * - login/logout goes through OIDC authorization code + PKCE (redirect to IdentityServer)
+ * - tokens are held by angular-auth-oidc-client (storage + silent renew), not by us
+ * - decodes the access token and keeps CurrentUser as a signal
  *
- * Koristi se u:
- * - interceptoru (getAccessToken)
- * - guardovima (isAuthenticated, isAdmin)
- * - komponentama (login, logout, navbar)
+ * Used in:
+ * - the interceptor (getAccessToken)
+ * - the guards (isAuthenticated, isAdmin)
+ * - components (login, logout, navbar)
  */
 @Injectable({ providedIn: 'root' })
 export class AuthFacadeService {
@@ -29,10 +29,10 @@ export class AuthFacadeService {
 
   private _currentUser = signal<CurrentUserDto | null>(null);
 
-  /** readonly signal za UI – čita se kao auth.currentUser() */
+  /** readonly signal for the UI - read as auth.currentUser() */
   currentUser = this._currentUser.asReadonly();
 
-  /** computed signali nad current userom */
+  /** computed signals over the current user */
   isAuthenticated = computed(() => !!this._currentUser());
   isAdmin = computed(() => this._currentUser()?.isAdmin ?? false);
   isOrganiser = computed(() => this._currentUser()?.IsOrganiser ?? false);
@@ -78,7 +78,7 @@ export class AuthFacadeService {
   }
 
   // =========================================================
-  // GETTERI ZA INTERCEPTOR
+  // GETTERS FOR THE INTERCEPTOR
   // =========================================================
 
   getAccessToken(): Observable<string> {
