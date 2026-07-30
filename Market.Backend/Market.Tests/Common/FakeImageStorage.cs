@@ -3,10 +3,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace Market.Tests.Common;
 
-/// <summary>
-/// In-memory <see cref="IImageStorage"/> that records what a handler asked it to do,
-/// so tests can assert on uploads/deletes without touching blob storage.
-/// </summary>
+
+// In-memory IImageStorage that records what a handler asked it to do,
+// so tests can assert on uploads/deletes without touching blob storage.
 public sealed class FakeImageStorage : IImageStorage
 {
     public const string PublicPrefix = "https://blobs.test/";

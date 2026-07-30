@@ -5,8 +5,8 @@ using Market.Tests.Common;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Time.Testing;
 
-namespace Market.Tests.EventTests.UnitTests;
-public sealed class EventsTestContext : IAsyncDisposable
+namespace Market.Tests.EventNewsTests.UnitTests;
+public sealed class EventNewsTestContext : IAsyncDisposable
 {
     public const int CountryId = 1;
     public const int SarajevoCityId = 1;
@@ -19,32 +19,30 @@ public sealed class EventsTestContext : IAsyncDisposable
     public const int OtherVenueId = 2;
     public const int EventTypeId = 1;
     public const int OtherEventTypeId = 2;
-    public const int PerformerId = 1;
-    public const int OtherPerformerId = 2;
+    public const int RockNightEventId = 1;
+    public const int SummerFestivalEventId = 2;
+    public const int RockNightNewsId = 1;
+    public const int RockNightSecondNewsId = 2;
+    public const int SummerFestivalNewsId = 3;
     public const int MissingId = 9999;
+    public const string SeededNewsImage = "event-news/seeded-news.png";
     private static readonly InMemoryDatabaseRoot Root = new();
     private readonly DbContextOptions<DatabaseContext> _options;
     private readonly List<DatabaseContext> _contexts = [];
     public DatabaseContext Db { get; }
     public FakeTimeProvider Clock { get; }
     public FakeImageStorage ImageStorage { get; } = new();
-    public DateTime FutureDate => DateTime.UtcNow.AddDays(30);
-    private EventsTestContext()
+
+    private EventNewsTestContext()
     {
         Clock = new FakeTimeProvider(new DateTimeOffset(2026, 1, 15, 12, 0, 0, TimeSpan.Zero));
 
         _options = new DbContextOptionsBuilder<DatabaseContext>()
-            .UseInMemoryDatabase($"events-{Guid.NewGuid()}", Root)
+            .UseInMemoryDatabase($"event-news-{Guid.NewGuid()}", Root)
             .EnableSensitiveDataLogging()
             .Options;
 
         Db = NewContext();
-    }
-    public static async Task<EventsTestContext> CreateAsync()
-    {
-        var ctx = new EventsTestContext();
-        await ctx.SeedAsync();
-        return ctx;
     }
     public DatabaseContext NewContext()
     {
@@ -52,7 +50,12 @@ public sealed class EventsTestContext : IAsyncDisposable
         _contexts.Add(context);
         return context;
     }
-
+    public static async Task<EventNewsTestContext> CreateAsync()
+    {
+        var ctx = new EventNewsTestContext();
+        await ctx.SeedAsync();
+        return ctx;
+    }
     private async Task SeedAsync()
     {
         Db.Countries.Add(new CountryEntity { Id = CountryId, Name = "Bosnia and Herzegovina", PhoneCode = "+387" });
@@ -71,13 +74,7 @@ public sealed class EventsTestContext : IAsyncDisposable
 
         Db.EventTypes.AddRange(
             new EventTypeEntity { Id = EventTypeId, Name = "Concert", IsEnabled = true },
-            new EventTypeEntity { Id = OtherEventTypeId, Name = "Theatre", IsEnabled = true });
-
-        Db.Genres.Add(new GenreEntity { Id = 1, Name = "Rock", Description = "Rock music" });
-
-        Db.Performers.AddRange(
-            new PerformerEntity { Id = PerformerId, GenreId = 1, Name = "Bijelo Dugme", Description = "Headliner" },
-            new PerformerEntity { Id = OtherPerformerId, GenreId = 1, Name = "Zabranjeno Pusenje", Description = "Support act" });
+            new EventTypeEntity { Id = OtherEventTypeId, Name = "Festival", IsEnabled = true });
 
         Db.Persons.AddRange(
             NewPerson(OrganizerUserId, "organiser.one"),
@@ -103,6 +100,57 @@ public sealed class EventsTestContext : IAsyncDisposable
                 Address = "Rade Bitange 5"
             });
 
+        Db.Events.AddRange(
+            new EventEntity
+            {
+                Id = RockNightEventId,
+                Name = "Rock Night Sarajevo",
+                Description = "Open air concert",
+                ScheduledDate = Clock.GetUtcNow().UtcDateTime.AddDays(30),
+                OrganizerId = OrganizerId,
+                VenueId = VenueId,
+                EventTypeId = EventTypeId
+            },
+            new EventEntity
+            {
+                Id = SummerFestivalEventId,
+                Name = "Mostar Summer Festival",
+                Description = "Three days of live music",
+                ScheduledDate = Clock.GetUtcNow().UtcDateTime.AddDays(60),
+                OrganizerId = OtherOrganizerId,
+                VenueId = OtherVenueId,
+                EventTypeId = OtherEventTypeId
+            });
+
+        Db.EventNews.AddRange(
+            new EventNewsEntity
+            {
+                Id = RockNightNewsId,
+                OrganizerId = OrganizerId,
+                EventId = RockNightEventId,
+                Header = "Doors open at 19:00",
+                Body = "Gates open one hour before the first act.",
+                Image = SeededNewsImage
+            },
+            new EventNewsEntity
+            {
+                Id = RockNightSecondNewsId,
+                OrganizerId = OrganizerId,
+                EventId = RockNightEventId,
+                Header = "Support act announced",
+                Body = "A local band joins the line-up.",
+                Image = null
+            },
+            new EventNewsEntity
+            {
+                Id = SummerFestivalNewsId,
+                OrganizerId = OtherOrganizerId,
+                EventId = SummerFestivalEventId,
+                Header = "Camping site is open",
+                Body = "The camping site opens the day before the festival.",
+                Image = null
+            });
+
         await Db.SaveChangesAsync(CancellationToken.None);
         Db.ChangeTracker.Clear();
     }
@@ -120,50 +168,43 @@ public sealed class EventsTestContext : IAsyncDisposable
         IsOrganiser = true,
         IsEnabled = true
     };
-    public async Task<EventEntity> AddEventAsync(
-        string name = "Seeded Event",
+
+    public async Task<EventNewsEntity> AddEventNewsAsync(
+        string header = "Seeded Event News",
+        string? body = "Seeded event news body",
         int organizerId = OrganizerId,
-        int venueId = VenueId,
-        int eventTypeId = EventTypeId,
-        DateTime? scheduledDate = null,
-        string? image = null,
-        params (int PerformerId, TimeOnly TimeStamp)[] performers)
+        int eventId = RockNightEventId,
+        string? image = null)
     {
         await using var seedContext = NewContext();
 
-        var entity = new EventEntity
+        var entity = new EventNewsEntity
         {
-            Name = name,
-            Description = $"{name} description",
-            ScheduledDate = scheduledDate ?? Clock.GetUtcNow().UtcDateTime.AddDays(30),
             OrganizerId = organizerId,
-            VenueId = venueId,
-            EventTypeId = eventTypeId,
+            EventId = eventId,
+            Header = header,
+            Body = body,
             Image = image
         };
 
-        seedContext.Events.Add(entity);
+        seedContext.EventNews.Add(entity);
         await seedContext.SaveChangesAsync(CancellationToken.None);
-
-        foreach (var (performerId, timeStamp) in performers)
-        {
-            seedContext.PerformerEvents.Add(new PerformerEventEntity
-            {
-                EventId = entity.Id,
-                PerformerId = performerId,
-                TimeStamp = timeStamp
-            });
-        }
-
-        if (performers.Length > 0)
-            await seedContext.SaveChangesAsync(CancellationToken.None);
 
         return entity;
     }
-    public async Task<List<PerformerEventEntity>> GetPerformerEventsAsync(int eventId)
+
+    public async Task<EventNewsEntity?> GetEventNewsAsync(int id)
     {
         await using var readContext = NewContext();
-        return await readContext.PerformerEvents
+        return await readContext.EventNews
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<List<EventNewsEntity>> GetEventNewsForEventAsync(int eventId)
+    {
+        await using var readContext = NewContext();
+        return await readContext.EventNews
             .AsNoTracking()
             .Where(x => x.EventId == eventId)
             .OrderBy(x => x.Id)

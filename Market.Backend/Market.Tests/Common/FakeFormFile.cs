@@ -2,10 +2,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Market.Tests.Common;
 
-/// <summary>
-/// Minimal <see cref="IFormFile"/> for multipart commands — only the members the
-/// validators and image storage actually read (<see cref="FileName"/> and <see cref="Length"/>).
-/// </summary>
+
+// Minimal IFormFilefor multipart commands
 public sealed class FakeFormFile : IFormFile
 {
     private readonly byte[] _content;

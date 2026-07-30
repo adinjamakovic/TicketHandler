@@ -69,9 +69,8 @@ public class UpdateEventCommandValidatorTests
         Assert.Contains("Description must be 2000 characters or fewer.", ErrorsFor(_validator, command, nameof(UpdateEventCommand.Description)));
     }
 
-    /// <summary>
-    /// Unlike create, an update may legitimately touch an event that has already happened.
-    /// </summary>
+    
+    // Unlike create, an update may legitimately touch an event that has already happened.
     [Fact]
     public void Validate_WithPastScheduledDate_Passes()
     {

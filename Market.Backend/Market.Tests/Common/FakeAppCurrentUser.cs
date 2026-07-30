@@ -2,9 +2,7 @@ using Market.Application.Abstractions;
 
 namespace Market.Tests.Common;
 
-/// <summary>
-/// Stand-in for <see cref="IAppCurrentUser"/> so handlers can be exercised without an HTTP context.
-/// </summary>
+// Stand-in for IAppCurrentUser so handlers can be exercised without an HTTP context.
 public sealed class FakeAppCurrentUser : IAppCurrentUser
 {
     public int? UserId { get; init; }

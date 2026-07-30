@@ -13,10 +13,6 @@ public class ListEventsQueryHandlerTests
     private static ListEventsQueryHandler CreateHandler(EventsTestContext ctx, FakeAppCurrentUser currentUser) =>
         new(ctx.Db, currentUser, ctx.ImageStorage);
 
-    /// <summary>
-    /// Three events: two for the primary organizer (Sarajevo / Concert and Mostar / Theatre)
-    /// and one for the competing organizer.
-    /// </summary>
     private static async Task SeedCatalogueAsync(EventsTestContext ctx)
     {
         await ctx.AddEventAsync(
