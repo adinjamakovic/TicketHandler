@@ -82,6 +82,11 @@
         <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.SETTINGS' | translate }}</span>
       </a>
 
+      <a mat-list-item routerLink="/admin/dashboard" routerLinkActive="active">
+        <mat-icon matListItemIcon>dashboard</mat-icon>
+        <span matListItemTitle>{{ 'ADMIN_PANEL.MENU.DASHBOARD' | translate }}</span>
+      </a>
+
       <!-- LOGOUT -->
       <a mat-list-item routerLink="/auth/logout" routerLinkActive="active" class="logout-item">
         <mat-icon matListItemIcon>logout</mat-icon>
