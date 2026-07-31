@@ -38,6 +38,28 @@
       "SETTINGS": "Settings",
       "DASHBOARD": "Dashboard",
       "LOGOUT": "Logout"
+    },
+    "SETTINGS": {
+      "TITLE": "Settings",
+      "PERSONAL_SECTION": "Personal information",
+      "CONTACT_SECTION": "Contact",
+      "SECURITY_SECTION": "Security",
+      "FIRST_NAME": "First Name",
+      "LAST_NAME": "Last Name",
+      "BIRTH_DATE": "Birth date",
+      "GENDER": "Gender",
+      "CITY": "City",
+      "ADDRESS": "Address",
+      "PHONE": "Phone",
+      "EMAIL": "E-Mail",
+      "NEW_PASSWORD": "New Password",
+      "CONFIRM_PASSWORD": "Confirm New Password",
+      "PASSWORD_OPTIONAL": "Leave blank to keep your current password",
+      "PASSWORD_HINT": "At least 8 characters with uppercase, lowercase, number, and special character",
+      "SAVE": "Save changes",
+      "RESET": "Reset",
+      "LOADING": "Loading your settings",
+      "SAVING": "Saving your settings"
     }
   },
   "ORGANIZER_PANEL": {

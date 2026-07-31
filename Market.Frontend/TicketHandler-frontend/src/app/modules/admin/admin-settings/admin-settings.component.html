@@ -1,1 +1,213 @@
-<p>admin-settings works!</p>
+<div class="container">
+
+  <div class="header-card mat-elevation-z2">
+    <h1>{{ 'ADMIN_PANEL.SETTINGS.TITLE' | translate }}</h1>
+  </div>
+
+  <div class="form-card mat-elevation-z2">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" *ngIf="form">
+      <div *ngIf="errorMessage" class="error-banner">
+        <mat-icon>error</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+
+      <div *ngIf="isLoading" class="loading-overlay">
+        <mat-spinner diameter="50"></mat-spinner>
+        <p>{{ 'ADMIN_PANEL.SETTINGS.SAVING' | translate }}</p>
+      </div>
+
+      <div class="account-summary">
+        <div class="account-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+        <div class="account-details">
+          <div class="account-name">{{ accountName }}</div>
+          <div class="account-email">{{ accountEmail }}</div>
+        </div>
+        <mat-chip class="role-chip">
+          <mat-icon>admin_panel_settings</mat-icon>
+          {{ 'ADMIN_PANEL.ROLES.ADMIN' | translate }}
+        </mat-chip>
+      </div>
+
+      <div class="section-title">
+        <h2>{{ 'ADMIN_PANEL.SETTINGS.PERSONAL_SECTION' | translate }}</h2>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.FIRST_NAME' | translate }}</mat-label>
+          <input matInput formControlName="firstName" [placeholder]="'John/Jane'"/>
+          <mat-error *ngIf="hasError('firstName')">
+            {{ getErrorMessage('firstName') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.LAST_NAME' | translate }}</mat-label>
+          <input matInput formControlName="lastName" [placeholder]="'Doe'"/>
+          <mat-error *ngIf="hasError('lastName')">
+            {{ getErrorMessage('lastName') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'ADMIN_PANEL.SETTINGS.BIRTH_DATE' | translate }}</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="birthDate" readonly (click)="picker.open()" (keyup.enter)="picker.open()">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="hasError('birthDate')">
+          {{ getErrorMessage('birthDate') }}
+        </mat-error>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.GENDER' | translate }}</mat-label>
+          <mat-select formControlName="gender">
+            <mat-option *ngFor="let gender of genders" [value]="gender">
+              {{ gender }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>biotech</mat-icon>
+          <mat-error *ngIf="hasError('gender')">
+            {{ getErrorMessage('gender') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.CITY' | translate }}</mat-label>
+          <mat-select formControlName="cityId">
+            <mat-option *ngFor="let city of cities" [value]="city.id">
+              {{ city.name }}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>location_on</mat-icon>
+          <mat-error *ngIf="hasError('cityId')">
+            {{ getErrorMessage('cityId') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ 'ADMIN_PANEL.SETTINGS.ADDRESS' | translate }}</mat-label>
+        <input matInput formControlName="address" [placeholder]="'Privet Drive 4'"/>
+        <mat-icon matSuffix>location_on</mat-icon>
+        <mat-error *ngIf="hasError('address')">
+          {{ getErrorMessage('address') }}
+        </mat-error>
+      </mat-form-field>
+
+      <!-- CONTACT -->
+      <div class="section-title">
+        <h2>{{ 'ADMIN_PANEL.SETTINGS.CONTACT_SECTION' | translate }}</h2>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.PHONE' | translate }}</mat-label>
+          <input matInput formControlName="phone" [placeholder]="'+XXXXXXXXXX'"/>
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error *ngIf="hasError('phone')">
+            {{ getErrorMessage('phone') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.EMAIL' | translate }}</mat-label>
+          <input matInput formControlName="email" [placeholder]="'jane.doe@some.organization'"/>
+          <mat-icon matSuffix>mail</mat-icon>
+          <mat-error *ngIf="hasError('email')">
+            {{ getErrorMessage('email') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="section-title">
+        <h2>{{ 'ADMIN_PANEL.SETTINGS.SECURITY_SECTION' | translate }}</h2>
+        <span class="section-subtitle">
+          {{ 'ADMIN_PANEL.SETTINGS.PASSWORD_OPTIONAL' | translate }}
+        </span>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.NEW_PASSWORD' | translate }}</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            [placeholder]="'••••••••'"
+            autocomplete="new-password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-hint>{{ 'ADMIN_PANEL.SETTINGS.PASSWORD_HINT' | translate }}</mat-hint>
+          <mat-error *ngIf="hasError('password')">
+            {{ getErrorMessage('password') }}
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>{{ 'ADMIN_PANEL.SETTINGS.CONFIRM_PASSWORD' | translate }}</mat-label>
+          <input
+            matInput
+            formControlName="passwordCheck"
+            [type]="hidePasswordCheck ? 'password' : 'text'"
+            [placeholder]="'••••••••'"
+            autocomplete="new-password"
+          />
+          <mat-icon matPrefix>lock</mat-icon>
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePasswordCheck = !hidePasswordCheck"
+            [attr.aria-label]="hidePasswordCheck ? 'Show password' : 'Hide password'"
+          >
+            <mat-icon>{{ hidePasswordCheck ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="hasError('passwordCheck')">
+            {{ getErrorMessage('passwordCheck') }}
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" mat-stroked-button (click)="onReset()" [disabled]="isLoading">
+          <mat-icon>restart_alt</mat-icon>
+          {{ 'ADMIN_PANEL.SETTINGS.RESET' | translate }}
+        </button>
+
+        <button
+          type="submit"
+          mat-raised-button
+          color="primary"
+          [disabled]="form.invalid || isLoading"
+        >
+          <mat-icon>save</mat-icon>
+          {{ 'ADMIN_PANEL.SETTINGS.SAVE' | translate }}
+        </button>
+      </div>
+    </form>
+
+    <div *ngIf="!form && !errorMessage" class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
+      <p>{{ 'ADMIN_PANEL.SETTINGS.LOADING' | translate }}</p>
+    </div>
+
+    <div *ngIf="!form && errorMessage" class="error-banner">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage }}</span>
+    </div>
+  </div>
+</div>
