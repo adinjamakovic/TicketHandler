@@ -1,4 +1,5 @@
 using Market.Application.Modules.Identity.Person.Commands.Create;
+using Market.Application.Modules.Identity.Person.Commands.Update;
 using Market.Application.Modules.Identity.Person.Queries.GetById;
 using Market.Application.Modules.Sales.TicketTypes.Commands.Create;
 using Market.Application.Modules.Sales.TicketTypes.Commands.Delete;
@@ -25,7 +26,14 @@ public class PersonController(ISender sender) : ApiControllerBase(sender)
     public async Task<GetPersonByIdQueryDto> GetById(int id, CancellationToken ct)
     {
         var Person = await SendTraced(new GetPersonByIdQuery { Id = id }, ct);
-    
+
         return Person;
+    }
+
+    [HttpPut("{id:int}")]
+    public async Task Update(int id, UpdatePersonCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await SendTraced(command, ct);
     }
 }

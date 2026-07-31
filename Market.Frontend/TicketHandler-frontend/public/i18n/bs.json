@@ -40,6 +40,28 @@
       "SETTINGS": "Postavke",
       "DASHBOARD": "Podatkovna tabla",
       "LOGOUT": "Odjava"
+    },
+    "SETTINGS": {
+      "TITLE": "Postavke",
+      "PERSONAL_SECTION": "Lični podaci",
+      "CONTACT_SECTION": "Kontakt",
+      "SECURITY_SECTION": "Sigurnost",
+      "FIRST_NAME": "Ime",
+      "LAST_NAME": "Prezime",
+      "BIRTH_DATE": "Datum rođenja",
+      "GENDER": "Spol",
+      "CITY": "Grad",
+      "ADDRESS": "Adresa",
+      "PHONE": "Telefon",
+      "EMAIL": "E-Mail",
+      "NEW_PASSWORD": "Nova lozinka",
+      "CONFIRM_PASSWORD": "Potvrdi novu lozinku",
+      "PASSWORD_OPTIONAL": "Ostavite prazno da zadržite trenutnu lozinku",
+      "PASSWORD_HINT": "Najmanje 8 znakova, s velikim i malim slovom, brojem i posebnim znakom",
+      "SAVE": "Sačuvaj promjene",
+      "RESET": "Poništi",
+      "LOADING": "Učitavanje postavki",
+      "SAVING": "Spašavanje postavki"
     }
   },
   "ORGANIZER_PANEL": {

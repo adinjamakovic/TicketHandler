@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreatePersonCommand, GetPersonByIdQueryDto } from './person.api.model';
+import { CreatePersonCommand, GetPersonByIdQueryDto, UpdatePersonCommand } from './person.api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -21,5 +21,9 @@ export class PersonApiService {
     //POST /Person
     create(payload: CreatePersonCommand): Observable<number>{
       return this.http.post<number>(this.baseUrl, payload);
+    }
+
+    update(id: number, payload: UpdatePersonCommand): Observable<void>{
+      return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
     }
 }

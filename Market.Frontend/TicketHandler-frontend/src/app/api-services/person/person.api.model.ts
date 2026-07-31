@@ -11,6 +11,7 @@ export interface GetPersonByIdQueryDto {
   address:string;
   gender:string;
   phone:string;
+  email:string;
 }
 
 // ================================================
@@ -31,4 +32,16 @@ export interface CreatePersonCommand {
   isAdmin: boolean;
   isOrganiser: boolean;
   isUser: boolean
+}
+
+export interface UpdatePersonCommand {
+  firstName: string;
+  lastName: string;
+  birthDate: string;
+  cityId: number;
+  address: string;
+  gender: string;
+  phone: string;
+  email: string;
+  password?: string | null;
 }

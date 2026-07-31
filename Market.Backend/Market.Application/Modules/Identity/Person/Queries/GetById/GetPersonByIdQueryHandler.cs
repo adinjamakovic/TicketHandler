@@ -21,7 +21,8 @@ namespace Market.Application.Modules.Identity.Person.Queries.GetById
                     CityId=x.CityId,
                     Address=x.Address,
                     Gender=x.Gender,
-                    Phone=x.Phone
+                    Phone=x.Phone,
+                    Email=x.Email
                 })
                 .FirstOrDefaultAsync(ct);
             if (Person is null)
