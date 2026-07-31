@@ -18,6 +18,7 @@ import { OrganizersComponent } from './organizers/organizers.component';
 import { OrganizersAddComponent } from './organizers/organizers-add/organizers-add.component';
 import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
 import { EventsComponent } from './events/events.component';
+import { DasboardComponent } from './dasboard/dasboard.component';
 
 
 
@@ -37,6 +38,7 @@ import { EventsComponent } from './events/events.component';
     OrganizersAddComponent,
     OrganizersEditComponent,
     EventsComponent,
+    DasboardComponent,
   ],
   imports: [
     AdminRoutingModule,

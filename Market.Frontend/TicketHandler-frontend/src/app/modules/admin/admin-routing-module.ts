@@ -12,6 +12,7 @@ import { OrganizersComponent } from './organizers/organizers.component';
 import {OrganizersAddComponent} from './organizers/organizers-add/organizers-add.component';
 import { OrganizersEditComponent } from './organizers/organizers-edit/organizers-edit.component';
 import { EventsComponent } from './events/events.component';
+import { DasboardComponent } from './dasboard/dasboard.component';
 
 
 const routes: Routes = [
@@ -36,6 +37,15 @@ const routes: Routes = [
       {
         path: 'events',
         component: EventsComponent
+      },
+      // SYSTEM
+      {
+        path: 'settings',
+        component: AdminSettingsComponent
+      },
+      {
+        path: 'dashboard',
+        component: DasboardComponent
       },
 
       // default admin route → /admin/organizers

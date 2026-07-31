@@ -1,0 +1,43 @@
+<div class="container">
+  <!-- Header card -->
+  <div class="header-card mat-elevation-z2">
+    <div class="header-card-content">
+      <h1>Dashboard</h1>
+
+      <div class="actions-container">
+        <button mat-raised-button color="primary" (click)="loadDashboard()" [disabled]="isLoading">
+          <mat-icon>refresh</mat-icon>
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="loading">
+    Loading dashboard...
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+
+  <div class="stats-grid" *ngIf="!isLoading && !errorMessage && dashboard">
+    <div class="stat-card" *ngFor="let stat of stats" [ngClass]="'stat-card--' + stat.variant">
+      <div class="stat-card__icon">
+        <mat-icon>{{ stat.icon }}</mat-icon>
+      </div>
+
+      <div class="stat-card__body">
+        <span class="stat-card__label">{{ stat.label }}</span>
+        <span class="stat-card__value">
+          <ng-container *ngIf="stat.isCurrency; else plainValue">
+            {{ statValue(stat) | currency:'BAM':'symbol':'1.2-2' }}
+          </ng-container>
+          <ng-template #plainValue>
+            {{ statValue(stat) | number }}
+          </ng-template>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
