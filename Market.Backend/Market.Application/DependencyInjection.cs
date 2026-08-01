@@ -24,6 +24,7 @@ public static class DependencyInjection
         // TimeProvider — if used by handlers
         services.AddSingleton(TimeProvider.System);
 
+        services.AddScoped<IImageCompressor, ImageCompressor>();
         services.AddScoped<IImageStorage, ImageStorage>();
 
         return services;
