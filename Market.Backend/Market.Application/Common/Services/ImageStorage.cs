@@ -10,10 +10,12 @@ public sealed class ImageStorage : IImageStorage
 {
     private const string ContainerName = "uploads";
     private readonly BlobServiceClient _client;
+    private readonly IImageCompressor _compressor;
 
-    public ImageStorage(BlobServiceClient client)
+    public ImageStorage(BlobServiceClient client, IImageCompressor compressor)
     {
         _client = client;
+        _compressor = compressor;
     }
 
     private static string GetCategoryFolder(ImageStorageCategory category) => category switch
@@ -38,16 +40,19 @@ public sealed class ImageStorage : IImageStorage
                 "image.invalid",
                 "Image must be a JPG, PNG, WEBP, or GIF file.");
 
+        // Downscale/re-encode first — the container only ever receives web-sized bytes, and the
+        // extension/content type come from the compressor since re-encoding can change the format.
+        await using var compressed = await _compressor.CompressAsync(image, ct);
+
         var container = _client.GetBlobContainerClient(ContainerName);
         await container.CreateIfNotExistsAsync(cancellationToken: ct);
 
-        var blobName = $"{GetCategoryFolder(category)}/{Guid.NewGuid()}{extension}";
+        var blobName = $"{GetCategoryFolder(category)}/{Guid.NewGuid()}{compressed.Extension}";
         var blob = container.GetBlobClient(blobName);
 
-        await using var stream = image.OpenReadStream();
-        await blob.UploadAsync(stream, new BlobUploadOptions
+        await blob.UploadAsync(compressed.Content, new BlobUploadOptions
         {
-            HttpHeaders = new BlobHttpHeaders { ContentType = image.ContentType }
+            HttpHeaders = new BlobHttpHeaders { ContentType = compressed.ContentType }
         }, ct);
 
         return blobName;
