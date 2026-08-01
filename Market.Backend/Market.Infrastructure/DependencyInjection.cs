@@ -49,6 +49,13 @@ public static class DependencyInjection
             .ValidateDataAnnotations()
             .ValidateOnStart();
 
+        // Consumed by the Application layer's ImageCompressor; bound here because this is where
+        // configuration is available.
+        services.AddOptions<ImageCompressionOptions>()
+            .Bind(configuration.GetSection(ImageCompressionOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
         services.AddHttpClient<IAiCompletionService, OpenAiCompletionService>((sp, client) =>
         {
             var openAi = sp.GetRequiredService<IOptions<OpenAiOptions>>().Value;
