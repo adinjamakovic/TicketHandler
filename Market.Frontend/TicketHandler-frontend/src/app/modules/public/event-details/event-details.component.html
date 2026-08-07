@@ -75,8 +75,13 @@
               >
                 {{ ticket.quantityInStock > 0 ? ticket.quantityInStock + ' available' : 'Sold out' }}
               </span>
-              <button mat-flat-button class="ticket-card__cta" [disabled]="ticket.quantityInStock === 0">
-                Select
+              <button
+                mat-flat-button
+                class="ticket-card__cta"
+                [disabled]="ticket.quantityInStock === 0 || addingTicketId === ticket.id"
+                (click)="selectTicket(ticket)"
+              >
+                {{ addingTicketId === ticket.id ? 'Adding…' : 'Select' }}
               </button>
             </div>
           </div>

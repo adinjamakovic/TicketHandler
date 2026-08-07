@@ -5,6 +5,9 @@ import { GetEventByIdQueryDto, ListEventsQueryDto } from '../../../api-services/
 import { TicketsApiService } from '../../../api-services/tickets/tickets-api.service';
 import { ListTicketsQueryDto } from '../../../api-services/tickets/tickets-api.model';
 import { ToasterService } from '../../../core/services/toaster.service';
+import { CartService } from '../../../core/services/cart/cart.service';
+import { CurrentUserService } from '../../../core/services/auth/current-user.service';
+import { AuthFacadeService } from '../../../core/services/auth/auth-facade.service';
 
 @Component({
   selector: 'app-event-details',
@@ -23,7 +26,10 @@ export class EventDetailsComponent implements OnInit {
   relatedLoading = true;
   notFound = false;
   showQrDialog = false;
-  
+
+  /** Ticket currently being written to the cart — keeps its Select button busy. */
+  addingTicketId: number | null = null;
+
   get currentUrl(): string {
     return window.location.href;
   }
@@ -34,6 +40,9 @@ export class EventDetailsComponent implements OnInit {
   private ticketsApi = inject(TicketsApiService);
   private toaster = inject(ToasterService);
   private cdr = inject(ChangeDetectorRef);
+  private cart = inject(CartService);
+  private currentUser = inject(CurrentUserService);
+  private auth = inject(AuthFacadeService);
 
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => {
@@ -55,6 +64,42 @@ export class EventDetailsComponent implements OnInit {
 
   closeQrDialog(): void {
     this.showQrDialog = false;
+  }
+
+  /**
+   * "Select" on a ticket card. The cart lives on the server, so an anonymous
+   * visitor is sent to login first and comes back to this page afterwards.
+   */
+  selectTicket(ticket: ListTicketsQueryDto): void {
+    if (!this.currentUser.isAuthenticated()) {
+      this.toaster.info('Log in to add tickets to your cart');
+      this.auth.redirectToLogin();
+      return;
+    }
+
+    if (ticket.quantityInStock === 0 || this.addingTicketId !== null) {
+      return;
+    }
+
+    this.addingTicketId = ticket.id;
+    this.cdr.markForCheck();
+
+    this.cart.add(ticket.id).subscribe({
+      next: () => {
+        this.addingTicketId = null;
+        this.toaster.success(`${ticket.ticketType.name} added to your cart`);
+        this.cdr.markForCheck();
+      },
+      error: err => {
+        this.addingTicketId = null;
+        this.toaster.error(err?.error?.message ?? 'Could not add the ticket to your cart');
+        this.cdr.markForCheck();
+      },
+    });
+  }
+
+  goToCart(): void {
+    this.router.navigate(['/client/cart']);
   }
 
   onRelatedEventSelected(event: ListEventsQueryDto): void {

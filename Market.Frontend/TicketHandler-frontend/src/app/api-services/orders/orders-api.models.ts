@@ -181,17 +181,17 @@ export type ListOrdersWithItemsResponse = PageResult<ListOrdersWithItemsQueryDto
  * Order item for create command
  */
 export interface CreateOrderCommandItem {
-  productId: number;
+  ticketId: number;
   quantity: number;
 }
 
 /**
  * Command for POST /Orders
  * Corresponds to: CreateOrderCommand.cs
+ * The person is resolved from the token on the backend.
  */
 export interface CreateOrderCommand {
-  note?: string | null;
-  items?: CreateOrderCommandItem[];
+  orderItems: CreateOrderCommandItem[];
 }
 
 /**
