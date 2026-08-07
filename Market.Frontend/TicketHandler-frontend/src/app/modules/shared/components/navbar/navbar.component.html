@@ -9,6 +9,14 @@
       </nav>
       <div class="navbar__actions">
         <a class="sell">Sell your tickets</a>
+
+        <button type="button" class="cart-link" (click)="goToCart()" aria-label="Cart">
+          <mat-icon>shopping_cart</mat-icon>
+          @if (cartCount() > 0) {
+            <span class="cart-link__badge">{{ cartCount() }}</span>
+          }
+        </button>
+
         <mat-icon>person_outline</mat-icon>
         @if (currentUser(); as user) {
           <button type="button" class="auth-link user-menu" [matMenuTriggerFor]="userMenu">
