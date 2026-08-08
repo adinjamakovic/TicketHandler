@@ -58,7 +58,7 @@ public sealed class EventNewsTestContext : IAsyncDisposable
     }
     private async Task SeedAsync()
     {
-        Db.Countries.Add(new CountryEntity { Id = CountryId, Name = "Bosnia and Herzegovina", PhoneCode = "+387" });
+        Db.Countries.Add(new CountryEntity { Id = CountryId, Name = "Bosnia and Herzegovina", IsoCode = "BA", PhoneCode = "+387" });
 
         Db.Cities.AddRange(
             new CityEntity { Id = SarajevoCityId, CountryId = CountryId, Name = "Sarajevo", PostalCode = "71000" },
