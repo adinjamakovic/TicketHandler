@@ -31,5 +31,6 @@ public interface IAppDbContext
     DbSet<OrderItemEntity> OrderItems { get; }
     DbSet<TicketsEntity> Tickets { get; }
     DbSet<TicketTypeEntity> TicketTypes { get; }
+    DbSet<TransactionEntity> Transactions { get; }
     Task<int> SaveChangesAsync(CancellationToken ct);
 }

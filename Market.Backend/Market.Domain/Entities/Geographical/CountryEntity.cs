@@ -17,6 +17,11 @@ namespace Market.Domain.Entities.Geographical
         /// </summary>
         public string Name { get; set; }
         /// <summary>
+        /// ISO 3166-1 alpha-2 code (e.g. "BA"), used by payment providers
+        /// such as Stripe for billing addresses
+        /// </summary>
+        public string IsoCode { get; set; }
+        /// <summary>
         /// Country flag image
         /// </summary>
         public string? Flag { get; set; }
