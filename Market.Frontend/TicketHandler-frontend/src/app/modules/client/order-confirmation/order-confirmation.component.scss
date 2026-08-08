@@ -1,0 +1,121 @@
+$purple: #7b1fa2;
+$bg-page: #f5f0fa;
+$card-bg: #ffffff;
+$text-main: #1c1c1c;
+$text-muted: #666;
+$success: #2e7d32;
+$pending: #ef6c00;
+$danger: #c62828;
+
+.confirmation-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $bg-page;
+}
+
+.confirmation {
+  flex: 1;
+  padding: 64px 24px;
+
+  &__container {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  &__loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 60px 0;
+    color: $text-muted;
+  }
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  background: $card-bg;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 40px 28px;
+  border-top: 4px solid $purple;
+
+  &--success {
+    border-top-color: $success;
+  }
+
+  &--pending {
+    border-top-color: $pending;
+  }
+
+  &--failed {
+    border-top-color: $danger;
+  }
+
+  &__icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 12px;
+
+    &--success {
+      color: $success;
+    }
+
+    &--pending {
+      color: $pending;
+    }
+
+    &--failed {
+      color: $danger;
+    }
+  }
+
+  &__title {
+    margin: 0 0 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-main;
+  }
+
+  &__text {
+    margin: 0;
+    max-width: 420px;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    color: $text-muted;
+  }
+
+  &__action {
+    margin-top: 26px !important;
+    min-width: 200px;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    height: 44px;
+  }
+}
+
+.details {
+  width: 100%;
+  max-width: 340px;
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 0.9rem;
+    color: $text-muted;
+
+    strong {
+      color: $text-main;
+    }
+  }
+}

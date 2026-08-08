@@ -164,36 +164,42 @@ public static class DynamicDataSeeder
                 new CountryEntity
                 {
                     Name = "Bosnia and Herzegovina",
+                    IsoCode = "BA",
                     PhoneCode = "+387",
                     CreatedAtUtc = DateTime.UtcNow
                 },
                 new CountryEntity
                 {
                     Name = "United States of America",
+                    IsoCode = "US",
                     PhoneCode = "+1",
                     CreatedAtUtc = DateTime.UtcNow
                 },
                 new CountryEntity
                 {
                     Name = "Sweden",
+                    IsoCode = "SE",
                     PhoneCode = "+46",
                     CreatedAtUtc = DateTime.UtcNow
                 },
                 new CountryEntity
                 {
                     Name = "Slovenia",
+                    IsoCode = "SI",
                     PhoneCode = "+386",
                     CreatedAtUtc = DateTime.UtcNow
                 },
                 new CountryEntity
                 {
                     Name = "Oman",
+                    IsoCode = "OM",
                     PhoneCode = "+968",
                     CreatedAtUtc = DateTime.UtcNow
                 },
                 new CountryEntity
                 {
                     Name = "Croatia",
+                    IsoCode = "HR",
                     PhoneCode = "+385",
                     CreatedAtUtc = DateTime.UtcNow
                 }

@@ -1,0 +1,91 @@
+<div class="confirmation-page">
+
+  <app-navbar/>
+
+  <section class="confirmation">
+    <div class="confirmation__container">
+
+      <div class="confirmation__loading" *ngIf="isLoading">
+        <mat-spinner diameter="44"></mat-spinner>
+        <p>Confirming your payment…</p>
+      </div>
+
+      <ng-container *ngIf="!isLoading">
+
+        <!-- ============ Paid ============ -->
+        <div class="panel panel--success" *ngIf="result?.isPaid">
+          <mat-icon class="panel__icon panel__icon--success">check_circle</mat-icon>
+          <h1 class="panel__title">Payment received</h1>
+          <p class="panel__text">
+            Your tickets are confirmed. A receipt is on its way to your email.
+          </p>
+
+          <div class="details">
+            <div class="details__row">
+              <span>Order</span>
+              <strong>#{{ result?.orderId }}</strong>
+            </div>
+            <div class="details__row">
+              <span>Amount paid</span>
+              <strong>{{ result?.amount | currency:currency:'symbol':'1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <button mat-flat-button class="panel__action" (click)="backToEvents()">
+            Browse more events
+          </button>
+        </div>
+
+        <!-- ============ Still settling ============ -->
+        <div class="panel panel--pending" *ngIf="isPending">
+          <mat-icon class="panel__icon panel__icon--pending">hourglass_top</mat-icon>
+          <h1 class="panel__title">Payment in progress</h1>
+          <p class="panel__text">
+            Your bank has not finished processing this payment yet. We will confirm your
+            order as soon as it clears — no need to pay again.
+          </p>
+
+          <div class="details">
+            <div class="details__row">
+              <span>Order</span>
+              <strong>#{{ result?.orderId }}</strong>
+            </div>
+          </div>
+
+          <button mat-stroked-button class="panel__action" (click)="retry()">
+            Check again
+          </button>
+        </div>
+
+        <!-- ============ Not paid ============ -->
+        <div class="panel panel--failed" *ngIf="isFailed">
+          <mat-icon class="panel__icon panel__icon--failed">cancel</mat-icon>
+          <h1 class="panel__title">Payment not completed</h1>
+          <p class="panel__text">
+            {{ result?.failureMessage ?? 'Your card was not charged. You can try again with a different payment method.' }}
+          </p>
+
+          <button mat-flat-button class="panel__action" (click)="backToCheckout()">
+            Back to checkout
+          </button>
+        </div>
+
+        <!-- ============ Could not check ============ -->
+        <div class="panel panel--failed" *ngIf="errorMessage">
+          <mat-icon class="panel__icon panel__icon--failed">error_outline</mat-icon>
+          <h1 class="panel__title">We couldn't confirm your payment</h1>
+          <p class="panel__text">{{ errorMessage }}</p>
+
+          <button mat-stroked-button class="panel__action" (click)="retry()">
+            Try again
+          </button>
+        </div>
+
+      </ng-container>
+
+    </div>
+  </section>
+
+  <app-footer/>
+
+</div>

@@ -43,8 +43,16 @@ namespace Market.Domain.Entities.CustomerRelationship
         /// </summary>
         public OrderEntity Order { get; set; }
         /// <summary>
-        /// Used for stripe payment
+        /// Id of the Stripe PaymentIntent this transaction settles (pi_...).
+        /// Every payment attempt is looked up by this value, both when the browser
+        /// reports back and when the Stripe webhook arrives.
         /// </summary>
         public string StripeToken { get; set; }
+        /// <summary>
+        /// Concurrency token. The browser and the Stripe webhook can report the same
+        /// successful payment at the same time; this makes sure only one of them gets to
+        /// take the tickets out of stock.
+        /// </summary>
+        public byte[]? RowVersion { get; set; }
     }
 }

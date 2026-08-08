@@ -192,6 +192,7 @@ export interface CreateOrderCommandItem {
  */
 export interface CreateOrderCommand {
   orderItems: CreateOrderCommandItem[];
+  note?: string | null;
 }
 
 /**
