@@ -1,4 +1,5 @@
 ﻿using Market.Application.Abstractions;
+using Market.Application.Abstractions.Payments;
 using Market.Infrastructure.Common;
 using Market.Infrastructure.Database;
 using Market.Shared.Constants;
@@ -55,6 +56,13 @@ public static class DependencyInjection
             .Bind(configuration.GetSection(ImageCompressionOptions.SectionName))
             .ValidateDataAnnotations()
             .ValidateOnStart();
+
+        // Stripe. Bound without ValidateOnStart so the API still boots with empty keys —
+        // only the checkout endpoints fail, and they say why.
+        services.AddOptions<StripeOptions>()
+            .Bind(configuration.GetSection(StripeOptions.SectionName));
+
+        services.AddScoped<IPaymentGateway, StripePaymentGateway>();
 
         services.AddHttpClient<IAiCompletionService, OpenAiCompletionService>((sp, client) =>
         {

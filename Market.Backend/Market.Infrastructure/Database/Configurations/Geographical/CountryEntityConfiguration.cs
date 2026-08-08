@@ -18,6 +18,11 @@ namespace Market.Infrastructure.Database.Configurations.Geographical
             b.Property(x => x.Name)
                 .IsRequired();
 
+            b.Property(x => x.IsoCode)
+                .IsRequired()
+                .HasMaxLength(2)
+                .IsFixedLength();
+
             b.HasMany(x => x.Cities)
                 .WithOne(x => x.Country)
                 .HasForeignKey(x => x.CountryId)

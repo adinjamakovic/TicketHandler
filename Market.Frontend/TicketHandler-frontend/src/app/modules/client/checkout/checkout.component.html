@@ -1,0 +1,251 @@
+<div class="checkout-page">
+
+  <app-navbar/>
+
+  <section class="checkout">
+    <div class="checkout__container">
+
+      <div class="checkout__heading">
+        <button mat-button class="checkout__back" (click)="backToCart()">
+          <mat-icon>arrow_back</mat-icon>
+          Back to cart
+        </button>
+        <h1 class="section-title">Checkout</h1>
+      </div>
+
+      <div class="checkout__loading" *ngIf="isLoading() && isEmpty()">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <form
+        class="checkout__grid"
+        *ngIf="!isEmpty()"
+        [formGroup]="form"
+        (ngSubmit)="submit()"
+        novalidate
+      >
+
+        <div class="checkout__main">
+
+          <!-- ============ Contact ============ -->
+          <div class="panel">
+            <h2 class="panel__title">
+              <mat-icon>person_outline</mat-icon>
+              Contact details
+            </h2>
+
+            <div class="field-grid">
+              <mat-form-field appearance="outline">
+                <mat-label>First name</mat-label>
+                <input matInput formControlName="firstName" autocomplete="given-name" required/>
+                <mat-error *ngIf="hasError('firstName', 'required')">First name is required</mat-error>
+                <mat-error *ngIf="hasError('firstName', 'maxlength')">First name is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Last name</mat-label>
+                <input matInput formControlName="lastName" autocomplete="family-name" required/>
+                <mat-error *ngIf="hasError('lastName', 'required')">Last name is required</mat-error>
+                <mat-error *ngIf="hasError('lastName', 'maxlength')">Last name is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" autocomplete="email" required/>
+                <mat-hint>Your tickets will be sent here</mat-hint>
+                <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+                <mat-error *ngIf="hasError('email', 'email')">Enter a valid email address</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput type="tel" formControlName="phone" autocomplete="tel" required/>
+                <mat-error *ngIf="hasError('phone', 'required')">Phone number is required</mat-error>
+                <mat-error *ngIf="hasError('phone', 'maxlength')">Phone number is too long</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- ============ Billing address ============ -->
+          <div class="panel">
+            <h2 class="panel__title">
+              <mat-icon>home_outlined</mat-icon>
+              Billing address
+            </h2>
+
+            <div class="field-grid">
+              <mat-form-field appearance="outline" class="field-grid__full">
+                <mat-label>Address line 1</mat-label>
+                <input matInput formControlName="addressLine1" autocomplete="address-line1" required/>
+                <mat-hint>Street address, P.O. box</mat-hint>
+                <mat-error *ngIf="hasError('addressLine1', 'required')">Address is required</mat-error>
+                <mat-error *ngIf="hasError('addressLine1', 'maxlength')">Address is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="field-grid__full">
+                <mat-label>Address line 2 (optional)</mat-label>
+                <input matInput formControlName="addressLine2" autocomplete="address-line2"/>
+                <mat-hint>Apartment, suite, unit, floor</mat-hint>
+                <mat-error *ngIf="hasError('addressLine2', 'maxlength')">Address is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="countryId" required>
+                  <mat-option *ngFor="let country of countries" [value]="country.id">
+                    {{ country.name }}
+                  </mat-option>
+                </mat-select>
+                <mat-hint *ngIf="isLoadingCountries">Loading countries…</mat-hint>
+                <mat-error *ngIf="hasError('countryId', 'required')">Country is required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" autocomplete="address-level2" required/>
+                <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
+                <mat-error *ngIf="hasError('city', 'maxlength')">City is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>State / Region</mat-label>
+                <input matInput formControlName="state" autocomplete="address-level1" required/>
+                <mat-error *ngIf="hasError('state', 'required')">State / region is required</mat-error>
+                <mat-error *ngIf="hasError('state', 'maxlength')">State is too long</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>ZIP / Postal code</mat-label>
+                <input matInput formControlName="postalCode" autocomplete="postal-code" required/>
+                <mat-error *ngIf="hasError('postalCode', 'required')">ZIP code is required</mat-error>
+                <mat-error *ngIf="hasError('postalCode', 'maxlength')">ZIP code is too long</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- ============ Payment (Stripe Payment Element) ============ -->
+          <div class="panel">
+            <h2 class="panel__title">
+              <mat-icon>credit_card</mat-icon>
+              Payment
+            </h2>
+
+            <!-- Payments switched off server-side, or the SDK failed to load. -->
+            <div class="payment-slot" *ngIf="paymentUnavailableMessage">
+              <mat-icon class="payment-slot__icon">credit_card_off</mat-icon>
+              <p class="payment-slot__title">Card payment unavailable</p>
+              <p class="payment-slot__text">{{ paymentUnavailableMessage }}</p>
+            </div>
+
+            <ng-container *ngIf="!paymentUnavailableMessage">
+              <div class="payment-loading" *ngIf="!isPaymentReady">
+                <mat-spinner diameter="28"></mat-spinner>
+                <span>Loading secure card form…</span>
+              </div>
+
+              <!-- Stripe mounts its iframes into this element. -->
+              <div #paymentElementHost class="payment-element"></div>
+
+              <p class="payment-error" *ngIf="paymentError">
+                <mat-icon>error_outline</mat-icon>
+                {{ paymentError }}
+              </p>
+
+              <p class="payment-note">
+                <mat-icon>lock_outline</mat-icon>
+                Card details go straight to Stripe — they never reach our servers.
+              </p>
+            </ng-container>
+          </div>
+
+          <!-- ============ Notes + terms ============ -->
+          <div class="panel">
+            <h2 class="panel__title">
+              <mat-icon>edit_note</mat-icon>
+              Order notes
+            </h2>
+
+            <mat-form-field appearance="outline" class="field-grid__full">
+              <mat-label>Anything we should know? (optional)</mat-label>
+              <textarea matInput rows="3" formControlName="note"></textarea>
+              <mat-error *ngIf="hasError('note', 'maxlength')">Note is too long (max 500 characters)</mat-error>
+            </mat-form-field>
+
+            <mat-checkbox class="terms" formControlName="acceptedTerms">
+              I agree to the terms of sale and the refund policy
+            </mat-checkbox>
+            <p class="terms__error" *ngIf="hasError('acceptedTerms', 'required')">
+              You must accept the terms to continue
+            </p>
+          </div>
+
+        </div>
+
+        <!-- ============ Summary ============ -->
+        <aside class="summary">
+          <h2 class="summary__title">Order Summary</h2>
+
+          <div class="summary__row" *ngFor="let item of items(); trackBy: trackByTicketId">
+            <span class="summary__label">
+              {{ item.ticketType.name }} × {{ item.quantity }}
+              <small>{{ item.event.name }}</small>
+            </span>
+            <span class="summary__value">{{ item.subtotal | currency:currency:'symbol':'1.2-2' }}</span>
+          </div>
+
+          <div class="summary__divider"></div>
+
+          <div class="summary__row">
+            <span class="summary__label">Tickets</span>
+            <span class="summary__value">{{ itemCount() }}</span>
+          </div>
+
+          <!--
+            Everything below comes from GET /Payments/quote, so the buyer sees exactly the
+            figures the server sends to Stripe rather than a separate browser-side sum.
+          -->
+          <ng-container *ngIf="quote">
+            <div class="summary__row">
+              <span class="summary__label">Subtotal</span>
+              <span class="summary__value">{{ quote.subtotal | currency:currency:'symbol':'1.2-2' }}</span>
+            </div>
+
+            <div class="summary__row summary__row--discount" *ngIf="quote.discountAmount > 0">
+              <span class="summary__label">Discount</span>
+              <span class="summary__value">−{{ quote.discountAmount | currency:currency:'symbol':'1.2-2' }}</span>
+            </div>
+
+            <div class="summary__row summary__row--total">
+              <span class="summary__label">Total</span>
+              <span class="summary__value">{{ quote.total | currency:currency:'symbol':'1.2-2' }}</span>
+            </div>
+          </ng-container>
+
+          <div class="summary__row summary__row--total" *ngIf="!quote">
+            <span class="summary__label">Total</span>
+            <span class="summary__value">…</span>
+          </div>
+
+          <button
+            mat-flat-button
+            type="submit"
+            class="summary__pay"
+            [disabled]="isPlacingOrder || isEmpty() || !quote || !!paymentUnavailableMessage"
+          >
+            <mat-icon>lock</mat-icon>
+            {{ isPlacingOrder ? 'Processing payment…' : payButtonLabel }}
+          </button>
+
+          <button mat-stroked-button type="button" class="summary__back" (click)="backToCart()">
+            Back to cart
+          </button>
+        </aside>
+
+      </form>
+
+    </div>
+  </section>
+
+  <app-footer/>
+
+</div>

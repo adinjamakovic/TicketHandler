@@ -1,6 +1,7 @@
 ﻿using Market.Application.Abstractions;
 using Market.Application.Common.Behaviors;
 using Market.Application.Common.Services;
+using Market.Application.Modules.Sales.Payments;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
@@ -26,6 +27,9 @@ public static class DependencyInjection
 
         services.AddScoped<IImageCompressor, ImageCompressor>();
         services.AddScoped<IImageStorage, ImageStorage>();
+
+        // Shared by the checkout confirmation and the Stripe webhook, which both settle payments.
+        services.AddScoped<PaymentSettlementService>();
 
         return services;
     }

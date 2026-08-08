@@ -117,11 +117,11 @@
           <button
             mat-flat-button
             class="summary__checkout"
-            [disabled]="isCheckingOut || isEmpty()"
+            [disabled]="isEmpty()"
             (click)="checkout()"
           >
             <mat-icon>lock</mat-icon>
-            {{ isCheckingOut ? 'Placing order…' : 'Checkout' }}
+            Checkout
           </button>
 
           <button mat-stroked-button class="summary__continue" (click)="continueShopping()">

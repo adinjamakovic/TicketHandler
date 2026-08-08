@@ -2,7 +2,6 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { GetCartQueryDtoItem } from '../../../api-services/cart/cart-api.model';
-import { OrdersApiService } from '../../../api-services/orders/orders-api.service';
 import { ToasterService } from '../../../core/services/toaster.service';
 
 @Component({
@@ -13,7 +12,6 @@ import { ToasterService } from '../../../core/services/toaster.service';
 })
 export class CartComponent implements OnInit {
   private cart = inject(CartService);
-  private ordersApi = inject(OrdersApiService);
   private toaster = inject(ToasterService);
   private router = inject(Router);
 
@@ -25,7 +23,6 @@ export class CartComponent implements OnInit {
 
   /** Blocks the quantity controls while a line is being written to the server. */
   pendingTicketId: number | null = null;
-  isCheckingOut = false;
 
   ngOnInit(): void {
     this.cart.load();
@@ -71,38 +68,13 @@ export class CartComponent implements OnInit {
     this.router.navigate(['/events']);
   }
 
+  /** The order itself is submitted from the checkout page, not here. */
   checkout(): void {
-    if (this.isEmpty() || this.isCheckingOut) {
+    if (this.isEmpty()) {
       return;
     }
 
-    this.isCheckingOut = true;
-
-    const orderItems = this.items().map(item => ({
-      ticketId: item.ticketId,
-      quantity: item.quantity,
-    }));
-
-    this.ordersApi.create({ orderItems }).subscribe({
-      next: () => {
-        this.cart.clear().subscribe({
-          next: () => {
-            this.isCheckingOut = false;
-            this.toaster.success('Your order has been placed');
-            this.router.navigate(['/client']);
-          },
-          error: () => {
-            this.isCheckingOut = false;
-            this.toaster.success('Your order has been placed');
-            this.router.navigate(['/client']);
-          },
-        });
-      },
-      error: () => {
-        this.isCheckingOut = false;
-        this.toaster.error('Could not place your order, please try again');
-      },
-    });
+    this.router.navigate(['/client/checkout']);
   }
 
   goToEvent(item: GetCartQueryDtoItem): void {

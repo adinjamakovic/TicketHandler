@@ -1,0 +1,302 @@
+$purple: #7b1fa2;
+$purple-dark: #4a0072;
+$purple-light: #ce93d8;
+$bg-page: #f5f0fa;
+$card-bg: #ffffff;
+$text-main: #1c1c1c;
+$text-muted: #666;
+$danger: #c62828;
+
+.checkout-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: $bg-page;
+}
+
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: $text-main;
+  margin: 0;
+}
+
+.checkout {
+  flex: 1;
+  padding: 48px 24px 64px;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  &__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  &__back {
+    color: $purple !important;
+    font-weight: 600 !important;
+    padding-left: 0 !important;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__loading {
+    display: flex;
+    justify-content: center;
+    padding: 60px 0;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    align-items: start;
+    gap: 24px;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+}
+
+.panel {
+  background: $card-bg;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  border-left: 4px solid $purple;
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $text-main;
+    margin: 0 0 18px;
+
+    mat-icon {
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+      color: $purple;
+    }
+  }
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px 16px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+
+  &__full {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
+.payment-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  padding: 36px 24px;
+  border: 2px dashed rgba(123, 31, 162, 0.35);
+  border-radius: 12px;
+  background: rgba(123, 31, 162, 0.04);
+
+  &__icon {
+    font-size: 34px;
+    width: 34px;
+    height: 34px;
+    color: $purple-light;
+  }
+
+  &__title {
+    margin: 0;
+    font-weight: 700;
+    color: $text-main;
+  }
+
+  &__text {
+    margin: 0;
+    max-width: 420px;
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: $text-muted;
+  }
+}
+
+/* Stripe renders its own iframes in here, so it only needs room, not styling. */
+.payment-element {
+  min-height: 4px;
+}
+
+.payment-loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+  font-size: 0.9rem;
+  color: $text-muted;
+}
+
+.payment-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  color: $danger;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.payment-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 16px 0 0;
+  font-size: 0.8rem;
+  color: $text-muted;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.terms {
+  display: block;
+  margin-top: 4px;
+  color: $text-main;
+
+  &__error {
+    margin: 6px 0 0;
+    font-size: 0.78rem;
+    color: $danger;
+  }
+}
+
+.summary {
+  position: sticky;
+  top: 24px;
+  background: $card-bg;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  border-top: 4px solid $purple;
+
+  &__title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: $text-main;
+    margin: 0 0 18px;
+  }
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 6px 0;
+    font-size: 0.88rem;
+    color: $text-muted;
+
+    &--total {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: $text-main;
+
+      .summary__value {
+        color: $purple;
+      }
+    }
+
+    &--discount .summary__value {
+      color: #2e7d32;
+    }
+  }
+
+  &__label {
+    display: flex;
+    flex-direction: column;
+
+    small {
+      color: rgba(0, 0, 0, 0.45);
+      font-size: 0.76rem;
+    }
+  }
+
+  &__value {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+
+  &__divider {
+    height: 1px;
+    background: rgba(0, 0, 0, 0.08);
+    margin: 14px 0;
+  }
+
+  &__pay {
+    width: 100%;
+    margin-top: 18px !important;
+    background: $purple !important;
+    color: #fff !important;
+    border-radius: 10px !important;
+    font-weight: 700 !important;
+    height: 46px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &:disabled {
+      background: rgba(0, 0, 0, 0.12) !important;
+      color: rgba(0, 0, 0, 0.38) !important;
+    }
+  }
+
+  &__back {
+    width: 100%;
+    margin-top: 10px !important;
+    border-color: $purple !important;
+    color: $purple !important;
+    border-radius: 10px !important;
+    font-weight: 600 !important;
+    height: 46px;
+  }
+}

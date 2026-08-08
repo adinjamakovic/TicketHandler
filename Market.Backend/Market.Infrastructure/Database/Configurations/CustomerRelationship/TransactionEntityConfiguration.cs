@@ -13,13 +13,21 @@ namespace Market.Infrastructure.Database.Configurations.CustomerRelationship
         {
             b.ToTable("Transactions");
 
-            b.HasKey(x =>new { x.Id, x.OrderId});
+            b.HasKey(x => x.Id);
 
             b.Property(x => x.Status)
                 .HasConversion(
                     x => x.ToString(),
                     x => Enum.Parse<OrderStatusType>(x)
                 );
+
+            b.Property(x => x.StripeToken)
+                .HasMaxLength(255);
+
+            b.HasIndex(x => x.StripeToken);
+
+            b.Property(x => x.RowVersion)
+                .IsRowVersion();
 
             b.HasOne(x => x.Order)
                 .WithOne()
