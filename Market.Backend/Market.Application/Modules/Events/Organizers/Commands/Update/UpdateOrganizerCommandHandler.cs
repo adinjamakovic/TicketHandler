@@ -51,7 +51,7 @@ public class UpdateOrganizerCommandHandler(
         user.BirthDate = req.User.BirthDate;
         user.Email = req.User.Email;
         user.Address = req.User.Address.Trim();
-        user.CityId = req.CityId;
+        user.CityId = req.User.CityId;
         user.Gender = req.User.Gender;
         user.Phone = req.User.Phone;
 

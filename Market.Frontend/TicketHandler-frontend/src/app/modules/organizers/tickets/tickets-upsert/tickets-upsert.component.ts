@@ -62,7 +62,7 @@ export class TicketsUpsertComponent extends BaseListPagedComponent<ListTicketsQu
   currentOrgId:number = 1;
   currentUserId:number | undefined;
 
-    // TODO NAPRAVIT SERVIS ZA VRACANJE IDA OD ORG PA ONDA VIDIT ZASTO FILTER NE RADI
+    // TODO: add a service that returns the organizer id, then investigate why the filter does not work
   ngOnInit(): void {
     
     this.currentUserId = this.currentUserService.snapshot!.userId;

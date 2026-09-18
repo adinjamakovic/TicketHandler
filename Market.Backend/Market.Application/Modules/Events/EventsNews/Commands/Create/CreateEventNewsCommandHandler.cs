@@ -18,6 +18,19 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Create
                 throw new MarketBusinessRuleException("111", "Only an organiser can enter event news");
 
             var org = await ctx.Organizers.FirstOrDefaultAsync(x => x.UserId == appCurrentUser.UserId, ct);
+
+            if (org is null)
+                throw new MarketNotFoundException("No organizer found");
+
+            var eventEntity = await ctx.Events
+                .FirstOrDefaultAsync(x => x.Id == req.EventId, ct);
+
+            if (eventEntity is null)
+                throw new MarketNotFoundException($"Event with an Id of {req.EventId} does not exist");
+
+            if (eventEntity.OrganizerId != org.Id)
+                throw new MarketBusinessRuleException("111", "Only the organiser who owns the event can enter event news");
+
             var normalizedHeader = req.Header.Trim();
             var normalizedBody = req.Body?.Trim() ?? string.Empty;
 

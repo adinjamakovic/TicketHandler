@@ -1,4 +1,5 @@
-﻿using Market.Infrastructure.Common;
+﻿using Market.API.Localization;
+using Market.Infrastructure.Common;
 using Market.Shared.Dtos;
 using Market.Shared.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -16,8 +17,14 @@ public static class DependencyInjection
         IConfiguration configuration,
         IHostEnvironment env)
     {
+        // Regional settings (bs-BA by default) for responses, validation messages and logs.
+        services.AddRegionalization(configuration);
+
         // Controllers + uniform BadRequest
-        services.AddControllers()
+        services.AddControllers(opts =>
+        {
+            opts.ValueProviderFactories.Insert(0, new InvariantCultureFormValueProviderFactory());
+        })
             .ConfigureApiBehaviorOptions(opts =>
             {
                 opts.InvalidModelStateResponseFactory = ctx =>
