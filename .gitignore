@@ -421,3 +421,4 @@ Market.Backend/Market.API/wwwroot/Upload
 Market.Frontend/TicketHandler-frontend/src/environments/environment.ts
 Market.Backend/.idea
 .vscode
+Market.Backend/Market.API/appsettings.json
