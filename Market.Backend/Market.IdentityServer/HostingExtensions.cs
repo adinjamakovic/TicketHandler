@@ -1,7 +1,14 @@
 using System.Globalization;
+using FluentValidation;
+using Market.Application.Abstractions;
+using Market.Application.Common;
+using Market.Application.Common.Behaviors;
+using Market.Application.Modules.Geography.Cities.Queries.List;
+using Market.Application.Modules.Identity.Person.Commands.Create;
 using Market.Domain.Entities.Identity;
 using Market.IdentityServer.Services;
 using Market.Infrastructure.Database;
+using MediatR;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +64,23 @@ internal static class HostingExtensions
         builder.Services.AddScoped<IPasswordHasher<PersonEntity>, PasswordHasher<PersonEntity>>();
         builder.Services.AddScoped<PersonCredentialStore>();
 
-        _ = builder.Services.AddIdentityServer()
+        builder.Services.AddScoped<IAppDbContext>(sp => sp.GetRequiredService<DatabaseContext>());
+
+        builder.Services.AddMediatR(cfg =>
+            cfg.RegisterServicesFromAssembly(typeof(HostingExtensions).Assembly));
+
+        builder.Services
+            .AddTransient<IRequestHandler<CreatePersonCommand, int>, CreatePersonCommandHandler>();
+        builder.Services
+            .AddTransient<IRequestHandler<ListCitiesQuery, PageResult<ListCitiesQueryDto>>, ListCitiesQueryHandler>();
+
+        builder.Services.AddScoped<IValidator<CreatePersonCommand>, CreatePersonCommandValidator>();
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
+        _ = builder.Services.AddIdentityServer(options =>
+            {
+                options.UserInteraction.CreateAccountUrl = "/Account/Create";
+            })
             .AddInMemoryIdentityResources(Config.IdentityResources)
             .AddInMemoryApiScopes(Config.ApiScopes)
             .AddInMemoryApiResources(Config.ApiResources)

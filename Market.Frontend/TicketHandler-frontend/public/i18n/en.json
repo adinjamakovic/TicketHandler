@@ -14,6 +14,14 @@
       "BUTTON": "Login",
       "LOADING": "Logging in..."
     },
+    "REGISTER": {
+      "TITLE": "Create account",
+      "SUBTITLE": "You will be redirected to the secure sign-up page",
+      "BUTTON": "Create account",
+      "REDIRECTING": "Redirecting to secure sign-up…",
+      "HAVE_ACCOUNT": "Already have an account?",
+      "LOGIN_LINK": "Log in"
+    },
     "LOGOUT": {
       "TITLE": "Logout",
       "MESSAGE": "Logging you out of the system...",

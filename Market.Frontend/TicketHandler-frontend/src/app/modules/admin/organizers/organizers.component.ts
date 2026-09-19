@@ -7,6 +7,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToasterService } from '../../../core/services/toaster.service';
 import {Router} from '@angular/router';
 import { DialogButton } from '../../shared/models/dialog-config.model';
+import { CitiesApiService } from '../../../api-services/cities/cities-api.service';
+import { ListCitiesQueryDto, ListCitiesRequest } from '../../../api-services/cities/cities-api.models';
 
 @Component({
   selector: 'app-organizers',
@@ -19,10 +21,13 @@ export class OrganizersComponent
   implements OnInit
 {
   private api = inject(OrganizerApiService);
+  private citiesApi = inject(CitiesApiService);
   private router = inject(Router);
   private toaster = inject(ToasterService);
   private dialogHelper = inject(DialogHelperService);
   displayedColums: string[] = ['name', 'description', 'userName', 'cityName', 'emailAddress', 'actions'];
+
+  cities: ListCitiesQueryDto[] = [];
 
   constructor(){
     super();
@@ -31,7 +36,18 @@ export class OrganizersComponent
   }
 
   ngOnInit(): void {
+    this.loadCities();
     this.initList();
+  }
+
+  private loadCities(): void {
+    const citiesRequest = new ListCitiesRequest();
+    citiesRequest.paging.pageSize = 100;
+
+    this.citiesApi.list(citiesRequest).subscribe({
+      next: (response) => this.cities = response.items,
+      error: (err) => console.error('Load cities error:', err)
+    });
   }
 
   protected override loadPagedData(): void {
@@ -98,5 +114,26 @@ export class OrganizersComponent
   onSearch(): void {
     this.request.paging.page = 1;
     this.loadPagedData();
+  }
+
+  /** Re-runs the query from page one — used by every filter control. */
+  onFilterChange(): void {
+    this.request.paging.page = 1;
+    this.loadPagedData();
+  }
+
+  onClearFilters(): void {
+    this.request.search = null;
+    this.request.city = null;
+    this.request.email = null;
+    this.request.hasEvents = null;
+    this.onFilterChange();
+  }
+
+  get hasActiveFilters(): boolean {
+    return !!(this.request.search
+      || this.request.city
+      || this.request.email
+      || (this.request.hasEvents !== null && this.request.hasEvents !== undefined));
   }
 }

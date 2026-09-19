@@ -10,7 +10,25 @@ public sealed class ListOrganizersQueryHandler(IAppDbContext ctx, IImageStorage 
         var searchTerm = req.Search?.Trim().ToLower() ?? string.Empty;
 
         if (!string.IsNullOrWhiteSpace(searchTerm))
-            q = q.Where(x => x.Name.ToLower().Contains(searchTerm));
+            q = q.Where(x => x.Name.ToLower().Contains(searchTerm)
+                          || (x.Description != null && x.Description.ToLower().Contains(searchTerm)));
+
+        if (!string.IsNullOrWhiteSpace(req.City))
+        {
+            var city = req.City.Trim().ToLower();
+            q = q.Where(x => x.City.Name.ToLower() == city);
+        }
+
+        if (!string.IsNullOrWhiteSpace(req.Email))
+        {
+            var email = req.Email.Trim().ToLower();
+            q = q.Where(x => x.User.Email.ToLower().Contains(email));
+        }
+
+        if (req.HasEvents.HasValue)
+            q = req.HasEvents.Value
+                ? q.Where(x => x.Events.Any())
+                : q.Where(x => !x.Events.Any());
 
         var projectedQuery = q.OrderBy(x => x.Name)
             .Select(x => new ListOrganizersQueryDto

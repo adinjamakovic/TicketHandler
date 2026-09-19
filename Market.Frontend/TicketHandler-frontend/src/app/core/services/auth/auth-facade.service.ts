@@ -54,13 +54,20 @@ export class AuthFacadeService {
   // =========================================================
 
   login(returnUrl?: string): void {
-    if (returnUrl) {
-      sessionStorage.setItem(AuthFacadeService.RETURN_URL_KEY, returnUrl);
-    } else {
-      sessionStorage.removeItem(AuthFacadeService.RETURN_URL_KEY);
-    }
+    this.rememberReturnUrl(returnUrl);
 
     this.oidc.authorize();
+  }
+
+  /**
+   * Same authorization code flow as login, but asks IdentityServer for the registration
+   * page first (OIDC prompt=create). The account is created against the same person store
+   * login authenticates against, and the flow finishes signed in, back on redirectUrl.
+   */
+  register(returnUrl?: string): void {
+    this.rememberReturnUrl(returnUrl);
+
+    this.oidc.authorize(undefined, { customParams: { prompt: 'create' } });
   }
 
   logout(): Observable<unknown> {
@@ -114,5 +121,13 @@ export class AuthFacadeService {
 
   private currentPath(): string {
     return `${window.location.pathname}${window.location.search}`;
+  }
+
+  private rememberReturnUrl(returnUrl?: string): void {
+    if (returnUrl) {
+      sessionStorage.setItem(AuthFacadeService.RETURN_URL_KEY, returnUrl);
+    } else {
+      sessionStorage.removeItem(AuthFacadeService.RETURN_URL_KEY);
+    }
   }
 }

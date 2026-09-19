@@ -1,5 +1,6 @@
 using Market.Application.Modules.Identity.Person.Commands.Create;
 using Market.Application.Modules.Identity.Person.Commands.Update;
+using Market.Application.Modules.Identity.Person.Commands.UpdateRoles;
 using Market.Application.Modules.Identity.Person.Queries.GetById;
 using Market.Application.Modules.Sales.TicketTypes.Commands.Create;
 using Market.Application.Modules.Sales.TicketTypes.Commands.Delete;
@@ -15,6 +16,10 @@ namespace Market.API.Controllers;
 [Route("[controller]")]
 public class PersonController(ISender sender) : ApiControllerBase(sender)
 {
+    /// <summary>
+    /// Creates a regular user account. The roles are set by the server, not by the request -
+    /// use <see cref="UpdateRoles"/> to grant admin or organiser rights.
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<int>> Create(CreatePersonCommand command, CancellationToken ct)
     {
@@ -32,6 +37,16 @@ public class PersonController(ISender sender) : ApiControllerBase(sender)
 
     [HttpPut("{id:int}")]
     public async Task Update(int id, UpdatePersonCommand command, CancellationToken ct)
+    {
+        command.Id = id;
+        await SendTraced(command, ct);
+    }
+
+    /// <summary>
+    /// Assigns the security roles of a person. Admin only - the handler rejects everybody else.
+    /// </summary>
+    [HttpPut("{id:int}/roles")]
+    public async Task UpdateRoles(int id, UpdatePersonRolesCommand command, CancellationToken ct)
     {
         command.Id = id;
         await SendTraced(command, ct);

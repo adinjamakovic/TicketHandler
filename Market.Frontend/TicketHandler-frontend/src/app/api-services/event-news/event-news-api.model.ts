@@ -8,6 +8,9 @@ import { PageResult } from "../../core/models/paging/page-result";
 export class ListEventNewsRequest extends BasePagedQuery {
     organizerId?: number | null;
     eventId?: number | null;
+    search?: string | null;
+    dateFrom?: Date | null;
+    dateTo?: Date | null;
 }
 
 export interface ListEventNewsQueryDto{

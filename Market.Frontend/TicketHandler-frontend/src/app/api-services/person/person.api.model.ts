@@ -18,6 +18,10 @@ export interface GetPersonByIdQueryDto {
 // ================= COMMANDS =====================
 // ================================================
 
+/**
+ * Creates a regular user account. The security roles are set by the server and are not part
+ * of the request - granting admin/organiser rights goes through UpdatePersonRolesCommand.
+ */
 export interface CreatePersonCommand {
   firstName: string;
   lastName: string;
@@ -29,9 +33,13 @@ export interface CreatePersonCommand {
   username: string;
   email: string;
   password: string;
+}
+
+/** Admin-only: PUT /Person/{id}/roles */
+export interface UpdatePersonRolesCommand {
   isAdmin: boolean;
   isOrganiser: boolean;
-  isUser: boolean
+  isUser: boolean;
 }
 
 export interface UpdatePersonCommand {

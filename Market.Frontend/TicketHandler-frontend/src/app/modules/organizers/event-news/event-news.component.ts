@@ -7,15 +7,22 @@ import {ToasterService} from '../../../core/services/toaster.service';
 import {DialogHelperService} from '../../shared/services/dialog-helper.service';
 import {MatDialog} from '@angular/material/dialog';
 import {EventNewsUpsertComponent} from './event-news-upsert/event-news-upsert.component';
-import {ListEventsQueryDto} from '../../../api-services/events/events-api.model';
+import {ListEventsQueryDto, ListEventsRequest} from '../../../api-services/events/events-api.model';
 import {DialogButton} from '../../shared/models/dialog-config.model';
 import { EventsApiService } from '../../../api-services/events/events-api.service';
+import { toDateOnlyParam } from '../../../core/utils/date-filter-utils';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DdMmYyyyDateAdapter, DD_MM_YYYY_FORMATS } from '../../../core/utils/DateUtilities/datepicker-utils';
 
 @Component({
   selector: 'app-event-news',
   standalone: false,
   templateUrl: './event-news.component.html',
   styleUrl: './event-news.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: DdMmYyyyDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_FORMATS }
+  ],
 })
 export class EventNewsComponent
   extends BaseListPagedComponent<ListEventNewsQueryDto, ListEventNewsRequest>
@@ -41,7 +48,11 @@ export class EventNewsComponent
     }
 
     private loadEvents() : void {
-        this.eventsApi.list().subscribe({
+        // The dropdown needs every event the organiser owns, not just the first default page.
+        const eventsRequest = new ListEventsRequest();
+        eventsRequest.paging.pageSize = 100;
+
+        this.eventsApi.list(eventsRequest).subscribe({
           next: (response)=>{
             this.events = response.items;
           },
@@ -59,7 +70,7 @@ export class EventNewsComponent
     protected override loadPagedData(): void {
         this.startLoading();
 
-      this.api.list(this.request).subscribe({
+      this.api.list(this.buildQuery()).subscribe({
         next: (response) => {
           this.handlePageResult(response);
           this.stopLoading();
@@ -75,6 +86,36 @@ export class EventNewsComponent
     this.request.eventId = eventId;
     this.request.paging.page = 1;
     this.loadPagedData();
+  }
+
+  /** Sends the picked calendar days instead of their UTC instants. */
+  private buildQuery(): ListEventNewsRequest {
+    return {
+      ...this.request,
+      dateFrom: toDateOnlyParam(this.request.dateFrom),
+      dateTo: toDateOnlyParam(this.request.dateTo)
+    };
+  }
+
+  /** Re-runs the query from page one — used by every filter control. */
+  onFilterChange(): void {
+    this.request.paging.page = 1;
+    this.loadPagedData();
+  }
+
+  onClearFilters(): void {
+    this.request.eventId = null;
+    this.request.search = null;
+    this.request.dateFrom = null;
+    this.request.dateTo = null;
+    this.onFilterChange();
+  }
+
+  get hasActiveFilters(): boolean {
+    return !!(this.request.eventId
+      || this.request.search
+      || this.request.dateFrom
+      || this.request.dateTo);
   }
 
   onCreate(): void {
