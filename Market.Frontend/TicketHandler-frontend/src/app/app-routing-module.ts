@@ -25,7 +25,7 @@ const routes: Routes = [
   {
     path: 'organizer',
     canActivate: [myAuthGuard],
-    data: myAuthData({ requireAuth: true }),// any authenticated user
+    data: myAuthData({ requireAuth: true, requireOrganiser: true }),
     loadChildren: () =>
       import('./modules/organizers/organizer-module').then(m => m.OrganizerModule)
   },

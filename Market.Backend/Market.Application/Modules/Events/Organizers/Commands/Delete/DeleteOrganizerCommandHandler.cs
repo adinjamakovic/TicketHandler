@@ -8,7 +8,7 @@ public class DeleteOrganizerCommandHandler(
 {
     public async Task<Unit> Handle(DeleteOrganizerCommand req, CancellationToken ct)
     {
-        if (appCurrentUser.IsUser)
+        if (!appCurrentUser.IsAdmin && !appCurrentUser.IsOrganiser)
             throw new MarketBusinessRuleException("111", "Only an admin or organizer user can delete an organizer");
 
         var organizer = await ctx.Organizers
@@ -18,6 +18,10 @@ public class DeleteOrganizerCommandHandler(
         if (organizer is null)
             throw new MarketNotFoundException("Organizer was not found");
 
+        // Admins may close any organizer account; an organizer may only close their own.
+        if (!appCurrentUser.IsAdmin && organizer.UserId != appCurrentUser.UserId)
+            throw new MarketBusinessRuleException("111", "An organizer can only delete their own record");
+
         var user = await ctx.Persons
             .Where(x => x.Id == organizer.UserId)
             .FirstOrDefaultAsync(ct);
@@ -25,11 +29,11 @@ public class DeleteOrganizerCommandHandler(
         if (user is null)
             throw new MarketNotFoundException("User associated with the organizer was not found");
 
-        await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, organizer.Logo, ct);
-
         ctx.Organizers.Remove(organizer);
         ctx.Persons.Remove(user);
         await ctx.SaveChangesAsync(ct);
+
+        await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, organizer.Logo, ct);
 
         return Unit.Value;
     }

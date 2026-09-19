@@ -53,6 +53,25 @@ public class CreateEventNewsCommandHandlerTests
     }
 
     [Fact]
+    public async Task Handle_WhenEventBelongsToAnotherOrganizer_ThrowsBusinessRule()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+
+        // Organizer A posts news onto organizer B's festival.
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        var command = ValidCommand();
+        command.EventId = EventNewsTestContext.SummerFestivalEventId;
+
+        var ex = await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(command, CancellationToken.None));
+
+        Assert.Equal("Only the organiser who owns the event can enter event news", ex.Message);
+        Assert.Single(await ctx.GetEventNewsForEventAsync(EventNewsTestContext.SummerFestivalEventId));
+        Assert.Empty(ctx.ImageStorage.Saved);
+    }
+
+    [Fact]
     public async Task Handle_WhenOrganiserHasNoOrganizerRecord_ThrowsNotFound()
     {
         await using var ctx = await EventNewsTestContext.CreateAsync();

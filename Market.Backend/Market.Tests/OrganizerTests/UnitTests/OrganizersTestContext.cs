@@ -1,5 +1,6 @@
 using Market.Domain.Entities.Events;
 using Market.Domain.Entities.Geographical;
+using Market.Domain.Entities.Identity;
 using Market.Tests.Common;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Time.Testing;
@@ -11,6 +12,8 @@ public sealed class OrganizersTestContext : IAsyncDisposable
     public const int CountryId = 1;
     public const int SarajevoCityId = 1;
     public const int MostarCityId = 2;
+    public const int OrganizerUserId = 11;
+    public const int OtherOrganizerUserId = 12;
     public const int MissingId = 9999;
     private static readonly InMemoryDatabaseRoot Root = new();
     private readonly DbContextOptions<DatabaseContext> _options;
@@ -63,6 +66,45 @@ public sealed class OrganizersTestContext : IAsyncDisposable
 
         await Db.SaveChangesAsync(CancellationToken.None);
         Db.ChangeTracker.Clear();
+    }
+
+    /// <summary>Seeds an organizer together with the person it signs in as.</summary>
+    public async Task<OrganizerEntity> AddOrganizerAsync(
+        int userId,
+        string name = "Seeded Organizer",
+        int cityId = SarajevoCityId,
+        string? logo = null)
+    {
+        await using var seedContext = NewContext();
+
+        seedContext.Persons.Add(new PersonEntity
+        {
+            Id = userId,
+            CityId = cityId,
+            FirstName = "Test",
+            LastName = "Organiser",
+            BirthDate = new DateTime(1990, 1, 1),
+            UserName = $"organiser.{userId}",
+            Email = $"organiser.{userId}@test.local",
+            PasswordHash = "hash",
+            IsOrganiser = true,
+            IsEnabled = true
+        });
+
+        var organizer = new OrganizerEntity
+        {
+            UserId = userId,
+            CityId = cityId,
+            Name = name,
+            Description = $"{name} description",
+            Address = "Marsala Tita 1",
+            Logo = logo
+        };
+
+        seedContext.Organizers.Add(organizer);
+        await seedContext.SaveChangesAsync(CancellationToken.None);
+
+        return organizer;
     }
 
     public async Task<List<OrganizerEntity>> GetOrganizersAsync()

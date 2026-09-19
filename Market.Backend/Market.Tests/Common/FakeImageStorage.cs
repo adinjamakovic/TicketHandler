@@ -33,7 +33,7 @@ public sealed class FakeImageStorage : IImageStorage
         return Task.CompletedTask;
     }
 
-    public async Task<string?> ReplaceIfUploadedAsync(
+    public async Task<string?> SaveIfUploadedAsync(
         ImageStorageCategory category,
         string? currentStoredPath,
         IFormFile? newImage,
@@ -42,7 +42,6 @@ public sealed class FakeImageStorage : IImageStorage
         if (newImage is null || newImage.Length == 0)
             return currentStoredPath;
 
-        await DeleteIfExistsAsync(category, currentStoredPath, ct);
         return await SaveAsync(category, newImage, ct);
     }
 

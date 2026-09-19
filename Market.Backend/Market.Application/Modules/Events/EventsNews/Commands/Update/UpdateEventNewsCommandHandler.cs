@@ -35,10 +35,14 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Update
 
             entity.Body = req.Body?.Trim() ?? string.Empty;
 
-            entity.Image = await imageStorage.ReplaceIfUploadedAsync(
+            var previousImage = entity.Image;
+            entity.Image = await imageStorage.SaveIfUploadedAsync(
                 ImageStorageCategory.EventNews, entity.Image, req.Image, ct);
 
             await ctx.SaveChangesAsync(ct);
+
+            if (previousImage != entity.Image)
+                await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.EventNews, previousImage, ct);
 
             return Unit.Value;
         }

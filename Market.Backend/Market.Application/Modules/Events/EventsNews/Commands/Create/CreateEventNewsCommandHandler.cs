@@ -34,17 +34,35 @@ namespace Market.Application.Modules.Events.EventsNews.Commands.Create
             var normalizedHeader = req.Header.Trim();
             var normalizedBody = req.Body?.Trim() ?? string.Empty;
 
+            var imagePath = await imageStorage.SaveAsync(ImageStorageCategory.EventNews, req.Image, ct);
+
             var EventNews = new EventNewsEntity
             {
                 OrganizerId = org.Id,
                 EventId=req.EventId,
                 Header= normalizedHeader,
                 Body=normalizedBody,
-                Image = await imageStorage.SaveAsync(ImageStorageCategory.EventNews, req.Image, ct)
+                Image = imagePath
             };
 
-            ctx.EventNews.Add(EventNews);
-            await ctx.SaveChangesAsync(ct);
+            try
+            {
+                ctx.EventNews.Add(EventNews);
+                await ctx.SaveChangesAsync(ct);
+            }
+            catch
+            {
+                try
+                {
+                    await imageStorage.DeleteIfExistsAsync(
+                        ImageStorageCategory.EventNews, imagePath, CancellationToken.None);
+                }
+                catch
+                {
+                }
+
+                throw;
+            }
 
             return EventNews.Id;
         }

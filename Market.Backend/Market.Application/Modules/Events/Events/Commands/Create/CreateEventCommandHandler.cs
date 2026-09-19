@@ -24,6 +24,13 @@ public class CreateEventCommandHandler(
         if (await ctx.EventTypes.FirstOrDefaultAsync(x => x.Id == req.EventTypeId, ct) == null)
             throw new MarketNotFoundException("Event type not found");
 
+        var performerQ = ctx.Performers.AsNoTracking();
+        foreach (var performer in req.Performers)
+        {
+            if (await performerQ.FirstOrDefaultAsync(x => x.Id == performer.PerformerId, ct) is null)
+                throw new MarketNotFoundException("Performer does not exist");
+        }
+
         var imagePath = await imageStorage.SaveAsync(ImageStorageCategory.Events, req.Image, ct);
 
         var newEvent = new EventEntity
@@ -38,14 +45,9 @@ public class CreateEventCommandHandler(
         };
 
         ctx.Events.Add(newEvent);
-        await ctx.SaveChangesAsync(ct);
 
-        var performerQ = ctx.Performers.AsNoTracking();
         foreach (var performer in req.Performers)
         {
-            if (await performerQ.FirstOrDefaultAsync(x => x.Id == performer.PerformerId, ct) is null)
-                throw new MarketNotFoundException("Performer does not exist");
-
             ctx.PerformerEvents.Add(new PerformerEventEntity
             {
                 Event = newEvent,
@@ -54,7 +56,28 @@ public class CreateEventCommandHandler(
             });
         }
 
-        await ctx.SaveChangesAsync(ct);
+        try
+        {
+            // The event and its line-up go in as one save, so a failure leaves no half-created event.
+            await ctx.SaveChangesAsync(ct);
+        }
+        catch
+        {
+            // The poster is already uploaded, so drop it instead of leaving it orphaned,
+            // then let the original failure reach MarketExceptionHandler.
+            try
+            {
+                // Not ct: cleanup still has to run when the request was cancelled.
+                await imageStorage.DeleteIfExistsAsync(
+                    ImageStorageCategory.Events, imagePath, CancellationToken.None);
+            }
+            catch
+            {
+                // A failed cleanup must not hide the failure we are about to rethrow.
+            }
+
+            throw;
+        }
 
         return newEvent.Id;
     }

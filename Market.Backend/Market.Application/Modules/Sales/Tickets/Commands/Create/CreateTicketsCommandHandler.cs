@@ -14,6 +14,24 @@ namespace Market.Application.Modules.Sales.Tickets.Commands.Create
             if (!appCurrentUser.IsOrganiser)
                 throw new MarketBusinessRuleException("111", "Only an organiser can create tickets");
 
+            var organizerId = await ctx.Organizers
+                .Where(x => x.UserId == appCurrentUser.UserId)
+                .Select(x => (int?)x.Id)
+                .FirstOrDefaultAsync(ct);
+
+            if (organizerId is null)
+                throw new MarketNotFoundException("No organizer found");
+
+            var eventEntity = await ctx.Events
+                .FirstOrDefaultAsync(x => x.Id == req.EventId, ct);
+
+            if (eventEntity is null)
+                throw new MarketNotFoundException($"Event with Id {req.EventId} does not exist");
+
+            // Tickets are inventory on someone's event, so the caller has to own that event.
+            if (eventEntity.OrganizerId != organizerId)
+                throw new MarketBusinessRuleException("111", $"Event with Id {req.EventId} belongs to another organizer");
+
             var Tickets = new TicketsEntity
             {
                 EventId = req.EventId,

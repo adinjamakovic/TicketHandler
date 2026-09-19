@@ -126,6 +126,54 @@ public class DeleteEventCommandHandlerTests
     }
 
     [Fact]
+    public async Task Handle_WhenEventBelongsToAnotherOrganizer_ThrowsBusinessRule()
+    {
+        await using var ctx = await EventsTestContext.CreateAsync();
+        var foreignEvent = await ctx.AddEventAsync(organizerId: EventsTestContext.OtherOrganizerId);
+
+        // Organizer A signs in and aims at organizer B's event.
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventsTestContext.OrganizerUserId));
+
+        var ex = await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(new DeleteEventCommand { Id = foreignEvent.Id }, CancellationToken.None));
+
+        Assert.Equal($"Event with Id {foreignEvent.Id} belongs to another organizer", ex.Message);
+
+        await using var readContext = ctx.NewContext();
+        Assert.True(await readContext.Events.AnyAsync(x => x.Id == foreignEvent.Id));
+        Assert.Empty(ctx.ImageStorage.Deleted);
+    }
+
+    [Fact]
+    public async Task Handle_WhenEventBelongsToAnotherOrganizer_LeavesItsPerformerLineUpIntact()
+    {
+        await using var ctx = await EventsTestContext.CreateAsync();
+        var foreignEvent = await ctx.AddEventAsync(
+            organizerId: EventsTestContext.OtherOrganizerId,
+            performers: new[] { (EventsTestContext.PerformerId, new TimeOnly(20, 0)) });
+
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventsTestContext.OrganizerUserId));
+
+        await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(new DeleteEventCommand { Id = foreignEvent.Id }, CancellationToken.None));
+
+        Assert.Single(await ctx.GetPerformerEventsAsync(foreignEvent.Id));
+    }
+
+    [Fact]
+    public async Task Handle_WhenOrganiserHasNoOrganizerRecord_ThrowsNotFound()
+    {
+        await using var ctx = await EventsTestContext.CreateAsync();
+        var seeded = await ctx.AddEventAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventsTestContext.MissingId));
+
+        var ex = await Assert.ThrowsAsync<MarketNotFoundException>(
+            () => handler.Handle(new DeleteEventCommand { Id = seeded.Id }, CancellationToken.None));
+
+        Assert.Equal("No organizer found", ex.Message);
+    }
+
+    [Fact]
     public async Task Handle_WhenCallerIsAdmin_DeletesEventOfAnyOrganizer()
     {
         await using var ctx = await EventsTestContext.CreateAsync();
