@@ -52,20 +52,84 @@ public class CreateEventNewsCommandHandlerTests
         Assert.Empty(ctx.ImageStorage.Saved);
     }
 
-    /// <summary>
-    /// BUG: the handler dereferences the organizer lookup without a null check, so an
-    /// authenticated organiser whose <c>OrganizerEntity</c> row is missing gets a 500 instead
-    /// of the <see cref="MarketNotFoundException"/> ("No organizer found") that
-    /// <c>CreateEventCommandHandler</c> throws for the same situation.
-    /// </summary>
     [Fact]
-    public async Task Handle_WhenOrganiserHasNoOrganizerRecord_ThrowsNullReference()
+    public async Task Handle_WhenEventBelongsToAnotherOrganizer_ThrowsBusinessRule()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+
+        // Organizer A posts news onto organizer B's festival.
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        var command = ValidCommand();
+        command.EventId = EventNewsTestContext.SummerFestivalEventId;
+
+        var ex = await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(command, CancellationToken.None));
+
+        Assert.Equal("Only the organiser who owns the event can enter event news", ex.Message);
+        Assert.Single(await ctx.GetEventNewsForEventAsync(EventNewsTestContext.SummerFestivalEventId));
+        Assert.Empty(ctx.ImageStorage.Saved);
+    }
+
+    [Fact]
+    public async Task Handle_WhenOrganiserHasNoOrganizerRecord_ThrowsNotFound()
     {
         await using var ctx = await EventNewsTestContext.CreateAsync();
         var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.MissingId));
 
-        await Assert.ThrowsAsync<NullReferenceException>(
+        var ex = await Assert.ThrowsAsync<MarketNotFoundException>(
             () => handler.Handle(ValidCommand(), CancellationToken.None));
+
+        Assert.Equal("No organizer found", ex.Message);
+    }
+
+    [Fact]
+    public async Task Handle_WhenEventDoesNotExist_ThrowsNotFound()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        var command = ValidCommand();
+        command.EventId = EventNewsTestContext.MissingId;
+
+        var ex = await Assert.ThrowsAsync<MarketNotFoundException>(
+            () => handler.Handle(command, CancellationToken.None));
+
+        Assert.Equal($"Event with an Id of {EventNewsTestContext.MissingId} does not exist", ex.Message);
+    }
+
+    [Fact]
+    public async Task Handle_WhenEventBelongsToAnotherOrganiser_ThrowsBusinessRule()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        var command = ValidCommand();
+        command.EventId = EventNewsTestContext.SummerFestivalEventId;
+
+        var ex = await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(command, CancellationToken.None));
+
+        Assert.Equal("Only the organiser who owns the event can enter event news", ex.Message);
+    }
+
+    [Fact]
+    public async Task Handle_WhenEventBelongsToAnotherOrganiser_PersistsNothing()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        var command = ValidCommand();
+        command.EventId = EventNewsTestContext.SummerFestivalEventId;
+        command.Image = new FakeFormFile("doors-open.png");
+
+        await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(command, CancellationToken.None));
+
+        Assert.Equal(
+            EventNewsTestContext.SummerFestivalNewsId,
+            Assert.Single(await ctx.GetEventNewsForEventAsync(EventNewsTestContext.SummerFestivalEventId)).Id);
+        Assert.Empty(ctx.ImageStorage.Saved);
     }
 
     [Fact]

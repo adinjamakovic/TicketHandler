@@ -100,3 +100,87 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// ================================================
+$filter-bar-primary: #984ae2;
+$filter-bar-text: #2c3e50;
+$filter-bar-text-secondary: #546e7a;
+$filter-bar-text-disabled: #90a4ae;
+$filter-bar-border: rgba(73, 118, 181, 0.15);
+$filter-bar-hover: rgba(73, 118, 181, 0.04);
+
+.header-card .filter-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid $filter-bar-border;
+
+  .filter-field {
+    width: 100%;
+
+    .mat-mdc-text-field-wrapper {
+      background-color: white;
+    }
+
+    .mat-mdc-form-field-focus-overlay {
+      background-color: transparent;
+    }
+
+    .mat-mdc-floating-label {
+      color: $filter-bar-text-secondary;
+    }
+
+    &.mat-focused .mat-mdc-floating-label {
+      color: $filter-bar-primary;
+    }
+
+    input {
+      color: $filter-bar-text;
+    }
+
+    .mat-icon,
+    .mat-mdc-icon-button {
+      color: $filter-bar-primary;
+    }
+  }
+
+  .clear-filters-button {
+    height: 44px;
+    border-radius: 8px;
+    border-color: $filter-bar-border;
+    color: $filter-bar-primary;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+
+    &:hover:not([disabled]) {
+      background: $filter-bar-hover;
+    }
+
+    &[disabled] {
+      color: $filter-bar-text-disabled;
+    }
+  }
+}
+
+// The filter controls use floatLabel="always" so the placeholder is readable
+// before the field is focused; Material's default placeholder colour is too
+// faint to serve as a hint on its own.
+.header-card .filter-field,
+.header-card .search-field {
+  input::placeholder {
+    color: $filter-bar-text-secondary;
+    opacity: 0.75;
+  }
+
+  .mat-mdc-select-placeholder {
+    color: $filter-bar-text-secondary;
+    opacity: 0.75;
+  }
+}

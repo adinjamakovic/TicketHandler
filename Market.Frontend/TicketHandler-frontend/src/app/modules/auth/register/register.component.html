@@ -1,1 +1,70 @@
-<p>register works!</p>
+<!-- src/app/modules/auth/register/register.component.html -->
+<div class="auth-container">
+  <div class="auth-background">
+    <!-- Decorative elements -->
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+  </div>
+
+  <div class="auth-content">
+    <!-- Logo & Brand -->
+    <div class="auth-brand">
+      <mat-icon class="brand-icon">storefront</mat-icon>
+      <h1 class="brand-name">TicketHandler</h1>
+      <p class="brand-tagline">Join TicketHandler</p>
+    </div>
+
+    <!-- Register Card -->
+    <mat-card class="auth-card mat-elevation-z8">
+      <mat-card-header>
+        <mat-card-title>{{ 'AUTH.REGISTER.TITLE' | translate }}</mat-card-title>
+        <mat-card-subtitle>{{ 'AUTH.REGISTER.SUBTITLE' | translate }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <!-- Error message -->
+        <div *ngIf="errorMessage" class="error-message">
+          <mat-icon>error_outline</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <div class="redirect-status">
+          <mat-progress-spinner
+            mode="indeterminate"
+            diameter="32"
+            strokeWidth="3"
+          ></mat-progress-spinner>
+          <span>{{ 'AUTH.REGISTER.REDIRECTING' | translate }}</span>
+        </div>
+
+        <!-- Fallback if the automatic redirect is blocked -->
+        <div class="actions">
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            class="submit-button"
+            (click)="signUp()"
+          >
+            <mat-icon>person_add</mat-icon>
+            {{ 'AUTH.REGISTER.BUTTON' | translate }}
+          </button>
+        </div>
+
+        <div class="auth-switch">
+          <span>{{ 'AUTH.REGISTER.HAVE_ACCOUNT' | translate }}</span>
+          <a routerLink="/auth/login">{{ 'AUTH.REGISTER.LOGIN_LINK' | translate }}</a>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      <a routerLink="/" class="back-link">
+        <mat-icon>arrow_back</mat-icon>
+        Back to homepage
+      </a>
+    </div>
+  </div>
+</div>

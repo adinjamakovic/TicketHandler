@@ -7,11 +7,11 @@
 
       <!-- Right: search + new organizer -->
       <div class="actions-container">
-        <mat-form-field class="search-field" appearance="fill">
+        <mat-form-field class="search-field" appearance="fill" floatLabel="always">
           <mat-label>{{ 'PRODUCTS.SEARCH_PLACEHOLDER' | translate }}</mat-label>
           <input
             matInput
-            [placeholder]="'Enter organizer name...'"
+            [placeholder]="'Name or description...'"
             (keyup.enter)="request.paging.page = 1; loadPagedData()"
             [(ngModel)]="request.search"
           />
@@ -23,6 +23,81 @@
           New organizer
         </button>
       </div>
+    </div>
+
+    <div class="filter-bar">
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>City</mat-label>
+        <mat-select
+          [(ngModel)]="request.city"
+          [placeholder]="'All cities'"
+          (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All cities</mat-option>
+          @for (city of cities; track city.id) {
+            <mat-option [value]="city.name">{{ city.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>E-Mail</mat-label>
+        <input
+          matInput
+          [placeholder]="'Part of the e-mail...'"
+          [(ngModel)]="request.email"
+          (keyup.enter)="onFilterChange()"
+        />
+        <mat-icon matSuffix>alternate_email</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Events</mat-label>
+        <mat-select
+          [(ngModel)]="request.hasEvents"
+          [placeholder]="'All organizers'"
+          (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All organizers</mat-option>
+          <mat-option [value]="true">With events</mat-option>
+          <mat-option [value]="false">Without events</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Registered from</mat-label>
+        <input
+          matInput
+          [matDatepicker]="registeredFromPicker"
+          [(ngModel)]="request.registeredFrom"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="registeredFromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #registeredFromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Registered to</mat-label>
+        <input
+          matInput
+          [matDatepicker]="registeredToPicker"
+          [min]="request.registeredFrom"
+          [(ngModel)]="request.registeredTo"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="registeredToPicker"></mat-datepicker-toggle>
+        <mat-datepicker #registeredToPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        class="clear-filters-button"
+        [disabled]="!hasActiveFilters"
+        (click)="onClearFilters()"
+      >
+        <mat-icon>filter_alt_off</mat-icon>
+        <span>Clear filters</span>
+      </button>
     </div>
   </div>
 
@@ -116,7 +191,7 @@
       <!-- No data -->
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" colspan="6">
-          <ng-container *ngIf="request.search; else noDataDefault">
+          <ng-container *ngIf="hasActiveFilters; else noDataDefault">
             {{ 'PRODUCTS.NO_DATA_FILTER' | translate }}
           </ng-container>
           <ng-template #noDataDefault>

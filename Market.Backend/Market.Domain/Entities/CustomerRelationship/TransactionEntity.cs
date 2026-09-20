@@ -49,6 +49,12 @@ namespace Market.Domain.Entities.CustomerRelationship
         /// </summary>
         public string StripeToken { get; set; }
         /// <summary>
+        /// Why a settled payment could not be fulfilled on its own. Written together with
+        /// <see cref="OrderStatusType.PaymentReview"/> so whoever picks the order up can see
+        /// what went wrong without digging through the logs.
+        /// </summary>
+        public string? SettlementIssue { get; set; }
+        /// <summary>
         /// Concurrency token. The browser and the Stripe webhook can report the same
         /// successful payment at the same time; this makes sure only one of them gets to
         /// take the tickets out of stock.

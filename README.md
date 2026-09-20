@@ -15,9 +15,9 @@ The system is split into three runnable applications — an ASP.NET Core Web API
 
 **Accounts**
 - OpenID Connect login / logout / registration, with silent token renewal
-- Domain and API support for carts, orders, wallets, loyalty programmes, reviews and transactions
-  (the logged-in `client` portal itself is still a scaffold — these are driven from the admin and
-  organizer portals today)
+- Cart → checkout → order confirmation, with card payment through Stripe
+- Domain and API support for wallets, loyalty programmes, reviews and transactions
+  (no dedicated UI yet — these are driven from the admin and organizer portals today)
 
 **Organizers**
 - Full CRUD for their own events, ticket types and issued tickets
@@ -29,6 +29,8 @@ The system is split into three runnable applications — an ASP.NET Core Web API
 - Global admin news and platform settings
 
 **Platform-wide**
+- Card payments — server-priced quote, a Stripe Payment Intent per order and a signature-verified
+  webhook that settles the order once Stripe confirms the charge
 - AI assistant — an in-app chat widget backed by OpenAI, answering user questions through a
   rate-limited `POST /Ai/chat` endpoint
 - Error and performance monitoring via Sentry on both the API and the SPA
@@ -53,6 +55,7 @@ The system is split into three runnable applications — an ASP.NET Core Web API
 | Identity | Duende IdentityServer 8 (authorization code + PKCE), JWT bearer on the API |
 | Logging | Serilog (console + rolling file) |
 | Monitoring | Sentry (`Sentry.AspNetCore` 6) — errors plus custom request/handler tracing |
+| Payments | Stripe.net 52 — Payment Intents and a signed webhook behind `IPaymentGateway` |
 | AI | OpenAI Chat Completions via a typed `HttpClient` behind `IAiCompletionService` |
 | File storage | Azure Blob Storage (event/venue images) |
 | API docs | Swagger / Swashbuckle, wired to IdentityServer for interactive auth |
@@ -78,6 +81,7 @@ Market.Tests            xUnit test project
 | Language | TypeScript 5.9 |
 | UI | Angular Material 21 + CDK |
 | Auth | `angular-auth-oidc-client` (OIDC code flow + PKCE, rotating refresh tokens) |
+| Payments | `@stripe/stripe-js` — Stripe Elements on the checkout page |
 | Monitoring | `@sentry/angular` — error reporting, browser tracing and session replay |
 | i18n | `@ngx-translate/core` |
 | Maps | `@angular/google-maps` |
@@ -95,6 +99,7 @@ Market.Tests            xUnit test project
 - **Node.js 20.19+ / 22.12+** and npm 11
 - A **Google Maps JavaScript API key** (optional — only the map on the event details page needs it)
 - An **OpenAI API key** (optional — only the AI chat widget needs it)
+- **Stripe test keys** (optional — only checkout needs them; the rest of the app boots without them)
 - Two **Sentry DSNs**, one per project (optional — monitoring is skipped when they are empty)
 
 ### 1. Clone
@@ -104,7 +109,23 @@ git clone <repo-url>
 cd TicketHandler
 ```
 
-### 2. Configure the database
+### 2. Create the local config files
+
+Neither the API's `appsettings.json` nor the SPA's `environment.ts` is committed — both carry keys. Each has a committed placeholder beside it, plus a password-protected zip holding the maintainer's own copy (ask the repo owner for the password; a fresh setup doesn't need it):
+
+```bash
+# backend — in Market.Backend/Market.API/
+cp appsettings.example.json appsettings.json          # or: unzip appsettings.zip
+
+# frontend — in Market.Frontend/TicketHandler-frontend/src/environments/
+cp environment-template.ts environment.ts             # or: unzip environment.zip
+```
+
+On Windows, use `copy` instead of `cp`.
+
+`Market.IdentityServer/appsettings.json` holds no secrets and *is* committed, so it needs no such step.
+
+### 3. Configure the database
 
 Both backend hosts read the `Main` connection string and default to:
 
@@ -121,26 +142,31 @@ cd Market.Backend
 dotnet ef database update --project Market.Infrastructure --startup-project Market.API
 ```
 
-### 3. Configure secrets
+### 4. Configure secrets
 
-Secrets are blank in `appsettings.json` and belong in user secrets — never commit them:
+Every secret is blank in `appsettings.example.json` and belongs in user secrets:
 
 ```bash
 cd Market.Backend/Market.API
 dotnet user-secrets set "ConnectionStrings:AzureBlob" "<azure-blob-connection-string>"
 dotnet user-secrets set "OpenAi:ApiKey"              "<openai-api-key>"
 dotnet user-secrets set "Sentry:Dsn"                 "<backend-sentry-dsn>"
+dotnet user-secrets set "Stripe:PublishableKey"      "pk_test_..."
+dotnet user-secrets set "Stripe:SecretKey"           "sk_test_..."
+dotnet user-secrets set "Stripe:WebhookSecret"       "whsec_..."
 ```
 
-Everything here is optional for a first run: without the blob connection string image upload fails, without the OpenAI key the chat widget returns an error, and without the DSN nothing is reported to Sentry. The rest of the `OpenAi` section (base URL, model, system prompt, timeout) stays in `appsettings.json`.
+Everything here is optional for a first run: without the blob connection string image upload fails, without the OpenAI key the chat widget returns an error, without the Stripe keys the checkout endpoints refuse (the rest of the API still boots), and without the DSN nothing is reported to Sentry. Non-secret settings — the `OpenAi` base URL, model, system prompt and timeout, `Stripe:Currency`, `ImageCompression`, `IdentityServer` — stay in `appsettings.json`.
 
-### 4. Trust the local HTTPS certificate
+`appsettings.json` is git-ignored, so putting the values straight into it works too; user secrets just keep them out of the working tree entirely.
+
+### 5. Trust the local HTTPS certificate
 
 ```bash
 dotnet dev-certs https --trust
 ```
 
-### 5. Run IdentityServer — `https://localhost:5001`
+### 6. Run IdentityServer — `https://localhost:5001`
 
 ```bash
 cd Market.Backend
@@ -149,7 +175,7 @@ dotnet run --project Market.IdentityServer
 
 Start this **first**: both the API and the SPA validate tokens against it.
 
-### 6. Run the API — `https://localhost:7260`
+### 7. Run the API — `https://localhost:7260`
 
 In a second terminal:
 
@@ -160,18 +186,17 @@ dotnet run --project Market.API
 
 Swagger UI is at <https://localhost:7260/swagger>. Use the **Authorize** button to log in through IdentityServer — the Swagger client is pre-registered.
 
-### 7. Run the frontend — `http://localhost:4200`
+### 8. Run the frontend — `http://localhost:4200`
 
 In a third terminal:
 
 ```bash
 cd Market.Frontend/TicketHandler-frontend
-cp src/environments/environment-template.ts src/environments/environment.ts   # Windows: copy
 npm install
 npm start
 ```
 
-`environment.ts` is not committed. Fill in your keys; the rest already points at the local backend:
+Fill in your keys in the `environment.ts` created in step 2; the rest already points at the local backend:
 
 ```ts
 export const environment = {
@@ -185,6 +210,8 @@ export const environment = {
   sentryEnvironment: 'development',
 };
 ```
+
+There is no Stripe key here — the SPA fetches the publishable key from `GET /Payments/config` at checkout.
 
 Open <http://localhost:4200>.
 
@@ -230,7 +257,8 @@ npm test      # Karma/Jasmine
 - Ports matter: the OIDC clients in `Market.IdentityServer/Config.cs` and the API's CORS policy are pinned to `http://localhost:4200`, `https://localhost:7260` and `http://localhost:5177`. If you change a port, update both.
 - Every API endpoint requires authentication by default (fallback authorization policy); public endpoints opt out with `[AllowAnonymous]`.
 - The AI chat endpoint is additionally rate limited to 10 requests per minute per caller (`AiRateLimitPolicy` in `Market.API/DependencyInjection.cs`).
+- `Market.API/appsettings.json` and the SPA's `environment.ts` are git-ignored; `appsettings.example.json` and `environment-template.ts` are the committed placeholders to copy, and the `.zip` files beside them are password-protected snapshots of the real config.
+- Stripe webhooks: the SPA settles an order by calling `POST /Payments/confirm`, and the webhook is the backstop for when the buyer never comes back (closed tab, redirect payment methods). To exercise it locally run `stripe listen --forward-to https://localhost:7260/Payments/webhook` and set `Stripe:WebhookSecret` to the `whsec_...` it prints.
+- Charges are created in `Stripe:Currency` (`BAM` by default), which must match the currency the catalogue prices are expressed in — ticket prices are sent to Stripe as-is.
 - Frontend and backend report to **two separate Sentry projects**, so each needs its own DSN.
 - The IdentityServer signing key under `Market.IdentityServer/keys/` and the seeded credentials above are for local development only — replace them before deploying anywhere real.
-</content>
-</invoke>

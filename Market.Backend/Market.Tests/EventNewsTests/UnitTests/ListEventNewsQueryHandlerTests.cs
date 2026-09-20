@@ -160,6 +160,46 @@ public class ListEventNewsQueryHandlerTests
     }
 
     [Fact]
+    public async Task Handle_WithHasImageTrue_ReturnsOnlyPostsCarryingAnImage()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+
+        var result = await CreateHandler(ctx, FakeAppCurrentUser.Anonymous())
+            .Handle(new ListEventNewsQuery { HasImage = true }, CancellationToken.None);
+
+        Assert.Equal(EventNewsTestContext.RockNightNewsId, Assert.Single(result.Items).Id);
+    }
+
+    [Fact]
+    public async Task Handle_WithHasImageFalse_ReturnsOnlyPostsWithoutAnImage()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+
+        var result = await CreateHandler(ctx, FakeAppCurrentUser.Anonymous())
+            .Handle(new ListEventNewsQuery { HasImage = false }, CancellationToken.None);
+
+        Assert.Equal(2, result.Total);
+        Assert.All(result.Items, x => Assert.Null(x.Image));
+    }
+
+    [Fact]
+    public async Task Handle_WithHasImageAndEventFilter_AppliesBoth()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+
+        var result = await CreateHandler(ctx, FakeAppCurrentUser.Anonymous())
+            .Handle(
+                new ListEventNewsQuery
+                {
+                    EventId = EventNewsTestContext.RockNightEventId,
+                    HasImage = false
+                },
+                CancellationToken.None);
+
+        Assert.Equal("Support act announced", Assert.Single(result.Items).Header);
+    }
+
+    [Fact]
     public async Task Handle_OrdersOldestPostFirst()
     {
         await using var ctx = await EventNewsTestContext.CreateAsync();

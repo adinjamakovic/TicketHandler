@@ -4,37 +4,109 @@
 <div class="login-page">
     <div class="lead">
         <h1>Create Account</h1>
+        <p>Registration creates a regular user account.</p>
     </div>
 
     <partial name="_ValidationSummary" />
 
     <div class="row">
 
-        <div class="col-sm-6">
+        <div class="col-sm-8">
             <form asp-page="/Account/Create/Index">
                 <input type="hidden" asp-for="Input.ReturnUrl" />
 
-                <div class="mb-3">
-                    <label asp-for="Input.Username"></label>
-                    <input class="form-control" placeholder="Username" asp-for="Input.Username" autofocus>
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.FirstName"></label>
+                        <input class="form-control" asp-for="Input.FirstName" autofocus>
+                        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.LastName"></label>
+                        <input class="form-control" asp-for="Input.LastName">
+                        <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Input.Password"></label>
-                    <input type="password" class="form-control" placeholder="Password" asp-for="Input.Password" autocomplete="off">
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.BirthDate"></label>
+                        <input type="date" class="form-control" asp-for="Input.BirthDate">
+                        <span asp-validation-for="Input.BirthDate" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Gender"></label>
+                        <select class="form-select" asp-for="Input.Gender">
+                            <option value="">Select…</option>
+                            @foreach (var gender in Market.IdentityServer.Pages.Create.Index.Genders)
+                            {
+                                <option value="@gender">@gender</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.Gender" class="text-danger"></span>
+                    </div>
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Input.Name"></label>
-                    <input type="text" class="form-control" placeholder="Name" asp-for="Input.Name">
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.CityId"></label>
+                        <select class="form-select" asp-for="Input.CityId">
+                            <option value="">Select…</option>
+                            @foreach (var city in Model.Cities)
+                            {
+                                <option value="@city.Id">@city.Name</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.CityId" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Address"></label>
+                        <input class="form-control" asp-for="Input.Address">
+                        <span asp-validation-for="Input.Address" class="text-danger"></span>
+                    </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Phone"></label>
+                        <input class="form-control" asp-for="Input.Phone">
+                        <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Username"></label>
+                        <input class="form-control" asp-for="Input.Username">
+                        <span asp-validation-for="Input.Username" class="text-danger"></span>
+                    </div>
+                </div>
+
                 <div class="mb-3">
                     <label asp-for="Input.Email"></label>
-                    <input type="email" class="form-control" placeholder="Email" asp-for="Input.Email" >
+                    <input type="email" class="form-control" asp-for="Input.Email">
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.Password"></label>
+                        <input type="password" class="form-control" asp-for="Input.Password" autocomplete="new-password">
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-sm-6 mb-3">
+                        <label asp-for="Input.ConfirmPassword"></label>
+                        <input type="password" class="form-control" asp-for="Input.ConfirmPassword" autocomplete="new-password">
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
                 </div>
 
                 <button class="btn btn-primary" name="Input.Button" value="create">Create</button>
                 <button class="btn btn-secondary" name="Input.Button" value="cancel">Cancel</button>
             </form>
+
+            <p class="mt-3">
+                Already have an account?
+                <a asp-page="/Account/Login/Index" asp-route-returnUrl="@Model.Input.ReturnUrl">Log in</a>
+            </p>
         </div>
-        
+
     </div>
 </div>

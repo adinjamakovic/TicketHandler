@@ -12,15 +12,20 @@ public sealed class ListEventsQueryHandler(
 
         var searchTerm = req.Search?.ToLower().Trim() ?? string.Empty;
         if (!string.IsNullOrWhiteSpace(searchTerm))
-            q = q.Where(x => x.Name.ToLower().Contains(searchTerm));
+            q = q.Where(x => x.Name.ToLower().Contains(searchTerm)
+                          || (x.Description != null && x.Description.ToLower().Contains(searchTerm)));
 
-        if (req.DateFrom.HasValue && req.DateTo.HasValue)
+        if (req.DateFrom.HasValue)
         {
             var from = req.DateFrom.Value.Date;
-            var to = req.DateTo.Value.Date;
-            q = q.Where(x => x.ScheduledDate.Date >= from && x.ScheduledDate.Date <= to);
+            q = q.Where(x => x.ScheduledDate.Date >= from);
         }
 
+        if (req.DateTo.HasValue)
+        {
+            var to = req.DateTo.Value.Date;
+            q = q.Where(x => x.ScheduledDate.Date <= to);
+        }
 
         if (!string.IsNullOrWhiteSpace(req.City))
         {

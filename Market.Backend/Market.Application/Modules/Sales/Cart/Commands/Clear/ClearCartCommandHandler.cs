@@ -14,7 +14,7 @@ namespace Market.Application.Modules.Sales.Cart.Commands.Clear
             int personId = CartPerson.RequireId(appCurrentUser);
 
             var cartItems = await ctx.CartItems
-                .Where(x => x.PersonId == personId)
+                .Where(x => x.PersonId == personId && !x.IsSavedForLater)
                 .ToListAsync(ct);
 
             if (cartItems.Count == 0)

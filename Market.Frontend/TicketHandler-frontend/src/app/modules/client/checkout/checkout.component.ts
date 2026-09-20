@@ -23,6 +23,8 @@ import {
   ListCountriesQueryDto,
   ListCountriesRequest,
 } from '../../../api-services/countries/countries-api.models';
+import { DialogButton } from '../../shared/models/dialog-config.model';
+import { DialogHelperService } from '../../shared/services/dialog-helper.service';
 
 @Component({
   selector: 'app-checkout',
@@ -38,6 +40,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   private countriesApi = inject(CountriesApiService);
   private auth = inject(AuthFacadeService);
   private toaster = inject(ToasterService);
+  private dialogHelper = inject(DialogHelperService);
   private router = inject(Router);
 
   items = this.cart.items;
@@ -48,6 +51,9 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   countries: ListCountriesQueryDto[] = [];
   isLoadingCountries = false;
   isPlacingOrder = false;
+
+  /** Guards against a second submit while the confirmation dialog is still open. */
+  private isConfirmingOrder = false;
 
   quote: GetPaymentQuoteQueryDto | null = null;
   currency = 'BAM';
@@ -118,7 +124,12 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       return 'Pay';
     }
 
-    return `Pay ${this.quote.total.toFixed(2)} ${this.currency}`;
+    return `Pay ${this.formattedTotal}`;
+  }
+
+  /** Invariant formatting on purpose: this string is shown, never parsed. */
+  private get formattedTotal(): string {
+    return this.quote ? `${this.quote.total.toFixed(2)} ${this.currency}` : '';
   }
 
   trackByTicketId(_index: number, item: GetCartQueryDtoItem): number {
@@ -142,12 +153,17 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     this.form.markAllAsTouched();
     this.paymentError = null;
 
-    if (this.form.invalid || this.isEmpty() || this.isPlacingOrder) {
+    if (this.form.invalid || this.isEmpty() || this.isPlacingOrder || this.isConfirmingOrder) {
       return;
     }
 
     if (!this.elements || !this.isPaymentReady) {
       this.toaster.error('The payment form is not ready yet, please wait a moment');
+      return;
+    }
+
+    // Last stop before the card is charged — the dialog names the amount.
+    if (!(await this.confirmCharge())) {
       return;
     }
 
@@ -159,6 +175,21 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.isPlacingOrder = false;
       this.checkoutStarted = false;
       this.showPaymentError(this.describeError(error, 'Could not take your payment, please try again'));
+    }
+  }
+
+  private async confirmCharge(): Promise<boolean> {
+    this.isConfirmingOrder = true;
+
+    try {
+      const result = await firstValueFrom(
+        this.dialogHelper.cart.confirmCheckout(this.formattedTotal)
+      );
+
+      // Escape and the backdrop both close with no result, which reads as "not now".
+      return result?.button === DialogButton.OK;
+    } finally {
+      this.isConfirmingOrder = false;
     }
   }
 
@@ -232,6 +263,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       if (result.isPaid) {
         this.toaster.success('Payment received — your tickets are confirmed');
+      } else if (result.requiresReview) {
+        this.toaster.warning('Payment received — we are checking your order');
       } else {
         this.toaster.info('Your payment is being processed');
       }

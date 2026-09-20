@@ -27,6 +27,28 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.List
             if (req.EventId is not null)
                 q = q.Where(x => x.EventId == req.EventId);
 
+            var searchTerm = req.Search?.Trim().ToLower() ?? string.Empty;
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+                q = q.Where(x => x.Header.ToLower().Contains(searchTerm)
+                              || (x.Body != null && x.Body.ToLower().Contains(searchTerm)));
+
+            if (req.DateFrom.HasValue)
+            {
+                var from = req.DateFrom.Value.Date;
+                q = q.Where(x => x.CreatedAtUtc.Date >= from);
+            }
+
+            if (req.DateTo.HasValue)
+            {
+                var to = req.DateTo.Value.Date;
+                q = q.Where(x => x.CreatedAtUtc.Date <= to);
+            }
+
+            if (req.HasImage.HasValue)
+                q = req.HasImage.Value
+                    ? q.Where(x => x.Image != null && x.Image != string.Empty)
+                    : q.Where(x => x.Image == null || x.Image == string.Empty);
+
             var projectedQ = q.OrderBy(x => x.CreatedAtUtc)
                 .Select(x => new ListEventNewsQueryDto
                 {

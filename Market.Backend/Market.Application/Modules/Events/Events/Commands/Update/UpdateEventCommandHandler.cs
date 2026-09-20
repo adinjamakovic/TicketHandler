@@ -35,9 +35,6 @@ public class UpdateEventCommandHandler(
         eventEntity.VenueId = req.VenueId;
         eventEntity.EventTypeId = req.EventTypeId;
 
-        eventEntity.Image = await imageStorage.ReplaceIfUploadedAsync(
-            ImageStorageCategory.Events, eventEntity.Image, req.Image, ct);
-
         var existingPerformers = await ctx.PerformerEvents
             .Where(x => x.EventId == eventEntity.Id)
             .ToListAsync(ct);
@@ -75,7 +72,16 @@ public class UpdateEventCommandHandler(
             }
         }
 
+        // Uploaded last, once the rest of the command is known to be valid: nothing is uploaded for
+        // an update that is about to be rejected.
+        var previousImage = eventEntity.Image;
+        eventEntity.Image = await imageStorage.SaveIfUploadedAsync(
+            ImageStorageCategory.Events, eventEntity.Image, req.Image, ct);
+
         await ctx.SaveChangesAsync(ct);
+
+        if (previousImage != eventEntity.Image)
+            await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Events, previousImage, ct);
 
         return eventEntity.Id;
     }

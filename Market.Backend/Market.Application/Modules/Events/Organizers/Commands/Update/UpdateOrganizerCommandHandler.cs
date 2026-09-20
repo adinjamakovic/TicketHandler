@@ -42,7 +42,8 @@ public class UpdateOrganizerCommandHandler(
         entity.Description = req.Description?.Trim();
         entity.Address = req.Address.Trim();
         entity.CityId = req.CityId;
-        entity.Logo = await imageStorage.ReplaceIfUploadedAsync(
+        var previousLogo = entity.Logo;
+        entity.Logo = await imageStorage.SaveIfUploadedAsync(
             ImageStorageCategory.Organizers, entity.Logo, req.Logo, ct);
 
 
@@ -51,7 +52,7 @@ public class UpdateOrganizerCommandHandler(
         user.BirthDate = req.User.BirthDate;
         user.Email = req.User.Email;
         user.Address = req.User.Address.Trim();
-        user.CityId = req.CityId;
+        user.CityId = req.User.CityId;
         user.Gender = req.User.Gender;
         user.Phone = req.User.Phone;
 
@@ -59,6 +60,9 @@ public class UpdateOrganizerCommandHandler(
             user.PasswordHash = new PasswordHasher<PersonEntity>().HashPassword(user, req.User.Password);
 
         await ctx.SaveChangesAsync(ct);
+
+        if (previousLogo != entity.Logo)
+            await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, previousLogo, ct);
 
         return Unit.Value;
     }

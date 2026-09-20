@@ -24,6 +24,9 @@ namespace Market.Infrastructure.Database.Configurations.CustomerRelationship
             b.Property(x => x.StripeToken)
                 .HasMaxLength(255);
 
+            b.Property(x => x.SettlementIssue)
+                .HasMaxLength(400);
+
             b.HasIndex(x => x.StripeToken);
 
             b.Property(x => x.RowVersion)

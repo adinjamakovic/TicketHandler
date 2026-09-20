@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import {SharedModule} from '../shared/shared-module';
 import { OrganizerRoutingModule } from './organizer-routing.module';
 import { OrganizersLayoutComponent } from './organizers-layout/organizers-layout.component';
-import { MatTabBody } from '@angular/material/tabs';
 import { OrganizerSettingsComponent } from './organizer-settings/organizer-settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { TicketTypesUpsertComponent } from './ticket-types/ticket-types-upsert/ticket-types-upsert.component';
@@ -40,7 +39,6 @@ import {MatTimepickerModule} from '@angular/material/timepicker';
   imports: [
     OrganizerRoutingModule,
     SharedModule,
-    MatTabBody,
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,

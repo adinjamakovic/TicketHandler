@@ -28,5 +28,11 @@ public enum OrderStatusType
     /// <summary>
     /// Order has been cancelled.
     /// </summary>
-    Cancelled = 5
+    Cancelled = 5,
+
+    /// <summary>
+    /// The payment went through but the order could not be fulfilled automatically —
+    /// the money is ours and the tickets are not handed over until someone looks at it.
+    /// </summary>
+    PaymentReview = 6
 }

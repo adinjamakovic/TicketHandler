@@ -16,15 +16,19 @@ export class CartService {
   private auth = inject(AuthFacadeService);
 
   private _items = signal<GetCartQueryDtoItem[]>([]);
+  private _savedItems = signal<GetCartQueryDtoItem[]>([]);
   private _isLoading = signal(false);
 
   items = this._items.asReadonly();
+  savedItems = this._savedItems.asReadonly();
   isLoading = this._isLoading.asReadonly();
 
   itemCount = computed(() => this._items().reduce((sum, item) => sum + item.quantity, 0));
   lineCount = computed(() => this._items().length);
   totalAmount = computed(() => this._items().reduce((sum, item) => sum + item.subtotal, 0));
   isEmpty = computed(() => this._items().length === 0);
+  savedLineCount = computed(() => this._savedItems().length);
+  hasSavedItems = computed(() => this._savedItems().length > 0);
 
   constructor() {
     effect(() => {
@@ -32,6 +36,7 @@ export class CartService {
         this.load();
       } else {
         this._items.set([]);
+        this._savedItems.set([]);
       }
     });
   }
@@ -45,6 +50,7 @@ export class CartService {
     this.cartApi.get().subscribe({
       next: cart => {
         this._items.set(cart.items ?? []);
+        this._savedItems.set(cart.savedItems ?? []);
         this._isLoading.set(false);
       },
       error: () => {
@@ -71,7 +77,25 @@ export class CartService {
       .pipe(tap(() => this.load()));
   }
 
+  saveForLater(ticketId: number): Observable<void> {
+    return this.cartApi
+      .saveForLater(ticketId)
+      .pipe(tap(() => this.load()));
+  }
+
+  moveToCart(ticketId: number): Observable<void> {
+    return this.cartApi
+      .moveToCart(ticketId)
+      .pipe(tap(() => this.load()));
+  }
+
+  /** Empties the cart only — the saved-for-later shelf survives, so it has to be reloaded. */
   clear(): Observable<void> {
-    return this.cartApi.clear().pipe(tap(() => this._items.set([])));
+    return this.cartApi.clear().pipe(
+      tap(() => {
+        this._items.set([]);
+        this.load();
+      })
+    );
   }
 }

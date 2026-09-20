@@ -59,14 +59,26 @@ public class CreateOrganizerCommandHandler(
         {
             ctx.Organizers.Add(organizer);
             await ctx.SaveChangesAsync(ct);
-
         }
-        catch (Exception ex)
+        catch
         {
-            await imageStorage.DeleteIfExistsAsync(ImageStorageCategory.Organizers, logoPath, ct);
-            Console.WriteLine(ex);
+            // The logo is already uploaded, so drop it instead of leaving it orphaned,
+            // then let the original failure reach MarketExceptionHandler - the caller
+            // must never get a success response for an organizer that was not saved.
+            try
+            {
+                // Not ct: cleanup still has to run when the request was cancelled.
+                await imageStorage.DeleteIfExistsAsync(
+                    ImageStorageCategory.Organizers, logoPath, CancellationToken.None);
+            }
+            catch
+            {
+                // A failed cleanup must not hide the failure we are about to rethrow.
+            }
+
+            throw;
         }
-        
+
         return organizer.Id;
     }
 }

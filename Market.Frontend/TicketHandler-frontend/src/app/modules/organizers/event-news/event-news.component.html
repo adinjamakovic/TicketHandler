@@ -10,16 +10,13 @@
 
       <div class="actions-container">
 
-        <mat-form-field class="search-field" appearance="fill">
-          <mat-label>Filter by event</mat-label>
-          <mat-select
-            [(ngModel)]="request.eventId"
-            (selectionChange)="onSearchChange($event.value)">
-            <mat-option [value]="null">All events</mat-option>
-            @for (event of events; track event.id) {
-              <mat-option [value]="event.id">{{ event.name }}</mat-option>
-            }
-          </mat-select>
+        <mat-form-field class="search-field" appearance="fill" floatLabel="always">
+          <mat-label>Search news</mat-label>
+          <input
+            matInput
+            [(ngModel)]="request.search"
+            (keyup.enter)="onFilterChange()"
+            [placeholder]="'Header or body text'">
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
@@ -28,6 +25,67 @@
           <span>Add news</span>
         </button>
       </div>
+    </div>
+
+    <div class="filter-bar">
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Event</mat-label>
+        <mat-select
+          [(ngModel)]="request.eventId"
+          [placeholder]="'All events'"
+          (selectionChange)="onSearchChange($event.value)">
+          <mat-option [value]="null">All events</mat-option>
+          @for (event of events; track event.id) {
+            <mat-option [value]="event.id">{{ event.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Published from</mat-label>
+        <input
+          matInput
+          [matDatepicker]="dateFromPicker"
+          [(ngModel)]="request.dateFrom"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()">
+        <mat-datepicker-toggle matIconSuffix [for]="dateFromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateFromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Published to</mat-label>
+        <input
+          matInput
+          [matDatepicker]="dateToPicker"
+          [min]="request.dateFrom"
+          [(ngModel)]="request.dateTo"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()">
+        <mat-datepicker-toggle matIconSuffix [for]="dateToPicker"></mat-datepicker-toggle>
+        <mat-datepicker #dateToPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Image</mat-label>
+        <mat-select
+          [(ngModel)]="request.hasImage"
+          [placeholder]="'All posts'"
+          (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All posts</mat-option>
+          <mat-option [value]="true">With image</mat-option>
+          <mat-option [value]="false">Without image</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button
+        mat-stroked-button
+        class="clear-filters-button"
+        [disabled]="!hasActiveFilters"
+        (click)="onClearFilters()">
+        <mat-icon>filter_alt_off</mat-icon>
+        <span>Clear filters</span>
+      </button>
     </div>
   </div>
 
@@ -122,8 +180,8 @@
           <div class="no-data-content">
             <mat-icon>inbox</mat-icon>
             <p>
-              <ng-container *ngIf="request.eventId; else noDataDefault">
-                {{ 'No news for the selected event' }}
+              <ng-container *ngIf="hasActiveFilters; else noDataDefault">
+                {{ 'No news match the selected filters' }}
               </ng-container>
               <ng-template #noDataDefault>
                 {{ 'No event news' }}

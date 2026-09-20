@@ -79,6 +79,17 @@
   }
 }
 
+// Payment review - Amber (Paid, but fulfilment needs a person)
+.status-payment-review {
+  background: rgba(255, 152, 0, 0.1);
+  color: #e65100;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+
+  mat-icon {
+    color: #e65100;
+  }
+}
+
 // Unknown - Light Gray
 .status-unknown {
   background: rgba(189, 189, 189, 0.1);

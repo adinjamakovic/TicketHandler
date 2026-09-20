@@ -57,6 +57,31 @@
           </button>
         </div>
 
+        <!-- ============ Paid, but held for review ============ -->
+        <div class="panel panel--pending" *ngIf="needsReview">
+          <mat-icon class="panel__icon panel__icon--pending">report_problem</mat-icon>
+          <h1 class="panel__title">We're checking your order</h1>
+          <p class="panel__text">
+            Your payment went through, but we could not release the tickets automatically.
+            Our team is looking into it and will be in touch — please do not pay again.
+          </p>
+
+          <div class="details">
+            <div class="details__row">
+              <span>Order</span>
+              <strong>#{{ result?.orderId }}</strong>
+            </div>
+            <div class="details__row">
+              <span>Amount paid</span>
+              <strong>{{ result?.amount | currency:currency:'symbol':'1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <button mat-stroked-button class="panel__action" (click)="backToEvents()">
+            Browse more events
+          </button>
+        </div>
+
         <!-- ============ Not paid ============ -->
         <div class="panel panel--failed" *ngIf="isFailed">
           <mat-icon class="panel__icon panel__icon--failed">cancel</mat-icon>

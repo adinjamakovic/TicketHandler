@@ -132,7 +132,7 @@ public class ListEventsQueryHandlerTests
     }
 
     [Fact]
-    public async Task Handle_WithOnlyDateFrom_DoesNotFilter()
+    public async Task Handle_WithOnlyDateFrom_ReturnsOnlyEventsFromThatDayOn()
     {
         await using var ctx = await EventsTestContext.CreateAsync();
         await SeedCatalogueAsync(ctx);
@@ -140,7 +140,23 @@ public class ListEventsQueryHandlerTests
         var result = await CreateHandler(ctx, FakeAppCurrentUser.Anonymous())
             .Handle(new ListEventsQuery { DateFrom = August }, CancellationToken.None);
 
-        Assert.Equal(3, result.Total);
+        // The open end of the range is still a filter: an unset DateTo means "no upper bound",
+        // not "ignore the lower bound too".
+        Assert.Equal(1, result.Total);
+        Assert.Equal("Autumn Drama Nights", Assert.Single(result.Items).Name);
+    }
+
+    [Fact]
+    public async Task Handle_WithOnlyDateTo_ReturnsOnlyEventsUpToThatDay()
+    {
+        await using var ctx = await EventsTestContext.CreateAsync();
+        await SeedCatalogueAsync(ctx);
+
+        var result = await CreateHandler(ctx, FakeAppCurrentUser.Anonymous())
+            .Handle(new ListEventsQuery { DateTo = June }, CancellationToken.None);
+
+        Assert.Equal(1, result.Total);
+        Assert.Equal("Mostar Jazz Evening", Assert.Single(result.Items).Name);
     }
 
     [Fact]

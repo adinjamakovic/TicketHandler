@@ -8,7 +8,6 @@ import {
   ListOrdersWithItemsRequest,
   ListOrdersWithItemsResponse,
   GetOrderByIdQueryDto,
-  CreateOrderCommand,
   UpdateOrderCommand,
   OrderStatusType
 } from './orders-api.models';
@@ -53,15 +52,6 @@ export class OrdersApiService {
    */
   getById(id: number): Observable<GetOrderByIdQueryDto> {
     return this.http.get<GetOrderByIdQueryDto>(`${this.baseUrl}/${id}`);
-  }
-
-  /**
-   * POST /Orders
-   * Create a new order.
-   * @returns ID of the newly created order
-   */
-  create(payload: CreateOrderCommand): Observable<number> {
-    return this.http.post<number>(this.baseUrl, payload);
   }
 
   /**

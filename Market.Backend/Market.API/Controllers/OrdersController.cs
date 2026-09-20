@@ -3,7 +3,6 @@ using Market.Application.Modules.Events.Events.Commands.Delete;
 using Market.Application.Modules.Events.Events.Commands.Update;
 using Market.Application.Modules.Events.Events.Queries.GetById;
 using Market.Application.Modules.Events.Events.Queries.List;
-using Market.Application.Modules.Sales.Orders.Commands.Create;
 using Market.Application.Modules.Sales.Orders.Commands.Delete;
 using Market.Application.Modules.Sales.Orders.Queries.GetById;
 using Market.Application.Modules.Sales.Orders.Queries.GetByPersonId;
@@ -19,13 +18,6 @@ namespace Market.API.Controllers;
 [Route("[controller]")]
 public class OrdersController(ISender sender) : ApiControllerBase(sender)
 {
-    [HttpPost]
-    public async Task<ActionResult<int>> Create(CreateOrderCommand command, CancellationToken ct)
-    {
-        int id = await SendTraced(command, ct);
-
-        return CreatedAtAction(nameof(GetById), new { id }, new { id });
-    }
     [HttpGet]
     [AllowAnonymous]
     public async Task<PageResult<ListOrdersQueryDto>> List([FromQuery] ListOrdersQuery q, CancellationToken ct)

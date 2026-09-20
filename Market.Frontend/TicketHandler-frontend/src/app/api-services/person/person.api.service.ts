@@ -2,7 +2,12 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { CreatePersonCommand, GetPersonByIdQueryDto, UpdatePersonCommand } from './person.api.model';
+import {
+  CreatePersonCommand,
+  GetPersonByIdQueryDto,
+  UpdatePersonCommand,
+  UpdatePersonRolesCommand,
+} from './person.api.model';
 
 @Injectable({
   providedIn: 'root',
@@ -25,5 +30,10 @@ export class PersonApiService {
 
     update(id: number, payload: UpdatePersonCommand): Observable<void>{
       return this.http.put<void>(`${this.baseUrl}/${id}`, payload);
+    }
+
+    // PUT /Person/{id}/roles - admin only, the server rejects anybody else.
+    updateRoles(id: number, payload: UpdatePersonRolesCommand): Observable<void>{
+      return this.http.put<void>(`${this.baseUrl}/${id}/roles`, payload);
     }
 }

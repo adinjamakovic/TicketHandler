@@ -28,6 +28,15 @@ export class CartApiService {
   removeItem(ticketId: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/items/${ticketId}`);
   }
+  //POST /Cart/items/{ticketId}/save-for-later
+    //Parks the line: it keeps its quantity but leaves the cart totals and checkout
+  saveForLater(ticketId: number): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/items/${ticketId}/save-for-later`, {});
+  }
+  //POST /Cart/items/{ticketId}/move-to-cart
+  moveToCart(ticketId: number): Observable<void> {
+    return this.http.post<void>(`${this.baseUrl}/items/${ticketId}/move-to-cart`, {});
+  }
   //DELETE /Cart
   clear(): Observable<void> {
     return this.http.delete<void>(this.baseUrl);

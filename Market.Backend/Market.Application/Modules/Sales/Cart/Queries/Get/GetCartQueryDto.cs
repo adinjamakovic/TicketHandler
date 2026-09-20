@@ -9,7 +9,9 @@ namespace Market.Application.Modules.Sales.Cart.Queries.Get
     public sealed class GetCartQueryDto
     {
         public List<GetCartQueryDtoItem> Items { get; set; } = new();
+        public List<GetCartQueryDtoItem> SavedItems { get; set; } = new();
         public int LineCount { get; set; }
+        public int SavedLineCount { get; set; }
         public decimal TotalQuantity { get; set; }
         public decimal TotalAmount { get; set; }
     }
@@ -25,6 +27,7 @@ namespace Market.Application.Modules.Sales.Cart.Queries.Get
         public decimal QuantityInStock { get; set; }
         public string Benefits { get; set; }
         public DateTime AddedAtUtc { get; set; }
+        public bool IsSavedForLater { get; set; }
     }
 
     public sealed class GetCartQueryDtoEvent

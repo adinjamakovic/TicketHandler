@@ -14,6 +14,14 @@
       "BUTTON": "Prijavi se",
       "LOADING": "Prijavljivanje..."
     },
+    "REGISTER": {
+      "TITLE": "Kreiraj račun",
+      "SUBTITLE": "Bit ćete preusmjereni na sigurnu stranicu za registraciju",
+      "BUTTON": "Kreiraj račun",
+      "REDIRECTING": "Preusmjeravanje na sigurnu registraciju…",
+      "HAVE_ACCOUNT": "Već imate račun?",
+      "LOGIN_LINK": "Prijavite se"
+    },
     "LOGOUT": {
       "TITLE": "Odjava",
       "MESSAGE": "Odjavljivanje sa sistema...",
@@ -418,6 +426,15 @@
     "N_A": "N/D",
     "OPTIONAL": "Opciono",
     "REQUIRED": "Obavezno"
+  },
+  "CART": {
+    "DIALOGS": {
+      "REMOVE_TITLE": "Uklanjanje karte",
+      "REMOVE_FROM_CART": "Ukloniti \"{{name}}\" iz korpe?",
+      "REMOVE_FROM_SAVED": "Ukloniti \"{{name}}\" iz sačuvanih stavki?",
+      "CHECKOUT_TITLE": "Potvrda narudžbe",
+      "CHECKOUT_MESSAGE": "Vaša kartica će odmah biti terećena za {{total}} i narudžba će biti kompletirana. Nastaviti?"
+    }
   },
   "DIALOGS": {
     "TYPES": {

@@ -105,6 +105,9 @@ public partial class Program
             }
 
             app.UseForwardedHeaders();
+
+            app.UseRequestLocalization();
+
             app.UseMiddleware<SecurityMiddleware>();
             app.UseResponseCaching();
 

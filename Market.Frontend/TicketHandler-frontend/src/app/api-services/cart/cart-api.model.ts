@@ -2,8 +2,11 @@
 
 export interface GetCartQueryDto {
   items: GetCartQueryDtoItem[];
+  /** Lines parked with "save for later" — priced, but outside the totals and checkout. */
+  savedItems: GetCartQueryDtoItem[];
   /** Number of distinct ticket lines in the cart. */
   lineCount: number;
+  savedLineCount: number;
   totalQuantity: number;
   totalAmount: number;
 }
@@ -17,7 +20,8 @@ export interface GetCartQueryDtoItem {
   subtotal: number;
   quantityInStock: number;
   benefits: string;
-  addedAtUtc: string; 
+  addedAtUtc: string;
+  isSavedForLater: boolean;
 }
 
 export interface GetCartQueryDtoEvent {

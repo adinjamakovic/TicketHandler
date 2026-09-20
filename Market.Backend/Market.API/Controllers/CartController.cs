@@ -1,6 +1,8 @@
 using Market.Application.Modules.Sales.Cart.Commands.AddItem;
 using Market.Application.Modules.Sales.Cart.Commands.Clear;
+using Market.Application.Modules.Sales.Cart.Commands.MoveToCart;
 using Market.Application.Modules.Sales.Cart.Commands.RemoveItem;
+using Market.Application.Modules.Sales.Cart.Commands.SaveForLater;
 using Market.Application.Modules.Sales.Cart.Commands.UpdateItem;
 using Market.Application.Modules.Sales.Cart.Queries.Get;
 
@@ -34,6 +36,18 @@ public class CartController(ISender sender) : ApiControllerBase(sender)
     public async Task RemoveItem(int ticketId, CancellationToken ct)
     {
         await SendTraced(new RemoveCartItemCommand { TicketId = ticketId }, ct);
+    }
+
+    [HttpPost("items/{ticketId:int}/save-for-later")]
+    public async Task SaveForLater(int ticketId, CancellationToken ct)
+    {
+        await SendTraced(new SaveCartItemForLaterCommand { TicketId = ticketId }, ct);
+    }
+
+    [HttpPost("items/{ticketId:int}/move-to-cart")]
+    public async Task MoveToCart(int ticketId, CancellationToken ct)
+    {
+        await SendTraced(new MoveCartItemToCartCommand { TicketId = ticketId }, ct);
     }
 
     [HttpDelete]

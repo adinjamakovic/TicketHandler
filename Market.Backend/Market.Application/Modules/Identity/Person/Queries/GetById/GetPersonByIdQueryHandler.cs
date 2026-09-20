@@ -11,6 +11,11 @@ namespace Market.Application.Modules.Identity.Person.Queries.GetById
     {
         public async Task<GetPersonByIdQueryDto> Handle(GetPersonByIdQuery req, CancellationToken ct)
         {
+            // The DTO carries email, address, phone and birth date, so only the person themselves
+            // may read it. Admins are allowed through because they administer organizer accounts.
+            if (!appCurrentUser.IsAdmin && appCurrentUser.UserId != req.Id)
+                throw new MarketBusinessRuleException("111", "This user can not view this person");
+
             var Person = await ctx.Persons
                 .Where(x => x.Id == req.Id)
                 .Select(x => new GetPersonByIdQueryDto

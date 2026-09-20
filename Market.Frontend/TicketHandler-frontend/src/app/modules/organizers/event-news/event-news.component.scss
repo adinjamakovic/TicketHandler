@@ -182,6 +182,7 @@ $hover-bg: rgba(73, 118, 181, 0.04);
       }
     }
   }
+
 }
 
 // Loading Container
@@ -393,7 +394,7 @@ $hover-bg: rgba(73, 118, 181, 0.04);
   }
 }
 
-// Responzivnost
+// Responsiveness
 @media (max-width: 1024px) {
   .header-card {
     .header-card-content {
@@ -453,6 +454,10 @@ $hover-bg: rgba(73, 118, 181, 0.04);
           width: 100%;
         }
       }
+    }
+
+    .filter-bar {
+      grid-template-columns: 1fr;
     }
   }
 

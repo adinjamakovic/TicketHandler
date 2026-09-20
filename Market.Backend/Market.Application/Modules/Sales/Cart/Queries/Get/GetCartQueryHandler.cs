@@ -13,7 +13,9 @@ namespace Market.Application.Modules.Sales.Cart.Queries.Get
         {
             int personId = CartPerson.RequireId(appCurrentUser);
 
-            var items = await ctx.CartItems
+            // Both lists come from the same table in one round trip and are split below,
+            // so the cart and the saved shelf can never disagree about a line.
+            var rows = await ctx.CartItems
                 .AsNoTracking()
                 .Where(x => x.PersonId == personId)
                 .OrderBy(x => x.CreatedAtUtc)
@@ -38,20 +40,26 @@ namespace Market.Application.Modules.Sales.Cart.Queries.Get
                     Subtotal = x.Quantity * x.Ticket.UnitPrice,
                     QuantityInStock = x.Ticket.QuantityInStock,
                     Benefits = x.Ticket.Benefits,
-                    AddedAtUtc = x.CreatedAtUtc
+                    AddedAtUtc = x.CreatedAtUtc,
+                    IsSavedForLater = x.IsSavedForLater
                 })
                 .ToListAsync(ct);
 
-            items.ApplyPublicImagePaths(
+            rows.ApplyPublicImagePaths(
                 imageStorage,
                 ImageStorageCategory.Events,
                 x => x.Event.Image,
                 (x, path) => x.Event.Image = path);
 
+            var items = rows.Where(x => !x.IsSavedForLater).ToList();
+            var savedItems = rows.Where(x => x.IsSavedForLater).ToList();
+
             return new GetCartQueryDto
             {
                 Items = items,
+                SavedItems = savedItems,
                 LineCount = items.Count,
+                SavedLineCount = savedItems.Count,
                 TotalQuantity = items.Sum(x => x.Quantity),
                 TotalAmount = Math.Round(items.Sum(x => x.Subtotal), 2, MidpointRounding.AwayFromZero)
             };

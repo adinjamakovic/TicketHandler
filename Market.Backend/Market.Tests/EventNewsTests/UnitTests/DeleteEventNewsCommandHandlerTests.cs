@@ -112,4 +112,44 @@ public class DeleteEventNewsCommandHandlerTests
 
         Assert.Empty(ctx.ImageStorage.Deleted);
     }
+
+    [Fact]
+    public async Task Handle_WhenNewsHasAnImage_DeletesItFromStorage()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var seeded = await ctx.AddEventNewsAsync(image: "event-news/own-news.png");
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        await handler.Handle(new DeleteEventNewsCommand { Id = seeded.Id }, CancellationToken.None);
+
+        Assert.Equal("event-news/own-news.png", Assert.Single(ctx.ImageStorage.Deleted));
+        Assert.Null(await ctx.GetEventNewsAsync(seeded.Id));
+    }
+
+    [Fact]
+    public async Task Handle_WhenSeededNewsWithImageIsDeleted_DeletesTheSeededImage()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OrganizerUserId));
+
+        await handler.Handle(
+            new DeleteEventNewsCommand { Id = EventNewsTestContext.RockNightNewsId },
+            CancellationToken.None);
+
+        Assert.Equal(EventNewsTestContext.SeededNewsImage, Assert.Single(ctx.ImageStorage.Deleted));
+    }
+
+    [Fact]
+    public async Task Handle_WhenNewsBelongsToAnotherOrganiser_DeletesNothingFromStorage()
+    {
+        await using var ctx = await EventNewsTestContext.CreateAsync();
+        var handler = CreateHandler(ctx, FakeAppCurrentUser.Organiser(EventNewsTestContext.OtherOrganizerUserId));
+
+        await Assert.ThrowsAsync<MarketBusinessRuleException>(
+            () => handler.Handle(
+                new DeleteEventNewsCommand { Id = EventNewsTestContext.RockNightNewsId },
+                CancellationToken.None));
+
+        Assert.Empty(ctx.ImageStorage.Deleted);
+    }
 }

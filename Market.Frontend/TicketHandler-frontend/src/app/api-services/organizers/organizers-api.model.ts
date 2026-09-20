@@ -7,6 +7,11 @@ import { PageResult } from "../../core/models/paging/page-result";
 
 export class ListOrganizersRequest extends BasePagedQuery{
     search?: string | null;
+    city?: string | null;
+    email?: string | null;
+    hasEvents?: boolean | null;
+    registeredFrom?: Date | null;
+    registeredTo?: Date | null;
 }
 
 export interface ListOrganizersQueryDto {

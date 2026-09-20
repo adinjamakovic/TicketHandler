@@ -14,6 +14,14 @@
       "BUTTON": "Login",
       "LOADING": "Logging in..."
     },
+    "REGISTER": {
+      "TITLE": "Create account",
+      "SUBTITLE": "You will be redirected to the secure sign-up page",
+      "BUTTON": "Create account",
+      "REDIRECTING": "Redirecting to secure sign-up…",
+      "HAVE_ACCOUNT": "Already have an account?",
+      "LOGIN_LINK": "Log in"
+    },
     "LOGOUT": {
       "TITLE": "Logout",
       "MESSAGE": "Logging you out of the system...",
@@ -416,6 +424,15 @@
     "N_A": "N/A",
     "OPTIONAL": "Optional",
     "REQUIRED": "Required"
+  },
+  "CART": {
+    "DIALOGS": {
+      "REMOVE_TITLE": "Remove ticket",
+      "REMOVE_FROM_CART": "Remove \"{{name}}\" from your cart?",
+      "REMOVE_FROM_SAVED": "Remove \"{{name}}\" from your saved items?",
+      "CHECKOUT_TITLE": "Confirm your order",
+      "CHECKOUT_MESSAGE": "Your card will be charged {{total}} now and your order will be completed. Continue?"
+    }
   },
   "DIALOGS": {
     "TYPES": {
