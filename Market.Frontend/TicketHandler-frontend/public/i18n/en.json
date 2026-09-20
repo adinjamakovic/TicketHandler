@@ -425,6 +425,15 @@
     "OPTIONAL": "Optional",
     "REQUIRED": "Required"
   },
+  "CART": {
+    "DIALOGS": {
+      "REMOVE_TITLE": "Remove ticket",
+      "REMOVE_FROM_CART": "Remove \"{{name}}\" from your cart?",
+      "REMOVE_FROM_SAVED": "Remove \"{{name}}\" from your saved items?",
+      "CHECKOUT_TITLE": "Confirm your order",
+      "CHECKOUT_MESSAGE": "Your card will be charged {{total}} now and your order will be completed. Continue?"
+    }
+  },
   "DIALOGS": {
     "TYPES": {
       "INFO": "Information",

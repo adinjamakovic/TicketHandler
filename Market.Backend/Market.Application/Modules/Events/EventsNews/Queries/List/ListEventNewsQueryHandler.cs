@@ -44,6 +44,11 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.List
                 q = q.Where(x => x.CreatedAtUtc.Date <= to);
             }
 
+            if (req.HasImage.HasValue)
+                q = req.HasImage.Value
+                    ? q.Where(x => x.Image != null && x.Image != string.Empty)
+                    : q.Where(x => x.Image == null || x.Image == string.Empty);
+
             var projectedQ = q.OrderBy(x => x.CreatedAtUtc)
                 .Select(x => new ListEventNewsQueryDto
                 {

@@ -16,5 +16,9 @@ namespace Market.Application.Modules.Events.Organizers.Queries.List
         public string? Email { get; set; }
         /// <summary>True keeps only organizers that have at least one event, false only those without any.</summary>
         public bool? HasEvents { get; set; }
+        /// <summary>Lower bound (inclusive) of the date the organizer account was registered.</summary>
+        public DateTime? RegisteredFrom { get; set; }
+        /// <summary>Upper bound (inclusive) of the date the organizer account was registered.</summary>
+        public DateTime? RegisteredTo { get; set; }
     }
 }

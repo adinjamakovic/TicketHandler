@@ -30,6 +30,18 @@ public sealed class ListOrganizersQueryHandler(IAppDbContext ctx, IImageStorage 
                 ? q.Where(x => x.Events.Any())
                 : q.Where(x => !x.Events.Any());
 
+        if (req.RegisteredFrom.HasValue)
+        {
+            var from = req.RegisteredFrom.Value.Date;
+            q = q.Where(x => x.CreatedAtUtc.Date >= from);
+        }
+
+        if (req.RegisteredTo.HasValue)
+        {
+            var to = req.RegisteredTo.Value.Date;
+            q = q.Where(x => x.CreatedAtUtc.Date <= to);
+        }
+
         var projectedQuery = q.OrderBy(x => x.Name)
             .Select(x => new ListOrganizersQueryDto
             {

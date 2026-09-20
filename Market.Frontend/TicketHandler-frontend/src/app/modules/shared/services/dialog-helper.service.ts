@@ -433,6 +433,43 @@ export class DialogHelperService {
     }
   };
   /**
+   * Cart specific dialogs — the two irreversible steps a buyer can take:
+   * dropping a line and paying for the order.
+   */
+  cart = {
+    confirmRemove: (ticketTypeName: string, isSavedForLater: boolean) => {
+      return this.open({
+        type: DialogType.WARNING,
+        titleKey: 'CART.DIALOGS.REMOVE_TITLE',
+        messageKey: isSavedForLater
+          ? 'CART.DIALOGS.REMOVE_FROM_SAVED'
+          : 'CART.DIALOGS.REMOVE_FROM_CART',
+        messageParams: { name: ticketTypeName },
+        icon: 'delete_outline',
+        buttons: [
+          { type: DialogButton.CANCEL },
+          { type: DialogButton.DELETE, color: 'warn' }
+        ]
+      });
+    },
+
+    /** `total` arrives pre-formatted so the dialog names the exact amount on the pay button. */
+    confirmCheckout: (total: string) => {
+      return this.open({
+        type: DialogType.QUESTION,
+        titleKey: 'CART.DIALOGS.CHECKOUT_TITLE',
+        messageKey: 'CART.DIALOGS.CHECKOUT_MESSAGE',
+        messageParams: { total },
+        icon: 'lock',
+        buttons: [
+          { type: DialogButton.CANCEL },
+          { type: DialogButton.OK, color: 'primary' }
+        ]
+      });
+    }
+  };
+
+  /**
    * Product specific dialogs
    */
   product = {

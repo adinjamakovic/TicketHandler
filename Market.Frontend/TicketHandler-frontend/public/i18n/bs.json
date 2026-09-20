@@ -427,6 +427,15 @@
     "OPTIONAL": "Opciono",
     "REQUIRED": "Obavezno"
   },
+  "CART": {
+    "DIALOGS": {
+      "REMOVE_TITLE": "Uklanjanje karte",
+      "REMOVE_FROM_CART": "Ukloniti \"{{name}}\" iz korpe?",
+      "REMOVE_FROM_SAVED": "Ukloniti \"{{name}}\" iz sačuvanih stavki?",
+      "CHECKOUT_TITLE": "Potvrda narudžbe",
+      "CHECKOUT_MESSAGE": "Vaša kartica će odmah biti terećena za {{total}} i narudžba će biti kompletirana. Nastaviti?"
+    }
+  },
   "DIALOGS": {
     "TYPES": {
       "INFO": "Informacija",

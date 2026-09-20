@@ -10,6 +10,8 @@ export class ListOrganizersRequest extends BasePagedQuery{
     city?: string | null;
     email?: string | null;
     hasEvents?: boolean | null;
+    registeredFrom?: Date | null;
+    registeredTo?: Date | null;
 }
 
 export interface ListOrganizersQueryDto {

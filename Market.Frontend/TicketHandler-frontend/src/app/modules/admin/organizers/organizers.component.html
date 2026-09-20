@@ -62,6 +62,33 @@
         </mat-select>
       </mat-form-field>
 
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Registered from</mat-label>
+        <input
+          matInput
+          [matDatepicker]="registeredFromPicker"
+          [(ngModel)]="request.registeredFrom"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="registeredFromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #registeredFromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Registered to</mat-label>
+        <input
+          matInput
+          [matDatepicker]="registeredToPicker"
+          [min]="request.registeredFrom"
+          [(ngModel)]="request.registeredTo"
+          [placeholder]="'dd/mm/yyyy'"
+          (dateChange)="onFilterChange()"
+        />
+        <mat-datepicker-toggle matIconSuffix [for]="registeredToPicker"></mat-datepicker-toggle>
+        <mat-datepicker #registeredToPicker></mat-datepicker>
+      </mat-form-field>
+
       <button
         mat-stroked-button
         class="clear-filters-button"

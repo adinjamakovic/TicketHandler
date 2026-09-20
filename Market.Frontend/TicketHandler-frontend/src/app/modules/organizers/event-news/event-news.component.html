@@ -66,6 +66,18 @@
         <mat-datepicker #dateToPicker></mat-datepicker>
       </mat-form-field>
 
+      <mat-form-field class="filter-field" appearance="fill" floatLabel="always">
+        <mat-label>Image</mat-label>
+        <mat-select
+          [(ngModel)]="request.hasImage"
+          [placeholder]="'All posts'"
+          (selectionChange)="onFilterChange()">
+          <mat-option [value]="null">All posts</mat-option>
+          <mat-option [value]="true">With image</mat-option>
+          <mat-option [value]="false">Without image</mat-option>
+        </mat-select>
+      </mat-form-field>
+
       <button
         mat-stroked-button
         class="clear-filters-button"

@@ -9,12 +9,19 @@ import {Router} from '@angular/router';
 import { DialogButton } from '../../shared/models/dialog-config.model';
 import { CitiesApiService } from '../../../api-services/cities/cities-api.service';
 import { ListCitiesQueryDto, ListCitiesRequest } from '../../../api-services/cities/cities-api.models';
+import { toDateOnlyParam } from '../../../core/utils/date-filter-utils';
+import { DateAdapter, MAT_DATE_FORMATS } from '@angular/material/core';
+import { DdMmYyyyDateAdapter, DD_MM_YYYY_FORMATS } from '../../../core/utils/DateUtilities/datepicker-utils';
 
 @Component({
   selector: 'app-organizers',
   standalone: false,
   templateUrl: './organizers.component.html',
   styleUrl: './organizers.component.scss',
+  providers: [
+    { provide: DateAdapter, useClass: DdMmYyyyDateAdapter },
+    { provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_FORMATS }
+  ],
 })
 export class OrganizersComponent
   extends BaseListPagedComponent<ListOrganizersQueryDto, ListOrganizersRequest>
@@ -53,7 +60,7 @@ export class OrganizersComponent
   protected override loadPagedData(): void {
     this.startLoading();
 
-    this.api.list(this.request).subscribe({
+    this.api.list(this.buildQuery()).subscribe({
       next: (response)=>{
         this.handlePageResult(response);
         this.stopLoading();
@@ -116,6 +123,15 @@ export class OrganizersComponent
     this.loadPagedData();
   }
 
+  /** Sends the picked calendar days instead of their UTC instants. */
+  private buildQuery(): ListOrganizersRequest {
+    return {
+      ...this.request,
+      registeredFrom: toDateOnlyParam(this.request.registeredFrom),
+      registeredTo: toDateOnlyParam(this.request.registeredTo)
+    };
+  }
+
   /** Re-runs the query from page one — used by every filter control. */
   onFilterChange(): void {
     this.request.paging.page = 1;
@@ -127,6 +143,8 @@ export class OrganizersComponent
     this.request.city = null;
     this.request.email = null;
     this.request.hasEvents = null;
+    this.request.registeredFrom = null;
+    this.request.registeredTo = null;
     this.onFilterChange();
   }
 
@@ -134,6 +152,8 @@ export class OrganizersComponent
     return !!(this.request.search
       || this.request.city
       || this.request.email
-      || (this.request.hasEvents !== null && this.request.hasEvents !== undefined));
+      || (this.request.hasEvents !== null && this.request.hasEvents !== undefined)
+      || this.request.registeredFrom
+      || this.request.registeredTo);
   }
 }

@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { CartService } from '../../../core/services/cart/cart.service';
 import { GetCartQueryDtoItem } from '../../../api-services/cart/cart-api.model';
 import { ToasterService } from '../../../core/services/toaster.service';
+import { DialogButton } from '../../shared/models/dialog-config.model';
+import { DialogHelperService } from '../../shared/services/dialog-helper.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,6 +15,7 @@ import { ToasterService } from '../../../core/services/toaster.service';
 export class CartComponent implements OnInit {
   private cart = inject(CartService);
   private toaster = inject(ToasterService);
+  private dialogHelper = inject(DialogHelperService);
   private router = inject(Router);
 
   items = this.cart.items;
@@ -52,7 +55,18 @@ export class CartComponent implements OnInit {
     this.setQuantity(item, item.quantity - 1);
   }
 
+  /** Dropping a line can't be undone, so it goes through a confirmation first. */
   remove(item: GetCartQueryDtoItem): void {
+    this.dialogHelper.cart
+      .confirmRemove(item.ticketType.name, item.isSavedForLater)
+      .subscribe(result => {
+        if (result?.button === DialogButton.DELETE) {
+          this.performRemove(item);
+        }
+      });
+  }
+
+  private performRemove(item: GetCartQueryDtoItem): void {
     const where = item.isSavedForLater ? 'your saved items' : 'your cart';
     this.pendingTicketId = item.ticketId;
 

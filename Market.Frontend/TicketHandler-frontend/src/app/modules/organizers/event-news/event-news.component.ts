@@ -108,6 +108,7 @@ export class EventNewsComponent
     this.request.search = null;
     this.request.dateFrom = null;
     this.request.dateTo = null;
+    this.request.hasImage = null;
     this.onFilterChange();
   }
 
@@ -115,7 +116,9 @@ export class EventNewsComponent
     return !!(this.request.eventId
       || this.request.search
       || this.request.dateFrom
-      || this.request.dateTo);
+      || this.request.dateTo
+      // "Without image" is `false`, which is a filter just like `true` is.
+      || (this.request.hasImage !== null && this.request.hasImage !== undefined));
   }
 
   onCreate(): void {

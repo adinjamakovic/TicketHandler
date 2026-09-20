@@ -11,6 +11,7 @@ export class ListEventNewsRequest extends BasePagedQuery {
     search?: string | null;
     dateFrom?: Date | null;
     dateTo?: Date | null;
+    hasImage?: boolean | null;
 }
 
 export interface ListEventNewsQueryDto{

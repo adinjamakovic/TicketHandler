@@ -18,5 +18,7 @@ namespace Market.Application.Modules.Events.EventsNews.Queries.List
         public DateTime? DateFrom { get; set; }
         /// <summary>Upper bound (inclusive) of the date the post was published.</summary>
         public DateTime? DateTo { get; set; }
+        /// <summary>True keeps only posts that carry an image, false only those without one.</summary>
+        public bool? HasImage { get; set; }
     }
 }

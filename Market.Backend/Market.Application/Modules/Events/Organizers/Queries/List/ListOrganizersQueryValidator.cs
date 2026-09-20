@@ -18,6 +18,11 @@ namespace Market.Application.Modules.Events.Organizers.Queries.List
 
             RuleFor(x => x.Email)
                 .MaximumLength(256).WithMessage("E-mail must be 256 characters or fewer.");
+
+            RuleFor(x => x.RegisteredTo)
+                .GreaterThanOrEqualTo(x => x.RegisteredFrom!.Value)
+                .When(x => x.RegisteredFrom.HasValue && x.RegisteredTo.HasValue)
+                .WithMessage("Registered to must be on or after registered from.");
         }
     }
 }
