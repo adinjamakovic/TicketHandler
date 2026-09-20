@@ -11,7 +11,9 @@ namespace Market.Application.Modules.Sales.Payments
         {
             var cartItems = await ctx.CartItems
                 .AsNoTracking()
-                .Where(x => x.PersonId == personId)
+                // Lines parked with "save for later" are deliberately not being bought yet,
+                // so they are priced nowhere and charged nowhere.
+                .Where(x => x.PersonId == personId && !x.IsSavedForLater)
                 .OrderBy(x => x.CreatedAtUtc)
                 .Select(x => new
                 {

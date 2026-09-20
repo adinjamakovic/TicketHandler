@@ -28,9 +28,17 @@ namespace Market.Application.Modules.Sales.Cart.Commands.AddItem
             decimal requestedTotal = alreadyInCart + req.Quantity;
 
             if (requestedTotal > ticket.QuantityInStock)
+            {
+                // A line parked with "save for later" still holds its quantity, so say where
+                // the tickets the person already picked actually are.
+                string whereAlreadyHeld = cartItem?.IsSavedForLater == true
+                    ? "saved for later"
+                    : "in your cart";
+
                 throw new MarketBusinessRuleException(
                     "CART_OUT_OF_STOCK",
-                    $"Only {ticket.QuantityInStock} ticket(s) left, you already have {alreadyInCart} in your cart.");
+                    $"Only {ticket.QuantityInStock} ticket(s) left, you already have {alreadyInCart} {whereAlreadyHeld}.");
+            }
 
             if (cartItem is null)
             {
@@ -51,6 +59,9 @@ namespace Market.Application.Modules.Sales.Cart.Commands.AddItem
                     cartItem.CreatedAtUtc = DateTime.UtcNow;
                 }
 
+                // Adding a ticket that was parked pulls it back into the cart — the person
+                // asked for it now, so it shouldn't stay on the saved shelf.
+                cartItem.IsSavedForLater = false;
                 cartItem.Quantity = requestedTotal;
                 cartItem.ModifiedAtUtc = DateTime.UtcNow;
             }

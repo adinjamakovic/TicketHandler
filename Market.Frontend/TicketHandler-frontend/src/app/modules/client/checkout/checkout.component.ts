@@ -232,6 +232,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
 
       if (result.isPaid) {
         this.toaster.success('Payment received — your tickets are confirmed');
+      } else if (result.requiresReview) {
+        this.toaster.warning('Payment received — we are checking your order');
       } else {
         this.toaster.info('Your payment is being processed');
       }

@@ -79,6 +79,8 @@ export interface ConfirmPaymentCommandDto {
   paymentStatus: PaymentIntentStatus;
   orderStatus: number;
   isPaid: boolean;
+  /** Charged, but the order could not be completed and is with our team — not a retry. */
+  requiresReview: boolean;
   amount: number;
   currency: string;
   failureMessage: string | null;

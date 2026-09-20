@@ -16,10 +16,13 @@ export class CartComponent implements OnInit {
   private router = inject(Router);
 
   items = this.cart.items;
+  savedItems = this.cart.savedItems;
   isLoading = this.cart.isLoading;
   isEmpty = this.cart.isEmpty;
   itemCount = this.cart.itemCount;
   totalAmount = this.cart.totalAmount;
+  hasSavedItems = this.cart.hasSavedItems;
+  savedLineCount = this.cart.savedLineCount;
 
   /** Blocks the quantity controls while a line is being written to the server. */
   pendingTicketId: number | null = null;
@@ -50,18 +53,55 @@ export class CartComponent implements OnInit {
   }
 
   remove(item: GetCartQueryDtoItem): void {
+    const where = item.isSavedForLater ? 'your saved items' : 'your cart';
     this.pendingTicketId = item.ticketId;
 
     this.cart.remove(item.ticketId).subscribe({
       next: () => {
         this.pendingTicketId = null;
-        this.toaster.success(`${item.ticketType.name} removed from your cart`);
+        this.toaster.success(`${item.ticketType.name} removed from ${where}`);
       },
       error: () => {
         this.pendingTicketId = null;
-        this.toaster.error('Could not remove the ticket from your cart');
+        this.toaster.error(`Could not remove the ticket from ${where}`);
       },
     });
+  }
+
+  /** Parks a line: it keeps its quantity but stops counting towards the order. */
+  saveForLater(item: GetCartQueryDtoItem): void {
+    this.pendingTicketId = item.ticketId;
+
+    this.cart.saveForLater(item.ticketId).subscribe({
+      next: () => {
+        this.pendingTicketId = null;
+        this.toaster.success(`${item.ticketType.name} saved for later`);
+      },
+      error: err => {
+        this.pendingTicketId = null;
+        this.toaster.error(err?.error?.message ?? 'Could not save the ticket for later');
+      },
+    });
+  }
+
+  moveToCart(item: GetCartQueryDtoItem): void {
+    this.pendingTicketId = item.ticketId;
+
+    this.cart.moveToCart(item.ticketId).subscribe({
+      next: () => {
+        this.pendingTicketId = null;
+        this.toaster.success(`${item.ticketType.name} moved back to your cart`);
+      },
+      // Stock can drop while a line sits on the shelf, so the server's reason matters here.
+      error: err => {
+        this.pendingTicketId = null;
+        this.toaster.error(err?.error?.message ?? 'Could not move the ticket to your cart');
+      },
+    });
+  }
+
+  isSoldOut(item: GetCartQueryDtoItem): boolean {
+    return item.quantity > item.quantityInStock;
   }
 
   continueShopping(): void {

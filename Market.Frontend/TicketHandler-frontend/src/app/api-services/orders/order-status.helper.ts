@@ -26,6 +26,8 @@ export class OrderStatusHelper {
         return 'ORDERS.STATUS.COMPLETED';
       case OrderStatusType.Cancelled:
         return 'ORDERS.STATUS.CANCELLED';
+      case OrderStatusType.PaymentReview:
+        return 'ORDERS.STATUS.PAYMENT_REVIEW';
       default:
         return 'ORDERS.STATUS.UNKNOWN';
     }
@@ -51,6 +53,8 @@ export class OrderStatusHelper {
         return 'status-completed'; // Dark Green
       case OrderStatusType.Cancelled:
         return 'status-cancelled'; // Red
+      case OrderStatusType.PaymentReview:
+        return 'status-payment-review'; // Amber
       default:
         return 'status-unknown'; // Gray
     }
@@ -74,6 +78,8 @@ export class OrderStatusHelper {
         return 'done_all'; // Double check
       case OrderStatusType.Cancelled:
         return 'cancel'; // Cancel X icon
+      case OrderStatusType.PaymentReview:
+        return 'report_problem'; // Needs a person to look at it
       default:
         return 'help_outline'; // Question mark
     }
@@ -92,7 +98,8 @@ export class OrderStatusHelper {
       OrderStatusType.Confirmed,
       OrderStatusType.Paid,
       OrderStatusType.Completed,
-      OrderStatusType.Cancelled
+      OrderStatusType.Cancelled,
+      OrderStatusType.PaymentReview
     ];
   }
 
@@ -128,11 +135,12 @@ export class OrderStatusHelper {
    * @returns true if order can be cancelled
    */
   static canCancel(status: OrderStatusType): boolean {
-    // Can cancel Draft, Confirmed, and Paid orders
+    // Can cancel Draft, Confirmed, Paid, and orders held for review (refunding them)
     // Cannot cancel Completed or already Cancelled orders
     return status === OrderStatusType.Draft ||
       status === OrderStatusType.Confirmed ||
-      status === OrderStatusType.Paid;
+      status === OrderStatusType.Paid ||
+      status === OrderStatusType.PaymentReview;
   }
 
   /**
@@ -153,6 +161,9 @@ export class OrderStatusHelper {
         return []; // Final status
       case OrderStatusType.Cancelled:
         return []; // Final status
+      case OrderStatusType.PaymentReview:
+        // A person decides: fulfil it after all, or cancel and refund
+        return [OrderStatusType.Paid, OrderStatusType.Cancelled];
       default:
         return [];
     }

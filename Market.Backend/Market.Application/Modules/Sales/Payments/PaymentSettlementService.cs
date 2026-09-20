@@ -1,4 +1,5 @@
 using Market.Application.Abstractions.Payments;
+using Market.Application.Modules.Sales.Orders;
 using Microsoft.Extensions.Logging;
 
 namespace Market.Application.Modules.Sales.Payments
@@ -13,6 +14,9 @@ namespace Market.Application.Modules.Sales.Payments
         IPaymentGateway gateway,
         ILogger<PaymentSettlementService> logger)
     {
+        // Room for a couple of short lines about what went wrong; the column matches.
+        private const int MaxSettlementIssueLength = 400;
+
         public async Task<PaymentSettlementResult> SettleAsync(
             string paymentIntentId,
             int? expectedPersonId,
@@ -26,7 +30,7 @@ namespace Market.Application.Modules.Sales.Payments
 
             var intent = await gateway.GetIntentAsync(paymentIntentId, ct);
 
-            if (transaction.Status == OrderStatusType.Paid)
+            if (OrderSettlement.IsFinal(transaction.Status))
                 return Result(transaction, intent);
 
             switch (intent.Status)
@@ -75,18 +79,28 @@ namespace Market.Application.Modules.Sales.Payments
             return Result(settled, intent);
         }
 
+        // Turns a succeeded payment into tickets the buyer actually owns. Anything that
+        // cannot be completed truthfully parks the transaction in PaymentReview instead of
+        // Paid: the money is already ours, so an order must never look fulfilled when the
+        // amount is wrong or the stock is not there. Stock only ever moves on the path that
+        // ends in Paid, which is the same status the revenue figures count.
         private async Task FulfillAsync(
             TransactionEntity transaction,
             PaymentIntentDescriptor intent,
             CancellationToken ct)
         {
-            if (intent.Amount != transaction.TotalAmount)
-                logger.LogWarning(
-                    "Payment {PaymentIntentId} settled {PaidAmount} but order {OrderId} totals {OrderAmount}",
-                    intent.Id, intent.Amount, transaction.OrderId, transaction.TotalAmount);
-
-            transaction.Status = OrderStatusType.Paid;
+            // The charge happened either way, so record when — even if the rest cannot follow.
             transaction.PaidAt = DateTime.UtcNow;
+
+            if (intent.Amount != transaction.TotalAmount)
+            {
+                HoldForReview(
+                    transaction,
+                    intent,
+                    $"Provider settled {intent.Amount} {intent.Currency} against an order total of {transaction.TotalAmount}.");
+
+                return;
+            }
 
             var orderItems = await ctx.OrderItems
                 .Where(x => x.OrderId == transaction.OrderId)
@@ -95,24 +109,18 @@ namespace Market.Application.Modules.Sales.Payments
 
             if (orderItems.Count == 0)
             {
-                logger.LogWarning(
-                    "Order {OrderId} was paid but has no items to fulfil", transaction.OrderId);
+                HoldForReview(transaction, intent, "The paid order has no items to fulfil.");
 
                 return;
             }
 
-            await ReleaseStockAsync(orderItems.Select(x => (x.TicketId, x.Quantity)).ToList(), ct);
-            await ClearPurchasedCartItemsAsync(
-                transaction.PersonId,
-                orderItems.Select(x => x.TicketId).ToList(),
-                ct);
-        }
+            // Two lines can point at the same ticket, and it is the total that has to be in
+            // stock — checking line by line would let a split order pass and then oversell.
+            var demand = orderItems
+                .GroupBy(x => x.TicketId)
+                .ToDictionary(x => x.Key, x => x.Sum(item => item.Quantity));
 
-        private async Task ReleaseStockAsync(
-            IReadOnlyList<(int TicketId, decimal Quantity)> soldItems,
-            CancellationToken ct)
-        {
-            var ticketIds = soldItems.Select(x => x.TicketId).ToList();
+            var ticketIds = demand.Keys.ToList();
 
             var tickets = await ctx.Tickets
                 .Where(x => ticketIds.Contains(x.Id))
@@ -120,28 +128,78 @@ namespace Market.Application.Modules.Sales.Payments
 
             var ticketsById = tickets.ToDictionary(x => x.Id);
 
-            foreach (var (ticketId, quantity) in soldItems)
+            string? shortfall = DescribeShortfall(demand, ticketsById);
+
+            if (shortfall is not null)
+            {
+                // Nothing is taken out of stock and the cart is left alone: the buyer has not
+                // received anything yet, so the lines stay where support can still act on them.
+                HoldForReview(transaction, intent, shortfall);
+
+                return;
+            }
+
+            foreach (var (ticketId, quantity) in demand)
+                ticketsById[ticketId].QuantityInStock -= quantity;
+
+            transaction.Status = OrderSettlement.Settled;
+
+            await ClearPurchasedCartItemsAsync(transaction.PersonId, ticketIds, ct);
+        }
+
+        // Names every line we cannot cover, so whoever reviews the order sees the whole
+        // problem at once rather than one ticket at a time.
+        private static string? DescribeShortfall(
+            IReadOnlyDictionary<int, decimal> demand,
+            IReadOnlyDictionary<int, TicketsEntity> ticketsById)
+        {
+            var problems = new List<string>();
+
+            foreach (var (ticketId, quantity) in demand)
             {
                 if (!ticketsById.TryGetValue(ticketId, out var ticket))
+                {
+                    problems.Add($"ticket {ticketId} is no longer on sale");
                     continue;
+                }
 
                 if (ticket.QuantityInStock < quantity)
-                    // Oversold: the payment already succeeded, so this is a support problem,
-                    // not something to fail the request over.
-                    logger.LogWarning(
-                        "Ticket {TicketId} oversold — {Sold} sold with {InStock} in stock",
-                        ticketId, quantity, ticket.QuantityInStock);
-
-                ticket.QuantityInStock = Math.Max(0, ticket.QuantityInStock - quantity);
+                    problems.Add($"ticket {ticketId} sold {quantity} with {ticket.QuantityInStock} in stock");
             }
+
+            return problems.Count == 0
+                ? null
+                : $"Cannot fulfil: {string.Join("; ", problems)}.";
         }
+
+        private void HoldForReview(
+            TransactionEntity transaction,
+            PaymentIntentDescriptor intent,
+            string reason)
+        {
+            transaction.Status = OrderStatusType.PaymentReview;
+            transaction.SettlementIssue = reason.Length <= MaxSettlementIssueLength
+                ? reason
+                : reason[..MaxSettlementIssueLength];
+
+            // Money changed hands and the order cannot complete on its own, so this needs a
+            // person — it is logged as an error rather than a warning that scrolls past.
+            logger.LogError(
+                "Payment {PaymentIntentId} for order {OrderId} held for manual review: {Reason}",
+                intent.Id, transaction.OrderId, transaction.SettlementIssue);
+        }
+
         private async Task ClearPurchasedCartItemsAsync(
             int personId,
             IReadOnlyList<int> ticketIds,
             CancellationToken ct)
         {
             var cartItems = await ctx.CartItems
-                .Where(x => x.PersonId == personId && ticketIds.Contains(x.TicketId))
+                .Where(x => x.PersonId == personId
+                    && ticketIds.Contains(x.TicketId)
+                    // Only what was actually bought is cleared; a saved-for-later line was
+                    // never part of the order and stays on the shelf.
+                    && !x.IsSavedForLater)
                 .ToListAsync(ct);
 
             foreach (var cartItem in cartItems)
@@ -177,6 +235,9 @@ namespace Market.Application.Modules.Sales.Payments
         public required int PersonId { get; init; }
         public string? FailureMessage { get; init; }
 
-        public bool IsPaid => OrderStatus == OrderStatusType.Paid;
+        public bool IsPaid => OrderStatus == OrderSettlement.Settled;
+
+        // Charged, but the tickets are not the buyer's yet — not a failure they can retry.
+        public bool RequiresReview => OrderStatus == OrderStatusType.PaymentReview;
     }
 }

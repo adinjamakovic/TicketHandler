@@ -20,6 +20,7 @@ namespace Market.Application.Modules.Sales.Payments.Commands.Confirm
                 PaymentStatus = result.Status,
                 OrderStatus = result.OrderStatus,
                 IsPaid = result.IsPaid,
+                RequiresReview = result.RequiresReview,
                 Amount = result.Amount,
                 Currency = result.Currency,
                 FailureMessage = result.FailureMessage

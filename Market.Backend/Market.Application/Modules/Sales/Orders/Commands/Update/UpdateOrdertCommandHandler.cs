@@ -36,6 +36,16 @@ namespace Market.Application.Modules.Sales.Orders.Commands.Update
             if (Order == null)
                 throw new MarketNotFoundException("This order does not exist");
 
+            // Once the payment settled, the order is what the buyer paid for and what the
+            // revenue figures count. Re-pricing it here would move money nobody charged.
+            bool isSettled = await ctx.Transactions
+                .AnyAsync(x => x.OrderId == Order.Id && x.Status == OrderSettlement.Settled, ct);
+
+            if (isSettled)
+                throw new MarketBusinessRuleException(
+                    "ORDER_ALREADY_PAID",
+                    "A paid order cannot be edited.");
+
             Order.PersonId = req.PersonId;
             #endregion
             #region Querying existing OrderItems

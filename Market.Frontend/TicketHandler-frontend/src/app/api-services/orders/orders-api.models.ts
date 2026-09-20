@@ -17,7 +17,9 @@ export enum OrderStatusType {
   /** Order has been shipped or delivered */
   Completed = 4,
   /** Order has been cancelled */
-  Cancelled = 5
+  Cancelled = 5,
+  /** Paid, but it could not be fulfilled automatically and is waiting on our team */
+  PaymentReview = 6
 }
 
 // === QUERIES (READ) ===
@@ -180,21 +182,6 @@ export type ListOrdersWithItemsResponse = PageResult<ListOrdersWithItemsQueryDto
 /**
  * Order item for create command
  */
-export interface CreateOrderCommandItem {
-  ticketId: number;
-  quantity: number;
-}
-
-/**
- * Command for POST /Orders
- * Corresponds to: CreateOrderCommand.cs
- * The person is resolved from the token on the backend.
- */
-export interface CreateOrderCommand {
-  orderItems: CreateOrderCommandItem[];
-  note?: string | null;
-}
-
 /**
  * Order item for update command
  */

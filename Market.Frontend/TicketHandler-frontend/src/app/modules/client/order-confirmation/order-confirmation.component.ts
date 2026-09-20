@@ -37,8 +37,19 @@ export class OrderConfirmationComponent implements OnInit {
     );
   }
 
+  /** Charged, but we could not hand the tickets over — support picks it up from here. */
+  get needsReview(): boolean {
+    return this.result?.requiresReview === true;
+  }
+
   get isFailed(): boolean {
-    return !this.isLoading && !this.errorMessage && !this.result?.isPaid && !this.isPending;
+    return (
+      !this.isLoading &&
+      !this.errorMessage &&
+      !this.result?.isPaid &&
+      !this.isPending &&
+      !this.needsReview
+    );
   }
 
   ngOnInit(): void {

@@ -18,6 +18,10 @@ namespace Market.Infrastructure.Database.Configurations.Sales
             b.Property(x => x.Quantity)
                 .IsRequired();
 
+            b.Property(x => x.IsSavedForLater)
+                .IsRequired()
+                .HasDefaultValue(false);
+
             b.HasOne(x => x.Ticket)
                 .WithMany()
                 .HasForeignKey(x => x.TicketId)

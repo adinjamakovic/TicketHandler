@@ -12,13 +12,16 @@
         </span>
       </div>
 
-      <div class="cart__loading" *ngIf="isLoading() && isEmpty()">
+      <div class="cart__loading" *ngIf="isLoading() && isEmpty() && !hasSavedItems()">
         <mat-spinner diameter="40"></mat-spinner>
       </div>
 
       <div class="cart__empty" *ngIf="!isLoading() && isEmpty()">
         <mat-icon>shopping_cart</mat-icon>
         <p>Your cart is empty.</p>
+        <p class="cart__empty-hint" *ngIf="hasSavedItems()">
+          You still have tickets saved for later below.
+        </p>
         <button mat-flat-button class="cart__cta" (click)="continueShopping()">
           Browse events
         </button>
@@ -83,15 +86,27 @@
                 {{ item.subtotal | currency:'BAM':'symbol':'1.2-2' }}
               </span>
 
-              <button
-                mat-button
-                class="cart-line__remove"
-                [disabled]="pendingTicketId === item.ticketId"
-                (click)="remove(item)"
-              >
-                <mat-icon>delete_outline</mat-icon>
-                Remove
-              </button>
+              <div class="cart-line__links">
+                <button
+                  mat-button
+                  class="cart-line__save"
+                  [disabled]="pendingTicketId === item.ticketId"
+                  (click)="saveForLater(item)"
+                >
+                  <mat-icon>bookmark_border</mat-icon>
+                  Save for later
+                </button>
+
+                <button
+                  mat-button
+                  class="cart-line__remove"
+                  [disabled]="pendingTicketId === item.ticketId"
+                  (click)="remove(item)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                  Remove
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -130,6 +145,87 @@
         </aside>
 
       </div>
+
+      <!-- Parked lines: same card as a cart line, but priced out of the order above. -->
+      <section class="saved" *ngIf="hasSavedItems()">
+        <div class="saved__heading">
+          <h2 class="section-title">Saved for later</h2>
+          <span class="saved__count">
+            {{ savedLineCount() }} item{{ savedLineCount() === 1 ? '' : 's' }}
+          </span>
+        </div>
+
+        <div class="cart__lines">
+          <div
+            class="cart-line cart-line--saved"
+            *ngFor="let item of savedItems(); trackBy: trackByTicketId"
+            [class.cart-line--busy]="pendingTicketId === item.ticketId"
+          >
+            <div
+              class="cart-line__image"
+              [style.backgroundImage]="item.event.image ? 'url(' + item.event.image + ')' : 'url(https://sttickethandlerrs1.blob.core.windows.net/web/no_image.jpg)'"
+              (click)="goToEvent(item)"
+            ></div>
+
+            <div class="cart-line__info">
+              <h3 class="cart-line__event" (click)="goToEvent(item)">{{ item.event.name }}</h3>
+
+              <div class="cart-line__meta">
+                <mat-icon>calendar_today</mat-icon>
+                <span>{{ item.event.scheduledDate | date : 'dd/MM/yyyy · HH:mm' }}</span>
+              </div>
+              <div class="cart-line__meta">
+                <mat-icon>location_on</mat-icon>
+                <span>{{ item.event.venueName }}</span>
+              </div>
+
+              <span class="cart-line__type">{{ item.ticketType.name }}</span>
+              <p class="cart-line__benefits" *ngIf="item.benefits">{{ item.benefits }}</p>
+
+              <p class="cart-line__warning" *ngIf="isSoldOut(item)">
+                <mat-icon>error_outline</mat-icon>
+                Only {{ item.quantityInStock }} left — not enough for the {{ item.quantity }} you saved.
+              </p>
+            </div>
+
+            <div class="cart-line__actions">
+              <span class="cart-line__unit">
+                {{ item.unitPrice | currency:'BAM':'symbol':'1.2-2' }} each
+              </span>
+
+              <span class="cart-line__saved-qty">
+                {{ item.quantity }} ticket{{ item.quantity === 1 ? '' : 's' }}
+              </span>
+
+              <span class="cart-line__subtotal">
+                {{ item.subtotal | currency:'BAM':'symbol':'1.2-2' }}
+              </span>
+
+              <div class="cart-line__links">
+                <button
+                  mat-button
+                  class="cart-line__move"
+                  [disabled]="pendingTicketId === item.ticketId || isSoldOut(item)"
+                  (click)="moveToCart(item)"
+                >
+                  <mat-icon>add_shopping_cart</mat-icon>
+                  Move to cart
+                </button>
+
+                <button
+                  mat-button
+                  class="cart-line__remove"
+                  [disabled]="pendingTicketId === item.ticketId"
+                  (click)="remove(item)"
+                >
+                  <mat-icon>delete_outline</mat-icon>
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
     </div>
   </section>

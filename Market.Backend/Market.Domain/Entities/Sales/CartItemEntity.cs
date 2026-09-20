@@ -33,6 +33,11 @@ namespace Market.Domain.Entities.Sales
         /// Quantity
         /// </summary>
         public decimal Quantity { get; set; }
+        /// <summary>
+        /// Parked line: the person keeps the ticket on their list but it is not being
+        /// bought right now, so it stays out of the cart totals and out of checkout.
+        /// </summary>
+        public bool IsSavedForLater { get; set; }
         public DateTime CreatedAtUtc { get; set; }
         public DateTime ModifiedAtUtc { get; set; }
         public bool IsDeleted { get; set; }
